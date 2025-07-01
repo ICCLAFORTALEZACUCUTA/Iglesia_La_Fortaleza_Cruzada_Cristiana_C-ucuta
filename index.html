@@ -1,0 +1,2866 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iglesia Comunidad de Fe</title>
+    <link rel="icon" href="https://ejemplo.com/favicon.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Variables CSS (Mantén las tuyas o usa estas) */
+        :root {
+            --primary-color: #007bff;
+            /* Azul vibrante */
+            --secondary-color: #28a745;
+            /* Verde para acciones secundarias */
+            --accent-color: #ffc107;
+            /* Amarillo para resaltar */
+            --dark-color: #343a40;
+            /* Texto oscuro principal */
+            --light-color: #f8f9fa;
+            /* Fondo claro */
+            --text-muted: #6c757d;
+            /* Texto más claro para párrafos generales */
+            --text-muted-dark: #495057;
+            /* Texto más oscuro para párrafos sobre fondos claros */
+            --text-primary-dark: #0056b3;
+            /* Un azul más oscuro para títulos en tarjetas claras */
+
+            --bg-gradient-start: #f8f9fa;
+            --bg-gradient-end: #e2e6ea;
+            --card-bg-light: rgba(255, 255, 255, 0.9);
+            /* Fondo de tarjeta claro con más opacidad */
+            --card-border-light: rgba(0, 0, 0, 0.1);
+
+            --calendar-border-color: #dee2e6;
+            --calendar-day-bg: #fdfdfd;
+            --calendar-today-bg: #e0f2f7;
+            /* Light blue for today */
+            --calendar-event-day-bg: #d4edda;
+            /* Light green for days with events */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            /* Hidden by default */
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(to bottom, #2c3e50, #34495e);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 2rem 1rem;
+            transition: right 0.3s ease-in-out;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-nav.open {
+            right: 0;
+            /* Show when open */
+        }
+
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 3rem;
+        }
+
+        .mobile-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .mobile-nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+
+        /* Main Content Sections */
+        .main-content {
+            margin-top: 80px;
+            /* Espacio para el header fijo */
+            flex-grow: 1;
+            /* Para que ocupe el espacio restante */
+        }
+
+        .section {
+            padding: 4rem 0;
+            text-align: center;
+            min-height: calc(100vh - 80px - 150px);
+            /* Ajusta a la altura de la ventana - header - footer */
+            display: none;
+            /* Oculta todas las secciones por defecto */
+        }
+
+        .section.active {
+            display: block;
+            /* Muestra solo la sección activa */
+        }
+
+        .section-sub {
+            padding: 3rem 0;
+            /* Padding para sub-secciones dentro de una sección principal */
+        }
+
+        /* Hero Section */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 600px;
+            /* Altura del hero */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6);
+            /* Oscurece la imagen para que el texto resalte */
+            z-index: -1;
+            transition: background-image 1s ease-in-out;
+            /* Transición para el carrusel */
+        }
+
+        #inicio {
+            position: relative;
+            /* Para posicionar el hero-bg dentro de ella */
+            padding-top: 0;
+            /* Ya tiene el hero-bg */
+        }
+
+        #inicio .hero-content {
+            position: relative;
+            /* Para que esté por encima del hero-bg */
+            z-index: 1;
+            padding-top: 150px;
+            /* Espacio para el header y un poco más */
+            padding-bottom: 50px;
+            /* Espacio inferior */
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Call to Action Section (Inicio) */
+        .call-to-action {
+            color: white;
+            padding: 3rem;
+            margin-top: 3rem;
+            border-radius: 10px;
+            background-color: var(--secondary-color);
+        }
+
+        .call-to-action .btn-outline-light {
+            border-color: white;
+            color: white;
+        }
+
+        .call-to-action .btn-outline-light:hover {
+            background-color: white;
+            color: var(--secondary-color);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-light {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline-light:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #218838;
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Glass Card Effect */
+        .glass-card {
+            background: var(--card-bg-light);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--card-border-light);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            /* Para el posicionamiento de elementos internos */
+            overflow: hidden;
+            /* Para que el contenido no se desborde */
+        }
+
+        /* General Headings & Paragraphs */
+        h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            /* Color por defecto */
+        }
+
+        /* Specific text colors for better integration */
+        .text-muted-dark {
+            color: var(--text-muted-dark);
+        }
+
+        .text-primary-dark {
+            color: var(--text-primary-dark);
+        }
+
+        .text-dark {
+            color: var(--dark-color);
+        }
+
+        .text-light {
+            color: var(--light-color);
+        }
+
+        ul {
+            list-style: none;
+            /* Elimina viñetas por defecto */
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+            /* Espacio para el ícono */
+            color: var(--text-muted);
+        }
+
+        ul li::before {
+            content: "\f00c";
+            /* Icono de check mark de Font Awesome */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Grid Layouts for Ministries, Sermons, Events */
+        .ministries-grid,
+        .sermons-grid,
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .ministry-card,
+        .sermon-card,
+        .event-card {
+            background: var(--card-bg-light);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--card-border-light);
+            overflow: hidden;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            /* Para el diseño interno de la tarjeta */
+            flex-direction: column;
+        }
+
+        .ministry-card:hover,
+        .sermon-card:hover,
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        .ministry-card img,
+        .sermon-card img,
+        .event-card img {
+            width: 100%;
+            height: 200px;
+            /* Altura fija para las imágenes */
+            object-fit: cover;
+            display: block;
+        }
+
+        .ministry-card-content,
+        .sermon-card-content,
+        .event-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            /* Para que el contenido ocupe el espacio restante */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Empuja el botón al final */
+        }
+
+        .ministry-card-content h4,
+        .sermon-card-content h4,
+        .event-card-content h4 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .sermon-card-content .meta,
+        .event-card-content .meta {
+            font-size: 0.9rem;
+            color: var(--text-muted-dark);
+            margin-bottom: 1rem;
+        }
+
+        .sermon-card-content .meta i,
+        .event-card-content .meta i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .ministry-card-content .btn,
+        .sermon-card-content .btn,
+        .event-card-content .btn {
+            margin-top: auto;
+            /* Empuja el botón hacia abajo */
+            align-self: flex-start;
+            /* Alinea el botón a la izquierda */
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="date"],
+        .form-group input[type="url"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--dark-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="password"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group input[type="url"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        /* Map Container */
+        .map-container {
+            height: 300px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: auto;
+            /* Empuja el footer al final de la página */
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px 25px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modals (General Styling for all Modals) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-dialog {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            /* Default width */
+            width: 90%;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            padding: 20px;
+            /* Inner padding */
+        }
+
+        .modal-dialog.modal-lg {
+            max-width: 800px;
+            /* Larger modal for details */
+        }
+
+        .modal-dialog.modal-xl {
+            max-width: 1100px;
+            /* Extra large for calendar */
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+        }
+
+        .modal-content {
+            padding: 0;
+            /* Remove inner padding as dialog has it */
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 15px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--dark-color);
+        }
+
+        .modal-footer {
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #888;
+            cursor: pointer;
+            line-height: 1;
+            /* Asegura que el X esté centrado */
+            transition: color 0.2s ease;
+        }
+
+        .btn-close:hover {
+            color: #333;
+        }
+
+        /* Specific modal image styling */
+        .pastor-photo,
+        .ministry-detail-photo,
+        .event-detail-photo {
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            max-width: 100%;
+        }
+
+        .pastor-photo {
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--primary-color);
+            object-fit: cover;
+        }
+
+        .ministry-detail-photo,
+        .event-detail-photo {
+            height: 250px;
+            /* Fixed height for consistency */
+            object-fit: cover;
+        }
+
+
+        /* Alertas y Notificaciones */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .alert.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Full Screen Loading Overlay */
+        .full-screen-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .full-screen-loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner-container {
+            color: white;
+            text-align: center;
+        }
+
+        .spinner-container .fa-spin {
+            margin-bottom: 15px;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+        }
+
+
+        /* Utilidades Bootstrap-like (Asegúrate de tener estas si no usas Bootstrap completo) */
+        .d-flex {
+            display: flex;
+        }
+
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .flex-md-row {
+            flex-direction: column;
+        }
+
+        /* Por defecto, luego en MD cambia a row */
+        @media (min-width: 768px) {
+            .flex-md-row {
+                flex-direction: row;
+            }
+
+            .col-md-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            .order-md-1 {
+                order: 1;
+            }
+
+            .order-md-2 {
+                order: 2;
+            }
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .justify-content-around {
+            justify-content: space-around;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .mb-5 {
+            margin-bottom: 3rem !important;
+        }
+
+        .mt-0 {
+            margin-top: 0 !important;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem !important;
+        }
+
+        .mt-3 {
+            margin-top: 1rem !important;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+
+        .mt-5 {
+            margin-top: 3rem !important;
+        }
+
+        .ms-2 {
+            margin-left: 0.5rem !important;
+        }
+
+        /* para iconos */
+        .me-2 {
+            margin-right: 0.5rem !important;
+        }
+
+        .ms-3 {
+            margin-left: 1rem !important;
+        }
+
+        .w-100 {
+            width: 100% !important;
+        }
+
+        .p-3 {
+            padding: 1rem !important;
+        }
+
+        .rounded {
+            border-radius: 0.25rem !important;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .lead {
+            font-size: 1.25em;
+            font-weight: 300;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .h-100 {
+            height: 100% !important;
+        }
+
+        .list-unstyled {
+            padding-left: 0;
+            list-style: none;
+        }
+
+
+        /* Predicaciones Filters */
+        .filter-bar {
+            padding: 1.5rem 2rem;
+            text-align: left;
+        }
+
+        .filter-bar h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-controls select,
+        .filter-controls input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--dark-color);
+        }
+
+        .filter-controls button {
+            height: 42px;
+            /* Match height of inputs/selects */
+            font-weight: bold;
+        }
+
+
+        /* Creencias Section Specifics */
+        #creencias .belief-list {
+            list-style: none;
+            padding-left: 0;
+            text-align: left;
+            /* Align text within the list */
+        }
+
+        #creencias .belief-list li {
+            margin-bottom: 2rem;
+            /* More space between belief points */
+            padding-left: 0;
+            /* Remove default list padding */
+        }
+
+        #creencias .belief-list li h4 {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 30px;
+            /* Space for a custom bullet */
+            color: var(--primary-color);
+            /* Ensure heading color is prominent */
+        }
+
+        #creencias .belief-list li h4::before {
+            content: "\f058";
+            /* Check-circle icon from Font Awesome */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2em;
+        }
+
+        #creencias .belief-list li p {
+            margin-bottom: 0;
+            /* No extra margin for paragraphs within list items */
+            color: var(--text-muted-dark);
+        }
+
+
+        /* Full Calendar Modal Specifics */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-nav h3 {
+            margin-bottom: 0;
+            font-size: 1.8rem;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .calendar-grid-container {
+            border: 1px solid var(--calendar-border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--calendar-border-color);
+        }
+
+        .calendar-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: white;
+        }
+
+        .calendar-day {
+            padding: 15px 5px;
+            border: 1px solid var(--calendar-border-color);
+            min-height: 100px;
+            text-align: right;
+            position: relative;
+            font-size: 0.95rem;
+            color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+        }
+
+        .calendar-day.prev-month,
+        .calendar-day.next-month {
+            color: var(--text-muted);
+            background-color: #f0f0f0;
+        }
+
+        .calendar-day.current-day {
+            background-color: var(--calendar-today-bg);
+            border: 2px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .calendar-day.has-event {
+            background-color: var(--calendar-event-day-bg);
+            cursor: pointer;
+        }
+
+        .calendar-day.has-event:hover {
+            background-color: #c7edd4;
+        }
+
+        .calendar-day span.day-number {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .calendar-day.current-day span.day-number {
+            color: var(--primary-color);
+        }
+
+        .calendar-day .event-indicator {
+            display: block;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-size: 0.75rem;
+            margin-top: 5px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* For multiple events */
+        .calendar-day .event-indicator.multiple {
+            background-color: var(--secondary-color);
+        }
+
+        .event-list-for-calendar {
+            text-align: left;
+        }
+
+        .event-list-for-calendar h4 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .event-list-for-calendar ul li {
+            margin-bottom: 10px;
+            padding-left: 0;
+            /* Remove default list style */
+        }
+
+        .event-list-for-calendar ul li::before {
+            content: none;
+            /* No checkmark for this list */
+        }
+
+        .event-list-for-calendar .event-title {
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .event-list-for-calendar .event-date {
+            font-size: 0.9rem;
+            color: var(--text-muted-dark);
+        }
+
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                /* Hide desktop nav links on smaller screens */
+            }
+
+            .menu-toggle {
+                display: block;
+                /* Show hamburger menu button */
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            h3 {
+                font-size: 1.7rem;
+            }
+
+            .ministries-grid,
+            .sermons-grid,
+            .events-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+
+            .calendar-day {
+                min-height: 80px;
+                /* Smaller height for calendar days on medium screens */
+            }
+
+            .modal-dialog.modal-xl {
+                max-width: 95%;
+                /* Adjust calendar modal width */
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            #inicio .hero-bg {
+                height: 450px;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .btn-outline-light.ms-3 {
+                margin-left: 0;
+                margin-top: 15px;
+                /* Stack buttons on small screens */
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .modal-dialog {
+                width: 95%;
+            }
+
+            /* Asegura que las columnas se apilen en móvil */
+            .row {
+                flex-direction: column;
+            }
+
+            .col-md-6 {
+                max-width: 100%;
+            }
+
+            .mb-md-0 {
+                margin-bottom: 1rem !important;
+                /* Si tienes mb-md-0 que necesite ajuste */
+            }
+
+            .mt-md-0 {
+                margin-top: 1rem !important;
+                /* Asegura un margen entre elementos apilados */
+            }
+
+            .order-md-1,
+            .order-md-2 {
+                order: unset !important;
+                /* Desactiva el orden para que se apilen naturalmente */
+            }
+
+            .section-sub {
+                padding: 2rem 0;
+            }
+
+            .filter-controls {
+                grid-template-columns: 1fr;
+                /* Stack filters vertically */
+            }
+
+            .filter-controls button {
+                width: 100%;
+            }
+
+            .calendar-day {
+                padding: 10px 2px;
+                min-height: 60px;
+                /* Even smaller height for calendar days on small screens */
+                font-size: 0.8rem;
+            }
+
+            .calendar-day span.day-number {
+                font-size: 1rem;
+            }
+
+            .calendar-day .event-indicator {
+                font-size: 0.65rem;
+                padding: 1px 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#inicio" class="logo nav-link-internal">
+                <img src="https://picsum.photos/id/684/50/50" alt="Logo de la Iglesia">
+                Iglesia Comunidad de Fe
+            </a>
+            <ul class="nav-links">
+                <li><a href="#inicio" class="nav-link-internal">Inicio</a></li>
+                <li><a href="#nosotros" class="nav-link-internal">Nosotros</a></li>
+                <li><a href="#ministerios" class="nav-link-internal">Ministerios</a></li>
+                <li><a href="#predicaciones" class="nav-link-internal">Predicaciones</a></li>
+                <li><a href="#eventos" class="nav-link-internal">Eventos</a></li>
+                <li><a href="#creencias" class="nav-link-internal">Creencias</a></li>
+                <li><a href="#contacto" class="nav-link-internal">Contacto</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="mobile-nav" id="mobileNav">
+        <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        <ul class="mobile-nav-links">
+            <li><a href="#inicio" class="nav-link-internal">Inicio</a></li>
+            <li><a href="#nosotros" class="nav-link-internal">Nosotros</a></li>
+            <li><a href="#ministerios" class="nav-link-internal">Ministerios</a></li>
+            <li><a href="#predicaciones" class="nav-link-internal">Predicaciones</a></li>
+            <li><a href="#eventos" class="nav-link-internal">Eventos</a></li>
+            <li><a href="#creencias" class="nav-link-internal">Creencias</a></li>
+            <li><a href="#contacto" class="nav-link-internal">Contacto</a></li>
+        </ul>
+    </div>
+
+    <main class="main-content">
+
+        <section id="inicio" class="section active">
+            <div class="hero-bg" style="background-image: url('https://picsum.photos/id/900/1600/600');" id="heroBg">
+            </div>
+            <div class="hero-content">
+                <h1>Bienvenido a Iglesia Comunidad de Fe</h1>
+                <p>Un lugar donde la fe se vive, el amor se comparte y la esperanza florece.</p>
+                <a href="#predicaciones" class="btn btn-primary nav-link-internal">Ver Predicación Reciente <i
+                        class="fas fa-play-circle ms-2"></i></a>
+                <a href="#eventos" class="btn btn-outline nav-link-internal">Próximos Eventos <i
+                        class="fas fa-calendar-alt ms-2"></i></a>
+            </div>
+
+            <div class="container section-sub">
+                <h2>Encuéntranos</h2>
+                <p class="text-muted-dark mb-5">¡Nos encantaría verte en uno de nuestros servicios!</p>
+                <div class="glass-card">
+                    <div class="d-flex flex-column flex-md-row justify-content-around align-items-center">
+                        <div class="text-center p-3">
+                            <i class="fas fa-church fa-3x mb-3" style="color: var(--primary-color);"></i>
+                            <h4 class="text-primary-dark mb-2">Horarios de Culto</h4>
+                            <p class="text-muted-dark">Domingos: 10:00 AM (Servicio General)</p>
+                            <p class="text-muted-dark">Miércoles: 7:00 PM (Estudio Bíblico)</p>
+                        </div>
+                        <div class="text-center p-3 mt-4 mt-md-0">
+                            <i class="fas fa-map-marker-alt fa-3x mb-3" style="color: var(--primary-color);"></i>
+                            <h4 class="text-primary-dark mb-2">Nuestra Ubicación</h4>
+                            <p class="text-muted-dark">[Tu Dirección de la Iglesia Completa]</p>
+                            <a href="#contacto" class="btn btn-primary btn-sm mt-2 nav-link-internal">Cómo Llegar <i
+                                    class="fas fa-directions ms-2"></i></a>
+                        </div>
+                        <div class="text-center p-3 mt-4 mt-md-0">
+                            <i class="fas fa-phone-alt fa-3x mb-3" style="color: var(--primary-color);"></i>
+                            <h4 class="text-primary-dark mb-2">Contáctanos</h4>
+                            <p class="text-muted-dark">[Tu Número de Teléfono]</p>
+                            <p class="text-muted-dark">[Tu Correo Electrónico]</p>
+                            <a href="#contacto" class="btn btn-primary btn-sm mt-2 nav-link-internal">Escríbenos <i
+                                    class="fas fa-envelope ms-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container section-sub bg-secondary text-white call-to-action">
+                <h2>¿Eres Nuevo Aquí?</h2>
+                <p class="lead mb-4">¡Nos encantaría conocerte! Planifica tu primera visita o únete a un grupo.</p>
+                <a href="#contacto" class="btn btn-outline-light nav-link-internal">Planifica tu Visita <i
+                        class="fas fa-hand-holding-heart ms-2"></i></a>
+                <a href="#ministerios" class="btn btn-outline-light ms-3 nav-link-internal">Únete a un Grupo <i
+                        class="fas fa-users ms-2"></i></a>
+            </div>
+        </section>
+
+        <section id="nosotros" class="section">
+            <div class="container">
+                <h2>Quiénes Somos</h2>
+
+                <div class="glass-card mb-4">
+                    <h3 class="text-dark">Nuestra Misión, Visión y Valores</h3>
+                    <div class="d-flex flex-column flex-md-row justify-content-around text-center mt-4">
+                        <div class="p-3">
+                            <i class="fas fa-bullseye fa-2x mb-2 text-secondary"></i>
+                            <h4 class="text-primary-dark">Misión</h4>
+                            <p class="text-muted-dark">Alcanzar almas para Cristo, discipular creyentes y servir a
+                                nuestra ciudad con el amor de Dios.</p>
+                        </div>
+                        <div class="p-3">
+                            <i class="fas fa-eye fa-2x mb-2 text-secondary"></i>
+                            <h4 class="text-primary-dark">Visión</h4>
+                            <p class="text-muted-dark">Ser una iglesia vibrante que glorifique a Dios, inspire el cambio
+                                y transforme vidas a través del evangelio.</p>
+                        </div>
+                        <div class="p-3">
+                            <i class="fas fa-heart fa-2x mb-2 text-secondary"></i>
+                            <h4 class="text-primary-dark">Valores</h4>
+                            <p class="text-muted-dark">Amor Incondicional, Fe Activa, Servicio Genuino, Comunidad Unida,
+                                Esperanza Viva.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card mb-4">
+                    <h3 class="text-dark">Nuestra Historia</h3>
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6 order-md-2">
+                            <img src="https://picsum.photos/id/250/600/400" alt="Historia de la Iglesia"
+                                class="img-fluid rounded shadow-sm mb-3 mb-md-0">
+                        </div>
+                        <div class="col-md-6 order-md-1 text-left">
+                            <p class="text-muted-dark">Fundada en [Año de Fundación] por un pequeño grupo de creyentes
+                                con una gran visión, nuestra iglesia ha sido un faro de esperanza y fe en [Nombre de la
+                                Ciudad/Barrio]. Lo que comenzó como reuniones en casas, creció gracias a la fidelidad de
+                                Dios y el compromiso de Su pueblo.</p>
+                            <p class="text-muted-dark">A lo largo de los años, hemos sido testigos de innumerables vidas
+                                transformadas, familias restauradas y un impacto significativo en nuestra comunidad a
+                                través de diversos ministerios y programas. Seguimos construyendo sobre los cimientos de
+                                la Palabra de Dios, mirando hacia el futuro con la convicción de que lo mejor está por
+                                venir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="text-dark">Nuestro Equipo Pastoral</h3>
+                    <div class="ministries-grid">
+                        <div class="ministry-card" data-pastor-id="juan">
+                            <img src="https://picsum.photos/id/65/300/200" alt="Pastor Juan Pérez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Pastor Juan Pérez</h4>
+                                <p class="text-muted-dark">Pastor Principal</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
+                        </div>
+                        <div class="ministry-card" data-pastor-id="maria">
+                            <img src="https://picsum.photos/id/66/300/200" alt="Pastora María Gómez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Pastora María Gómez</h4>
+                                <p class="text-muted-dark">Pastora Asociada</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
+                        </div>
+                        <div class="ministry-card" data-pastor-id="carlos">
+                            <img src="https://picsum.photos/id/67/300/200" alt="Pastor Carlos Ruiz">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Pastor Carlos Ruiz</h4>
+                                <p class="text-muted-dark">Líder de Jóvenes</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ministerios" class="section">
+            <div class="container">
+                <h2>Nuestros Ministerios</h2>
+                <p class="text-muted-dark mb-5">Conoce las áreas en las que servimos a Dios y a nuestra comunidad.</p>
+                <div class="ministries-grid">
+                    <div class="ministry-card" data-ministry-id="alabanza">
+                        <img src="https://picsum.photos/id/10/300/200" alt="Ministerio de Alabanza">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Ministerio de Alabanza</h4>
+                            <p class="text-muted-dark">Dirigiendo a la congregación en adoración y exaltación a Dios.
+                            </p>
+                            <button class="btn btn-primary btn-sm view-ministry-btn">Ver Más</button>
+                        </div>
+                    </div>
+                    <div class="ministry-card" data-ministry-id="ninos">
+                        <img src="https://picsum.photos/id/20/300/200" alt="Ministerio de Niños">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Ministerio de Niños</h4>
+                            <p class="text-muted-dark">Enseñando la Palabra de Dios a los más pequeños en un ambiente
+                                divertido.</p>
+                            <button class="btn btn-primary btn-sm view-ministry-btn">Ver Más</button>
+                        </div>
+                    </div>
+                    <div class="ministry-card" data-ministry-id="jovenes">
+                        <img src="https://picsum.photos/id/30/300/200" alt="Ministerio de Jóvenes">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Ministerio de Jóvenes</h4>
+                            <p class="text-muted-dark">Conectando y discipulando a la próxima generación de líderes.</p>
+                            <button class="btn btn-primary btn-sm view-ministry-btn">Ver Más</button>
+                        </div>
+                    </div>
+                    <div class="ministry-card" data-ministry-id="mujeres">
+                        <img src="https://picsum.photos/id/40/300/200" alt="Ministerio de Mujeres">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Ministerio de Mujeres</h4>
+                            <p class="text-muted-dark">Empoderando a las mujeres a través de la fe y la comunidad.</p>
+                            <button class="btn btn-primary btn-sm view-ministry-btn">Ver Más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="predicaciones" class="section">
+            <div class="container">
+                <h2>Nuestras Predicaciones</h2>
+                <p class="text-muted-dark mb-5">Escucha la Palabra que transforma vidas.</p>
+
+                <div class="glass-card filter-bar mb-4">
+                    <h3 class="text-dark">Filtrar Predicaciones</h3>
+                    <div class="filter-controls">
+                        <select id="filterYear">
+                            <option value="">Año</option>
+                        </select>
+                        <select id="filterMonth">
+                            <option value="">Mes</option>
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                        <select id="filterPreacher">
+                            <option value="">Predicador</option>
+                        </select>
+                        <select id="filterArea">
+                            <option value="">Área</option>
+                        </select>
+                        <input type="text" id="searchSermon" placeholder="Buscar por palabra clave...">
+                        <button id="resetFilters" class="btn btn-outline-secondary">Limpiar Filtros</button>
+                    </div>
+                </div>
+
+                <div class="sermons-grid" id="sermonsContainer">
+                </div>
+
+                <div class="text-center mt-5">
+                    <button class="btn btn-primary" id="addSermonBtn"><i class="fas fa-plus me-2"></i>Agregar
+                        Predicación</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="eventos" class="section">
+            <div class="container">
+                <h2>Próximos Eventos</h2>
+                <p class="text-muted-dark mb-5">Participa en nuestras actividades y fortalece tu fe.</p>
+                <div class="events-grid">
+                    <div class="event-card glass-card" data-event-id="conferenciaAnual">
+                        <img src="https://picsum.photos/id/111/400/250" alt="Conferencia Anual">
+                        <div class="event-card-content">
+                            <h4 class="text-primary-dark">Conferencia Anual de Fe</h4>
+                            <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> 20-22 Septiembre 2025 |
+                                <i class="fas fa-map-marker-alt"></i> Centro de Convenciones</p>
+                            <p class="text-muted-dark">Tres días de adoración intensa, enseñanzas profundas y
+                                experiencias transformadoras con oradores invitados.</p>
+                            <button class="btn btn-primary btn-sm view-event-btn">Más Info</button>
+                        </div>
+                    </div>
+                    <div class="event-card glass-card" data-event-id="nochePelicula">
+                        <img src="https://picsum.photos/id/112/400/250" alt="Noche de Película Familiar">
+                        <div class="event-card-content">
+                            <h4 class="text-primary-dark">Noche de Película Familiar</h4>
+                            <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> 05 Julio 2025 | <i
+                                    class="fas fa-map-marker-alt"></i> Salón Parroquial</p>
+                            <p class="text-muted-dark">Disfruta de una noche divertida con palomitas de maíz y una
+                                película inspiradora para toda la familia.</p>
+                            <button class="btn btn-primary btn-sm view-event-btn">Más Info</button>
+                        </div>
+                    </div>
+                    <div class="event-card glass-card" data-event-id="voluntariado">
+                        <img src="https://picsum.photos/id/113/400/250" alt="Voluntariado Comunitario">
+                        <div class="event-card-content">
+                            <h4 class="text-primary-dark">Jornada de Voluntariado Comunitario</h4>
+                            <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> 12 Agosto 2025 | <i
+                                    class="fas fa-map-marker-alt"></i> Parque Central</p>
+                            <p class="text-muted-dark">Únete a nosotros para servir a nuestra comunidad y marcar la
+                                diferencia en las vidas de otros.</p>
+                            <button class="btn btn-primary btn-sm view-event-btn">Más Info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <button class="btn btn-primary" id="viewFullCalendarBtn">Ver Calendario Completo</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="creencias" class="section">
+            <div class="container">
+                <h2>Nuestras Creencias Fundamentales</h2>
+                <p class="text-muted-dark mb-5">Explora los pilares de nuestra fe y los principios que guían nuestra
+                    vida.</p>
+
+                <div class="glass-card mb-4 text-left">
+                    <h3 class="text-dark">Artículos de Fe</h3>
+                    <p class="text-muted-dark">Nuestra iglesia se adhiere a los siguientes principios bíblicos que
+                        consideramos fundamentales para la fe cristiana. Estos artículos representan las verdades
+                        centrales que sostenemos y que guían nuestra doctrina y nuestra práctica como iglesia:</p>
+                    <ul class="belief-list">
+                        <li>
+                            <h4 class="text-primary-dark">La Inspiración Divina de la Biblia:</h4>
+                            <p class="text-muted-dark">Creemos que la Biblia, compuesta por el Antiguo y Nuevo
+                                Testamento, es la Palabra de Dios inspirada verbalmente y plenamente, infalible en sus
+                                manuscritos originales, y es la autoridad suprema y final en todo asunto de fe y
+                                conducta. Es la revelación escrita de Dios para la humanidad.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Naturaleza de Dios (La Trinidad):</h4>
+                            <p class="text-muted-dark">Creemos en un solo Dios verdadero y vivo, infinito, eterno y
+                                perfecto en santidad, sabiduría, poder y amor. Él es el Creador y Sustentador de todas
+                                las cosas. Este único Dios existe eternamente en tres personas co-iguales: Padre, Hijo
+                                (Jesucristo) y Espíritu Santo. Son un solo Dios, pero distintas personas.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">Jesucristo: Dios con Nosotros (Emanuel):</h4>
+                            <p class="text-muted-dark">Creemos en la deidad absoluta de nuestro Señor Jesucristo, en su
+                                nacimiento virginal, en su vida sin pecado, en sus milagros divinos, en su muerte
+                                sustitutoria y expiatoria en la cruz por nuestros pecados, en su resurrección corporal
+                                de entre los muertos, en su ascensión a la diestra del Padre, donde intercede por
+                                nosotros, y en su regreso personal y visible en poder y gloria.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Creación del Hombre y el Pecado:</h4>
+                            <p class="text-muted-dark">Creemos que el hombre fue creado directamente por Dios a su
+                                imagen y semejanza, en un estado de inocencia, pero por la desobediencia de Adán, toda
+                                la humanidad cayó en pecado. Como resultado, todos los seres humanos nacen con una
+                                naturaleza pecaminosa, están separados de Dios y son incapaces, por sí mismos, de
+                                alcanzar la salvación. El pecado es una transgresión de la ley de Dios y trae consigo la
+                                muerte espiritual y física.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Gracia de Dios y la Salvación:</h4>
+                            <p class="text-muted-dark">Creemos que la salvación del hombre es un regalo de Dios,
+                                obtenida solo por gracia a través de la fe en Jesucristo. La redención se logra a través
+                                del derramamiento de la sangre de Jesucristo en la cruz, quien murió por nuestros
+                                pecados, fue sepultado y resucitó al tercer día conforme a las Escrituras. Creemos que
+                                el arrepentimiento del pecado y la fe en Cristo son las únicas condiciones para la
+                                salvación. El que cree en Jesús tiene vida eterna.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">El Bautismo en Agua:</h4>
+                            <p class="text-muted-dark">Creemos en el bautismo en agua por inmersión total para aquellos
+                                que han creído en Jesucristo y se han arrepentido de sus pecados. Es un acto público de
+                                obediencia, un símbolo de la muerte, sepultura y resurrección con Cristo, y una
+                                declaración de fe en Su obra redentora.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Cena del Señor:</h4>
+                            <p class="text-muted-dark">Creemos en la celebración de la Cena del Señor (Comunión) como un
+                                mandato de Jesucristo para sus seguidores. Es una conmemoración de Su sacrificio en la
+                                cruz y Su sangre derramada, así como una anticipación de Su segunda venida. Participar
+                                de ella es un privilegio para los creyentes bautizados.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">El Bautismo en el Espíritu Santo:</h4>
+                            <p class="text-muted-dark">Creemos en el bautismo en el Espíritu Santo como una experiencia
+                                subsiguiente a la salvación para aquellos que creen, con la evidencia inicial de hablar
+                                en otras lenguas según el Espíritu les da que hablen. Esta experiencia empodera a los
+                                creyentes para testificar y servir, y les permite vivir una vida más profunda y efectiva
+                                en Cristo.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Sanidad Divina:</h4>
+                            <p class="text-muted-dark">Creemos en la sanidad divina, la cual es provista para los
+                                creyentes a través de la expiación de Jesucristo en la cruz. Dios todavía sana hoy, y
+                                oramos con fe por la sanidad de los enfermos, creyendo en Su poder para restaurar el
+                                cuerpo, el alma y el espíritu.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Segunda Venida de Cristo:</h4>
+                            <p class="text-muted-dark">Creemos en el regreso personal y visible de nuestro Señor
+                                Jesucristo a la Tierra. Este evento glorioso marcará la consumación de la historia de la
+                                redención y el establecimiento de Su reino eterno.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">El Juicio Final y la Vida Eterna:</h4>
+                            <p class="text-muted-dark">Creemos en la resurrección de los salvos para vida eterna con
+                                Dios en el cielo, y la resurrección de los no salvos para juicio eterno y castigo en el
+                                infierno. Creemos en un cielo nuevo y una tierra nueva donde morará la justicia.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">La Iglesia:</h4>
+                            <p class="text-muted-dark">Creemos en la iglesia como el cuerpo de Cristo, compuesta por
+                                todos los creyentes nacidos de nuevo a nivel universal. La iglesia local es una
+                                manifestación visible de este cuerpo, llamada a adorar a Dios, edificar a los creyentes,
+                                evangelizar al mundo y servir a su comunidad.</p>
+                        </li>
+                        <li>
+                            <h4 class="text-primary-dark">Mayordomía:</h4>
+                            <p class="text-muted-dark">Creemos que todo lo que tenemos y somos proviene de Dios, y por
+                                lo tanto, somos llamados a ser buenos mayordomos de nuestros recursos, tiempo, talentos
+                                y finanzas, honrando a Dios con nuestras primicias y ofrendas.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="section">
+            <div class="container">
+                <h2>Contáctanos</h2>
+                <p class="text-muted-dark mb-5">Estamos aquí para servirte. Envíanos un mensaje o visítanos.</p>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="glass-card h-100">
+                            <h3 class="text-dark">Envíanos un Mensaje</h3>
+                            <form id="contactForm">
+                                <div class="form-group">
+                                    <label for="name">Nombre:</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">Asunto:</label>
+                                    <input type="text" id="subject" name="subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Mensaje:</label>
+                                    <textarea id="message" name="message" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="glass-card h-100">
+                            <h3 class="text-dark">Nuestra Ubicación y Horarios</h3>
+                            <p class="text-muted-dark"><i class="fas fa-map-marker-alt text-primary-dark"></i> [Tu
+                                Dirección de la Iglesia Completa]</p>
+                            <p class="text-muted-dark"><i class="fas fa-phone-alt text-primary-dark"></i> [Tu Número de
+                                Teléfono]</p>
+                            <p class="text-muted-dark"><i class="fas fa-envelope text-primary-dark"></i> [Tu Correo
+                                Electrónico]</p>
+                            <p class="text-muted-dark"><i class="fas fa-clock text-primary-dark"></i> <strong>Horarios
+                                    de Oficina:</strong> Lunes a Viernes, 9:00 AM - 5:00 PM</p>
+                            <p class="text-muted-dark"><i class="fas fa-church text-primary-dark"></i> <strong>Servicios
+                                    Dominicales:</strong> 10:00 AM</p>
+                            <div class="map-container">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.5755106571587!2d-75.56847288599427!3d6.216666695489726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e442838c0f5e1f7%3A0x7d6a78a6d6e7f7e9!2sMedell%C3%ADn%2C%20Antioquia!5e0!3m2!1sen!2sco!4v1689254321098!5m2!1sen!2sco"
+                                    width="100%" height="300" style="border:0;" allowfullscreen=""
+                                    loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="#inicio" class="nav-link-internal">Inicio</a></li>
+                <li><a href="#nosotros" class="nav-link-internal">Nosotros</a></li>
+                <li><a href="#ministerios" class="nav-link-internal">Ministerios</a></li>
+                <li><a href="#predicaciones" class="nav-link-internal">Predicaciones</a></li>
+                <li><a href="#eventos" class="nav-link-internal">Eventos</a></li>
+                <li><a href="#creencias" class="nav-link-internal">Creencias</a></li>
+                <li><a href="#contacto" class="nav-link-internal">Contacto</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>© <span id="currentYear"></span> Iglesia Comunidad de Fe. Todos los derechos reservados.</p>
+            <p>Diseñado con <i class="fas fa-heart text-danger"></i> por [Tu Nombre/Equipo]</p>
+        </div>
+    </footer>
+
+    <div id="fullScreenLoadingOverlay" class="full-screen-loading-overlay">
+        <div class="spinner-container">
+            <i class="fas fa-spinner fa-spin fa-4x"></i>
+            <p class="loading-text">Cargando...</p>
+        </div>
+    </div>
+
+    <div id="tempMessageModal" class="modal"></div>
+    <div id="tempConfirmModal" class="modal"></div>
+
+    <div id="pastorBioModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pastorBioModalLabel">Biografía del Pastor</h5>
+                    <button type="button" class="btn-close" onclick="hideModal('pastorBioModal');">×</button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="pastorBioPhoto" src="" alt="Foto del Pastor" class="rounded-circle mb-3 pastor-photo">
+                    <h4 id="pastorBioName" class="text-primary-dark"></h4>
+                    <p id="pastorBioTitle" class="text-muted-dark"></p>
+                    <p id="pastorBioText" class="text-left text-muted-dark"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="hideModal('pastorBioModal');">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ministryDetailModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ministryDetailModalLabel">Detalles del Ministerio</h5>
+                    <button type="button" class="btn-close" onclick="hideModal('ministryDetailModal');">×</button>
+                </div>
+                <div class="modal-body">
+                    <img id="ministryDetailPhoto" src="" alt="Imagen del Ministerio"
+                        class="img-fluid rounded mb-3 ministry-detail-photo">
+                    <h4 id="ministryDetailName" class="text-primary-dark mb-2"></h4>
+                    <p id="ministryDetailDescription" class="text-muted-dark"></p>
+                    <div id="ministryDetailInfo" class="text-muted-dark">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        onclick="hideModal('ministryDetailModal');">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="eventDetailModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailModalLabel">Detalles del Evento</h5>
+                    <button type="button" class="btn-close" onclick="hideModal('eventDetailModal');">×</button>
+                </div>
+                <div class="modal-body">
+                    <img id="eventDetailPhoto" src="" alt="Imagen del Evento"
+                        class="img-fluid rounded mb-3 event-detail-photo">
+                    <h4 id="eventDetailName" class="text-primary-dark mb-2"></h4>
+                    <p id="eventDetailDate" class="text-muted-dark"><i class="fas fa-calendar-alt me-2"></i></p>
+                    <p id="eventDetailLocation" class="text-muted-dark"><i class="fas fa-map-marker-alt me-2"></i></p>
+                    <p id="eventDetailDescription" class="text-muted-dark"></p>
+                    <div id="eventDetailLinks">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        onclick="hideModal('eventDetailModal');">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fullCalendarModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Calendario de Eventos</h5>
+                    <button type="button" class="btn-close" onclick="hideModal('fullCalendarModal');">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="calendar-nav mb-3 d-flex justify-content-between align-items-center">
+                        <button id="prevMonthBtn" class="btn btn-outline-primary"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <h3 id="currentMonthYear" class="text-primary-dark mb-0"></h3>
+                        <button id="nextMonthBtn" class="btn btn-outline-primary"><i
+                                class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid-container">
+                        <div class="calendar-weekdays">
+                            <div>Dom</div>
+                            <div>Lun</div>
+                            <div>Mar</div>
+                            <div>Mié</div>
+                            <div>Jue</div>
+                            <div>Vie</div>
+                            <div>Sáb</div>
+                        </div>
+                        <div id="calendarDaysGrid" class="calendar-days-grid">
+                        </div>
+                    </div>
+                    <div class="event-list-for-calendar mt-4">
+                        <h4 class="text-primary-dark">Eventos para este mes:</h4>
+                        <ul id="eventsForCurrentMonth" class="list-unstyled">
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        onclick="hideModal('fullCalendarModal');">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sermonAuthModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sermonAuthModalLabel">Acceso para Subir Predicaciones</h5>
+                    <button type="button" class="btn-close" onclick="hideModal('sermonAuthModal');">×</button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginFormContainer">
+                        <p class="text-muted-dark mb-4 text-center">Solo el personal autorizado puede subir
+                            predicaciones. Inicia sesión para continuar.</p>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="username">Usuario:</label>
+                                <input type="text" id="username" name="username" required autocomplete="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" name="password" required
+                                    autocomplete="current-password">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                            <p id="loginMessage" class="alert mt-3 text-center" style="display:none;"></p>
+                        </form>
+                    </div>
+
+                    <div id="uploadFormContainer" style="display:none;">
+                        <h4 class="text-primary-dark text-center mb-3">Subir Nueva Predicación</h4>
+                        <form id="uploadSermonForm">
+                            <div class="form-group">
+                                <label for="sermonTitle">Título:</label>
+                                <input type="text" id="sermonTitle" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sermonDate">Fecha:</label>
+                                <input type="date" id="sermonDate" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sermonPreacher">Predicador:</label>
+                                <input type="text" id="sermonPreacher" name="preacher" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sermonArea">Área/Categoría:</label>
+                                <select id="sermonArea" name="area" required>
+                                    <option value="">Selecciona un área</option>
+                                    <option value="Gracia">Gracia</option>
+                                    <option value="Fe">Fe</option>
+                                    <option value="Sanidad">Sanidad</option>
+                                    <option value="Familia">Familia</option>
+                                    <option value="Liderazgo">Liderazgo</option>
+                                    <option value="Esperanza">Esperanza</option>
+                                    <option value="Evangelismo">Evangelismo</option>
+                                    <option value="Discipulado">Discipulado</option>
+                                    <option value="Adoracion">Adoración</option>
+                                    <option value="Profecia">Profecía</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sermonLink">Enlace (URL de YouTube, Vimeo, etc.):</label>
+                                <input type="url" id="sermonLink" name="link"
+                                    placeholder="https://youtube.com/watch?v=..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sermonDescription">Descripción:</label>
+                                <textarea id="sermonDescription" name="description" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Subir Predicación</button>
+                            <p id="uploadMessage" class="alert mt-3 text-center" style="display:none;"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN (SIMULADA) ---
+        const CONFIG = {
+            // Estas credenciales son solo para DEMOSTRACIÓN en el frontend. NO usar en producción.
+            USERS: {
+                'admin': { password: 'password123', role: 'administrator', name: 'Administrador' },
+                'editor': { password: 'editor123', role: 'editor', name: 'Editor' },
+            },
+            // Simulación de rol del usuario actual (se establece tras un login simulado)
+            currentUserRole: null
+        };
+
+        // --- Datos de Ejemplo (En una aplicación real, vendrían de un backend) ---
+        const pastorsData = {
+            juan: {
+                name: "Pastor Juan Pérez",
+                title: "Pastor Principal",
+                photo: "https://picsum.photos/id/65/300/300",
+                bio: "El Pastor Juan Pérez ha sido el líder espiritual de nuestra congregación desde 2005. Con una pasión inquebrantable por la Palabra de Dios y un corazón para las personas, ha guiado a nuestra iglesia con sabiduría, amor y visión. Es un orador inspirador, mentor y esposo de María, con quien tiene 2 hijos."
+            },
+            maria: {
+                name: "Pastora María Gómez",
+                title: "Pastora Asociada",
+                photo: "https://picsum.photos/id/66/300/300",
+                bio: "La Pastora María Gómez ha sido una pieza fundamental en el desarrollo de los ministerios de nuestra iglesia desde 2010. Con un don especial para la enseñanza y el discipulado, se dedica a empoderar a los creyentes para vivir una vida plena en Cristo. Su enfoque principal es el ministerio de mujeres y familias, donde ha visto grandes transformaciones."
+            },
+            carlos: {
+                name: "Pastor Carlos Ruiz",
+                title: "Líder de Jóvenes",
+                photo: "https://picsum.photos/id/67/300/300",
+                bio: "El Pastor Carlos Ruiz es el apasionado líder de nuestro vibrante ministerio de jóvenes. Con un enfoque dinámico y relevante, busca conectar a los jóvenes con Dios y entre sí, preparándolos para ser líderes de impacto en su generación. Es conocido por su energía, creatividad y su habilidad para comunicarse con las nuevas generaciones, inspirándolos a seguir a Jesús."
+            }
+        };
+
+        const ministriesData = {
+            alabanza: {
+                name: "Ministerio de Alabanza",
+                photo: "https://picsum.photos/id/10/800/500",
+                description: "El Ministerio de Alabanza y Adoración de nuestra iglesia busca guiar a la congregación en una experiencia profunda de adoración a Dios a través de la música y el canto. No solo elevamos nuestra voz, sino también nuestros corazones, creando un ambiente donde la presencia de Dios se manifiesta. Si tienes talento musical y un corazón para adorar, ¡te invitamos a unirte!",
+                info: "<p><strong>Líderes:</strong> Equipo de Adoración</p><p><strong>Ensayos:</strong> Jueves 7:00 PM</p><p><strong>Contacto:</strong> alabanza@iglesiaejemplo.com</p>"
+            },
+            ninos: {
+                name: "Ministerio de Niños",
+                photo: "https://picsum.photos/id/20/800/500",
+                description: "El Ministerio de Niños, conocido como 'Pequeños Valientes', se dedica a enseñar la Palabra de Dios a nuestros hijos de una manera divertida, creativa y relevante. Creemos que los niños no son la iglesia del futuro, ¡sino la iglesia de hoy! Nuestro objetivo es sembrar la fe en sus corazones desde temprana edad, equipándolos con principios bíblicos para sus vidas.",
+                info: "<p><strong>Edades:</strong> 3-12 años</p><p><strong>Actividades:</strong> Domingos durante el servicio principal, eventos especiales</p><p><strong>Contacto:</strong> ninos@iglesiaejemplo.com</p>"
+            },
+            jovenes: {
+                name: "Ministerio de Jóvenes",
+                photo: "https://picsum.photos/id/30/800/500",
+                description: "Nuestro Ministerio de Jóvenes, 'Generación En-fuego', está diseñado para conectar a adolescentes y jóvenes adultos en un ambiente de comunidad, crecimiento espiritual y diversión. Abordamos temas relevantes para su etapa de vida desde una perspectiva bíblica, fomentando el liderazgo y el servicio. Ven y sé parte de una generación apasionada por Cristo.",
+                info: "<p><strong>Edades:</strong> 13-25 años</p><p><strong>Reuniones:</strong> Viernes 7:30 PM</p><p><strong>Contacto:</strong> jovenes@iglesiaejemplo.com</p>"
+            },
+            mujeres: {
+                name: "Ministerio de Mujeres",
+                photo: "https://picsum.photos/id/40/800/500",
+                description: "El Ministerio de Mujeres 'Mujeres de Fe' busca empoderar a cada mujer en nuestra congregación y comunidad para que descubran su propósito en Dios. A través de estudios bíblicos, conferencias, retiros y momentos de compañerismo, cultivamos un ambiente de apoyo, crecimiento y amistad. Creemos que una mujer empoderada por Dios puede transformar su hogar y su entorno.",
+                info: "<p><strong>Actividades:</strong> Reuniones mensuales, estudios de grupos pequeños, retiros</p><p><strong>Contacto:</strong> mujeres@iglesiaejemplo.com</p>"
+            }
+        };
+
+        let eventsData = [
+            {
+                id: "conferenciaAnual",
+                name: "Conferencia Anual de Fe",
+                photo: "https://picsum.photos/id/111/800/500",
+                date: "2025-09-20", // YYYY-MM-DD
+                endDate: "2025-09-22",
+                location: "Centro de Convenciones [Nombre de la Ciudad]",
+                description: "¡Prepárate para nuestra Conferencia Anual de Fe! Tres días de adoración intensa, enseñanzas profundas y experiencias transformadoras con oradores invitados de renombre nacional e internacional. Este es un tiempo para renovar tu fe, recibir dirección divina y ser equipado para un mayor impacto. No te lo puedes perder. ¡Regístrate con anticipación!",
+                links: [
+                    { text: "Registrarse Ahora", url: "#", type: "primary" }
+                ]
+            },
+            {
+                id: "nochePelicula",
+                name: "Noche de Película Familiar",
+                photo: "https://picsum.photos/id/112/800/500",
+                date: "2025-07-05",
+                location: "Salón Parroquial de la Iglesia",
+                description: "Invita a toda tu familia y amigos para una noche de película divertida y edificante. Disfrutaremos de una película inspiradora, palomitas de maíz y un ambiente de compañerismo. Ideal para todas las edades. ¡Te esperamos para compartir juntos!",
+                links: [
+                    { text: "Ver Tráiler", url: "#", type: "outline" }
+                ]
+            },
+            {
+                id: "voluntariado",
+                name: "Jornada de Voluntariado Comunitario",
+                photo: "https://picsum.photos/id/113/800/500",
+                date: "2025-08-12",
+                location: "Parque Central [Nombre de la Ciudad]",
+                description: "Únete a nosotros en nuestra jornada de voluntariado para servir a nuestra comunidad. Ayudaremos en la limpieza del parque, distribución de alimentos y otras actividades que beneficien a nuestros vecinos. Es una excelente oportunidad para poner tu fe en acción y ser una bendición para otros.",
+                links: [
+                    { text: "Inscríbete Aquí", url: "#", type: "primary" }
+                ]
+            },
+            {
+                id: "estudioBiblico",
+                name: "Lanzamiento Nuevo Estudio Bíblico",
+                photo: "https://picsum.photos/id/114/800/500",
+                date: "2025-07-10",
+                location: "Salón de Estudios Bíblicos (Iglesia)",
+                description: "Comenzamos un nuevo estudio bíblico profundo sobre el libro de [Nombre del Libro]. Aprende a aplicar las verdades bíblicas a tu vida diaria en un ambiente de grupo pequeño. ¡No se requiere experiencia previa, solo ganas de aprender!",
+                links: [
+                    { text: "Más Detalles", url: "#", type: "outline" }
+                ]
+            },
+            {
+                id: "retiroJovenes",
+                name: "Retiro de Jóvenes: Conectados",
+                photo: "https://picsum.photos/id/115/800/500",
+                date: "2025-10-25",
+                endDate: "2025-10-27",
+                location: "Campamento Cristiano 'La Esperanza'",
+                description: "Un fin de semana lleno de actividades, enseñanzas dinámicas y momentos de adoración para nuestros jóvenes. 'Conectados' es un tiempo para fortalecer su relación con Dios y con otros jóvenes. ¡Inscríbete ya, los cupos son limitados!",
+                links: [
+                    { text: "Inscripción", url: "#", type: "primary" }
+                ]
+            }
+        ].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort events by date
+
+        let sermonsData = [
+            {
+                id: "sermon1",
+                title: "El Poder del Perdón",
+                preacher: "Pastor Juan Pérez",
+                date: "2025-05-15",
+                area: "Gracia",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Ejemplo de YouTube
+                description: "Un mensaje inspirador sobre la libertad que encontramos al perdonar a otros y a nosotros mismos, basado en las enseñanzas de Cristo. Descubre cómo el perdón libera tu espíritu y restaura relaciones."
+            },
+            {
+                id: "sermon2",
+                title: "La Fe en Tiempos de Incertidumbre",
+                preacher: "Pastora María Gómez",
+                date: "2025-05-08",
+                area: "Fe",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                description: "Cómo mantener la esperanza y la confianza en Dios en medio de la adversidad y los desafíos de la vida. Aprende a caminar por fe, no por vista, y a confiar en la soberanía de Dios."
+            },
+            {
+                id: "sermon3",
+                title: "El Amor Que Transforma",
+                preacher: "Pastor Carlos Ruiz",
+                date: "2025-05-01",
+                area: "Familia",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                description: "Descubre el impacto del amor incondicional de Dios en tu vida y entorno. Un mensaje práctico sobre cómo el amor de Cristo puede sanar y restaurar familias y comunidades."
+            },
+            {
+                id: "sermon4",
+                title: "Propósito y Destino",
+                preacher: "Pastor Juan Pérez",
+                date: "2025-04-24",
+                area: "Discipulado",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                description: "Dios tiene un plan y un propósito para tu vida. Este mensaje te ayudará a descubrir tu llamado y a caminar en el destino que Él ha preparado para ti desde antes de la fundación del mundo."
+            },
+            {
+                id: "sermon5",
+                title: "Renovando tu Mente",
+                preacher: "Pastora María Gómez",
+                date: "2025-04-17",
+                area: "Fe",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                description: "Un estudio sobre cómo transformar tus pensamientos para vivir una vida victoriosa y alineada con la voluntad de Dios. La clave está en renovar tu mente con la Palabra de Dios."
+            }
+        ].sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort latest sermons first
+
+        // --- Utility functions for Modals and Loading Overlay ---
+
+        function showFullScreenLoading(show) {
+            const fullScreenLoadingOverlay = document.getElementById('fullScreenLoadingOverlay');
+            if (fullScreenLoadingOverlay) {
+                if (show) {
+                    fullScreenLoadingOverlay.classList.add('show');
+                } else {
+                    fullScreenLoadingOverlay.classList.remove('show');
+                }
+            }
+        }
+
+        function showModal(modalElementId, title = '', message = '', type = 'primary', isConfirm = false, onConfirmCallback = null) {
+            const modalElement = document.getElementById(modalElementId);
+            if (!modalElement) {
+                console.error(`${modalElementId} no encontrado.`);
+                return;
+            }
+
+            // Common structure for dynamic modals (tempMessageModal, tempConfirmModal)
+            // For specific modals like pastorBioModal, ministryDetailModal, etc., their content is pre-defined in HTML
+            if (modalElementId === 'tempMessageModal' || modalElementId === 'tempConfirmModal') {
+                let modalContentHtml = `
+            <div class="modal-dialog ${isConfirm ? 'modal-dialog-centered' : ''}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title ${type === 'success' ? 'text-success' : (type === 'danger' ? 'text-danger' : 'text-primary')}" id="${modalElementId}Label">${title}</h5>
+                        <button type="button" class="btn-close" onclick="hideModal('${modalElementId}')">×</button>
+                    </div>
+                    <div class="modal-body" id="${modalElementId}Body">
+                        ${message}
+                    </div>
+                    <div class="modal-footer">
+                        ${isConfirm ? `<button type="button" class="btn btn-secondary" onclick="hideModal('${modalElementId}')">Cancelar</button>` : ''}
+                        <button type="button" class="btn btn-primary" id="${modalElementId}ActionButton">${isConfirm ? 'Aceptar' : 'Cerrar'}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+                modalElement.innerHTML = modalContentHtml;
+
+                const actionButton = document.getElementById(`${modalElementId}ActionButton`);
+                if (actionButton) {
+                    actionButton.onclick = () => {
+                        if (isConfirm && onConfirmCallback) {
+                            onConfirmCallback();
+                        }
+                        hideModal(modalElementId);
+                    };
+                }
+            }
+
+            modalElement.classList.add('show');
+
+            // Close modal when clicking outside (only for the dynamic modals)
+            if (modalElementId === 'tempMessageModal' || modalElementId === 'tempConfirmModal' || modalElementId === 'sermonAuthModal' || modalElementId === 'fullCalendarModal') {
+                modalElement.onclick = (e) => {
+                    if (e.target === modalElement) {
+                        hideModal(modalElementId);
+                    }
+                };
+            }
+        }
+
+        function hideModal(modalElementId) {
+            const modalElement = document.getElementById(modalElementId);
+            if (modalElement) {
+                modalElement.classList.remove('show');
+                // Clear dynamic content after transition for reusable modals
+                if (modalElementId === 'tempMessageModal' || modalElementId === 'tempConfirmModal') {
+                    setTimeout(() => {
+                        modalElement.innerHTML = '';
+                    }, 300); // Match CSS transition duration
+                }
+            }
+        }
+
+        function showMessageModal(title, message, type = 'primary') {
+            showModal('tempMessageModal', title, message, type, false);
+        }
+
+        function showConfirmModal(title, message, onConfirmCallback) {
+            showModal('tempConfirmModal', title, message, 'primary', true, onConfirmCallback);
+        }
+
+
+        // --- Main Document Ready Logic ---
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set current year for the footer
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            // Mobile Navigation Toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const closeMenu = document.getElementById('closeMenu');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileNavLinks = document.querySelectorAll('#mobileNav .nav-link-internal');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileNav.classList.add('open');
+                });
+            }
+
+            if (closeMenu) {
+                closeMenu.addEventListener('click', () => {
+                    mobileNav.classList.remove('open');
+                });
+            }
+
+            // Hero Image Carousel
+            const heroBg = document.getElementById('heroBg');
+            if (heroBg) {
+                const heroImages = [
+                    'https://picsum.photos/id/900/1600/600',
+                    'https://picsum.photos/id/901/1600/600',
+                    'https://picsum.photos/id/902/1600/600'
+                ];
+                let currentHeroImageIndex = 0;
+
+                function changeHeroImage() {
+                    currentHeroImageIndex = (currentHeroImageIndex + 1) % heroImages.length;
+                    heroBg.style.backgroundImage = `url('${heroImages[currentHeroImageIndex]}')`;
+                }
+                setInterval(changeHeroImage, 8000); // Change image every 8 seconds
+            }
+
+            // --- Single Page Application (SPA) Section Management ---
+            const allSections = document.querySelectorAll('.main-content .section');
+            const headerOffset = document.querySelector('.header').offsetHeight;
+
+            function showSection(targetId) {
+                allSections.forEach(section => {
+                    if ('#' + section.id === targetId) {
+                        section.classList.add('active');
+                        // Scroll to the top of the section with offset for fixed header
+                        setTimeout(() => {
+                            const scrollPosition = section.offsetTop - headerOffset;
+                            window.scrollTo({
+                                top: scrollPosition > 0 ? scrollPosition : 0, // Ensure not to scroll above 0
+                                behavior: 'smooth'
+                            });
+                        }, 100);
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+            }
+
+            // Handle initial load based on URL hash or default to #inicio
+            const initialHash = window.location.hash || '#inicio';
+            showSection(initialHash);
+
+            // Add event listeners to all internal navigation links
+            const internalLinks = document.querySelectorAll('.nav-link-internal');
+            internalLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent default anchor jump
+                    const targetId = this.getAttribute('href');
+                    showSection(targetId);
+                    // Close mobile menu if open
+                    if (mobileNav && mobileNav.classList.contains('open')) {
+                        mobileNav.classList.remove('open');
+                    }
+                    // Update URL hash without page reload for direct linking
+                    history.pushState(null, '', targetId);
+                });
+            });
+
+            // Handle back/forward browser buttons
+            window.addEventListener('popstate', function () {
+                const newHash = window.location.hash || '#inicio';
+                showSection(newHash);
+            });
+
+            // --- Pastor Biography Modal Logic ---
+            const pastorBioModal = document.getElementById('pastorBioModal');
+            if (pastorBioModal) {
+                const readBioButtons = document.querySelectorAll('.read-bio-btn');
+                readBioButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const pastorId = e.target.closest('.ministry-card').dataset.pastorId;
+                        const pastor = pastorsData[pastorId];
+
+                        if (pastor) {
+                            document.getElementById('pastorBioPhoto').src = pastor.photo;
+                            document.getElementById('pastorBioName').textContent = pastor.name;
+                            document.getElementById('pastorBioTitle').textContent = pastor.title;
+                            document.getElementById('pastorBioText').textContent = pastor.bio;
+                            showModal('pastorBioModal');
+                        }
+                    });
+                });
+            }
+
+            // --- Ministry Detail Modal Logic ---
+            const ministryDetailModal = document.getElementById('ministryDetailModal');
+            if (ministryDetailModal) {
+                const viewMinistryButtons = document.querySelectorAll('.view-ministry-btn');
+                viewMinistryButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const ministryId = e.target.closest('.ministry-card').dataset.ministryId;
+                        const ministry = ministriesData[ministryId];
+
+                        if (ministry) {
+                            document.getElementById('ministryDetailPhoto').src = ministry.photo;
+                            document.getElementById('ministryDetailName').textContent = ministry.name;
+                            document.getElementById('ministryDetailDescription').textContent = ministry.description;
+                            document.getElementById('ministryDetailInfo').innerHTML = ministry.info;
+                            showModal('ministryDetailModal');
+                        }
+                    });
+                });
+            }
+
+            // --- Event Detail Modal Logic ---
+            const eventDetailModal = document.getElementById('eventDetailModal');
+            if (eventDetailModal) {
+                const viewEventButtons = document.querySelectorAll('.view-event-btn');
+                viewEventButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const eventId = e.target.closest('.event-card').dataset.eventId;
+                        const event = eventsData.find(ev => ev.id === eventId);
+
+                        if (event) {
+                            document.getElementById('eventDetailPhoto').src = event.photo;
+                            document.getElementById('eventDetailName').textContent = event.name;
+                            document.getElementById('eventDetailDate').innerHTML = `<i class="fas fa-calendar-alt me-2"></i> ${formatEventDates(event.date, event.endDate)}`;
+                            document.getElementById('eventDetailLocation').innerHTML = `<i class="fas fa-map-marker-alt me-2"></i> ${event.location}`;
+                            document.getElementById('eventDetailDescription').textContent = event.description;
+
+                            const eventDetailLinks = document.getElementById('eventDetailLinks');
+                            eventDetailLinks.innerHTML = '';
+                            if (event.links && event.links.length > 0) {
+                                event.links.forEach(link => {
+                                    const btn = document.createElement('a');
+                                    btn.href = link.url;
+                                    btn.target = "_blank";
+                                    btn.classList.add('btn', `btn-${link.type}`, 'btn-sm', 'me-2');
+                                    btn.textContent = link.text;
+                                    eventDetailLinks.appendChild(btn);
+                                });
+                            }
+                            showModal('eventDetailModal');
+                        }
+                    });
+                });
+            }
+
+            // Helper to format event dates
+            function formatEventDates(startDate, endDate) {
+                const start = new Date(startDate);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                let formattedDate = start.toLocaleDateString('es-ES', options);
+
+                if (endDate && startDate !== endDate) {
+                    const end = new Date(endDate);
+                    formattedDate += ` - ${end.toLocaleDateString('es-ES', options)}`;
+                }
+                return formattedDate;
+            }
+
+
+            // --- Full Calendar Modal Logic ---
+            const viewFullCalendarBtn = document.getElementById('viewFullCalendarBtn');
+            const fullCalendarModal = document.getElementById('fullCalendarModal');
+            const currentMonthYearHeader = document.getElementById('currentMonthYear');
+            const prevMonthBtn = document.getElementById('prevMonthBtn');
+            const nextMonthBtn = document.getElementById('nextMonthBtn');
+            const calendarDaysGrid = document.getElementById('calendarDaysGrid');
+            const eventsForCurrentMonthList = document.getElementById('eventsForCurrentMonth');
+
+            let currentCalendarDate = new Date(); // Start with current month
+
+            function renderCalendar() {
+                const year = currentCalendarDate.getFullYear();
+                const month = currentCalendarDate.getMonth(); // 0-indexed
+
+                currentMonthYearHeader.textContent = `${currentCalendarDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
+                calendarDaysGrid.innerHTML = ''; // Clear previous days
+                eventsForCurrentMonthList.innerHTML = ''; // Clear previous events list
+
+                const firstDayOfMonth = new Date(year, month, 1);
+                const lastDayOfMonth = new Date(year, month + 1, 0);
+                const daysInMonth = lastDayOfMonth.getDate();
+
+                // Calculate the day of the week for the first day (0=Sunday, 6=Saturday)
+                const firstDayOfWeek = firstDayOfMonth.getDay();
+
+                // Fill in leading empty days from previous month
+                for (let i = 0; i < firstDayOfWeek; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day', 'prev-month');
+                    // Optional: show prev month day number
+                    // const prevMonthLastDay = new Date(year, month, 0).getDate();
+                    // dayElement.innerHTML = `<span class="day-number">${prevMonthLastDay - (firstDayOfWeek - 1 - i)}</span>`;
+                    calendarDaysGrid.appendChild(dayElement);
+                }
+
+                // Fill in current month days
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day');
+                    dayElement.innerHTML = `<span class="day-number">${day}</span>`;
+
+                    const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const today = new Date();
+                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        dayElement.classList.add('current-day');
+                    }
+
+                    // Check for events on this day
+                    const eventsOnThisDay = eventsData.filter(event => {
+                        const eventStartDate = new Date(event.date);
+                        const eventEndDate = event.endDate ? new Date(event.endDate) : eventStartDate;
+                        const currentDayDate = new Date(year, month, day);
+                        return currentDayDate >= eventStartDate && currentDayDate <= eventEndDate;
+                    });
+
+                    if (eventsOnThisDay.length > 0) {
+                        dayElement.classList.add('has-event');
+                        const eventIndicator = document.createElement('span');
+                        eventIndicator.classList.add('event-indicator');
+                        if (eventsOnThisDay.length === 1) {
+                            eventIndicator.textContent = eventsOnThisDay[0].name;
+                        } else {
+                            eventIndicator.textContent = `${eventsOnThisDay.length} eventos`;
+                            eventIndicator.classList.add('multiple');
+                        }
+                        dayElement.appendChild(eventIndicator);
+                    }
+                    calendarDaysGrid.appendChild(dayElement);
+                }
+
+                // Fill in trailing empty days from next month
+                const totalDaysDisplayed = firstDayOfWeek + daysInMonth;
+                const remainingCells = 42 - totalDaysDisplayed; // Max 6 weeks * 7 days
+                for (let i = 1; i <= remainingCells; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day', 'next-month');
+                    // Optional: show next month day number
+                    // dayElement.innerHTML = `<span class="day-number">${i}</span>`;
+                    calendarDaysGrid.appendChild(dayElement);
+                }
+
+                // Populate events list for the current month
+                const currentMonthEvents = eventsData.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getMonth() === month && eventDate.getFullYear() === year;
+                });
+
+                if (currentMonthEvents.length > 0) {
+                    currentMonthEvents.forEach(event => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<span class="event-title">${event.name}</span> - <span class="event-date">${formatEventDates(event.date, event.endDate)}</span> en <span class="event-date">${event.location}</span>`;
+                        eventsForCurrentMonthList.appendChild(listItem);
+                    });
+                } else {
+                    eventsForCurrentMonthList.innerHTML = '<li>No hay eventos programados para este mes.</li>';
+                }
+            }
+
+            if (viewFullCalendarBtn) {
+                viewFullCalendarBtn.addEventListener('click', () => {
+                    currentCalendarDate = new Date(); // Reset to current month when opening
+                    renderCalendar();
+                    showModal('fullCalendarModal');
+                });
+            }
+
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', () => {
+                    currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+                    renderCalendar();
+                });
+            }
+
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', () => {
+                    currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+                    renderCalendar();
+                });
+            }
+
+
+            // --- Predicaciones Filtering and Display Logic ---
+            const sermonsContainer = document.getElementById('sermonsContainer');
+            const filterYear = document.getElementById('filterYear');
+            const filterMonth = document.getElementById('filterMonth');
+            const filterPreacher = document.getElementById('filterPreacher');
+            const filterArea = document.getElementById('filterArea');
+            const searchSermon = document.getElementById('searchSermon');
+            const resetFiltersBtn = document.getElementById('resetFilters');
+
+            function populateFilterOptions() {
+                const years = new Set();
+                const preachers = new Set();
+                const areas = new Set();
+
+                sermonsData.forEach(sermon => {
+                    years.add(new Date(sermon.date).getFullYear());
+                    preachers.add(sermon.preacher);
+                    areas.add(sermon.area);
+                });
+
+                // Populate Years
+                filterYear.innerHTML = '<option value="">Año</option>';
+                Array.from(years).sort().forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    filterYear.appendChild(option);
+                });
+
+                // Populate Preachers
+                filterPreacher.innerHTML = '<option value="">Predicador</option>';
+                Array.from(preachers).sort().forEach(preacher => {
+                    const option = document.createElement('option');
+                    option.value = preacher;
+                    option.textContent = preacher;
+                    filterPreacher.appendChild(option);
+                });
+
+                // Populate Areas
+                filterArea.innerHTML = '<option value="">Área</option>';
+                Array.from(areas).sort().forEach(area => {
+                    const option = document.createElement('option');
+                    option.value = area;
+                    option.textContent = area;
+                    filterArea.appendChild(option);
+                });
+            }
+
+            function renderSermons(filteredSermons) {
+                sermonsContainer.innerHTML = '';
+                if (filteredSermons.length === 0) {
+                    sermonsContainer.innerHTML = '<p class="text-muted-dark text-center">No se encontraron predicaciones con los filtros seleccionados.</p>';
+                    return;
+                }
+
+                filteredSermons.forEach(sermon => {
+                    const sermonCard = document.createElement('div');
+                    sermonCard.classList.add('sermon-card');
+                    sermonCard.innerHTML = `
+                <img src="https://picsum.photos/seed/${sermon.id}/400/220" alt="${sermon.title}">
+                <div class="sermon-card-content">
+                    <h4 class="text-primary-dark">${sermon.title}</h4>
+                    <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> ${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | <i class="fas fa-user"></i> ${sermon.preacher}</p>
+                    <p class="meta text-muted-dark"><i class="fas fa-tag"></i> ${sermon.area}</p>
+                    <p class="text-muted-dark">${sermon.description.substring(0, 100)}...</p>
+                    <a href="${sermon.link}" target="_blank" class="btn btn-primary btn-sm">Escuchar Predicación</a>
+                </div>
+            `;
+                    sermonsContainer.appendChild(sermonCard);
+                });
+            }
+
+            function applySermonFilters() {
+                const selectedYear = filterYear.value;
+                const selectedMonth = filterMonth.value; // 1-12
+                const selectedPreacher = filterPreacher.value;
+                const selectedArea = filterArea.value;
+                const searchTerm = searchSermon.value.toLowerCase();
+
+                const filtered = sermonsData.filter(sermon => {
+                    const sermonDate = new Date(sermon.date);
+                    const sermonYear = sermonDate.getFullYear().toString();
+                    const sermonMonth = (sermonDate.getMonth() + 1).toString(); // 1-indexed month
+
+                    const matchesYear = !selectedYear || sermonYear === selectedYear;
+                    const matchesMonth = !selectedMonth || sermonMonth === selectedMonth;
+                    const matchesPreacher = !selectedPreacher || sermon.preacher === selectedPreacher;
+                    const matchesArea = !selectedArea || sermon.area === selectedArea;
+
+                    // "Smart" search: checks title, preacher, description, area
+                    const matchesSearch = !searchTerm ||
+                        sermon.title.toLowerCase().includes(searchTerm) ||
+                        sermon.preacher.toLowerCase().includes(searchTerm) ||
+                        sermon.description.toLowerCase().includes(searchTerm) ||
+                        sermon.area.toLowerCase().includes(searchTerm);
+
+                    return matchesYear && matchesMonth && matchesPreacher && matchesArea && matchesSearch;
+                });
+
+                renderSermons(filtered);
+            }
+
+            // Attach listeners to filters
+            filterYear.addEventListener('change', applySermonFilters);
+            filterMonth.addEventListener('change', applySermonFilters);
+            filterPreacher.addEventListener('change', applySermonFilters);
+            filterArea.addEventListener('change', applySermonFilters);
+            searchSermon.addEventListener('input', applySermonFilters);
+            resetFiltersBtn.addEventListener('click', () => {
+                filterYear.value = '';
+                filterMonth.value = '';
+                filterPreacher.value = '';
+                filterArea.value = '';
+                searchSermon.value = '';
+                applySermonFilters();
+            });
+
+            // Initial render and populate filters
+            populateFilterOptions();
+            renderSermons(sermonsData);
+
+
+            // --- Sermon Upload Login/Form Logic ---
+            const addSermonBtn = document.getElementById('addSermonBtn');
+            const sermonAuthModal = document.getElementById('sermonAuthModal');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+            const uploadFormContainer = document.getElementById('uploadFormContainer');
+            const loginForm = document.getElementById('loginForm');
+            const uploadSermonForm = document.getElementById('uploadSermonForm');
+            const loginMessage = document.getElementById('loginMessage');
+            const uploadMessage = document.getElementById('uploadMessage');
+
+            if (addSermonBtn) {
+                addSermonBtn.addEventListener('click', () => {
+                    // Reset form visibility and messages
+                    loginFormContainer.style.display = 'block';
+                    uploadFormContainer.style.display = 'none';
+                    loginMessage.style.display = 'none';
+                    uploadMessage.style.display = 'none';
+                    loginForm.reset();
+                    uploadSermonForm.reset();
+                    CONFIG.currentUserRole = null; // Clear role on modal open
+
+                    showModal('sermonAuthModal');
+                });
+            }
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const username = loginForm.username.value;
+                    const password = loginForm.password.value;
+
+                    loginMessage.style.display = 'none'; // Hide previous message
+
+                    if (CONFIG.USERS[username] && CONFIG.USERS[username].password === password) {
+                        CONFIG.currentUserRole = CONFIG.USERS[username].role;
+                        loginMessage.textContent = `¡Bienvenido, ${CONFIG.USERS[username].name}!`;
+                        loginMessage.classList.remove('danger');
+                        loginMessage.classList.add('success', 'show');
+
+                        // Simulate loading for better UX
+                        showFullScreenLoading(true);
+                        setTimeout(() => {
+                            showFullScreenLoading(false);
+                            loginFormContainer.style.display = 'none';
+                            uploadFormContainer.style.display = 'block';
+                            // Optional: Pre-fill preacher field if user is a known preacher
+                            if (username === 'admin' || username === 'editor') {
+                                uploadSermonForm.sermonPreacher.value = (username === 'admin') ? 'Pastor Juan Pérez' : 'Pastora María Gómez';
+                            }
+                            uploadMessage.style.display = 'none'; // Ensure upload message is hidden
+                        }, 1000); // Simulate login delay
+                    } else {
+                        loginMessage.textContent = 'Usuario o contraseña incorrectos.';
+                        loginMessage.classList.remove('success');
+                        loginMessage.classList.add('danger', 'show');
+                    }
+                });
+            }
+
+            if (uploadSermonForm) {
+                uploadSermonForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    uploadMessage.style.display = 'none'; // Hide previous message
+
+                    if (CONFIG.currentUserRole !== 'administrator' && CONFIG.currentUserRole !== 'editor') {
+                        uploadMessage.textContent = 'No tienes permisos para subir predicaciones.';
+                        uploadMessage.classList.remove('success');
+                        uploadMessage.classList.add('danger', 'show');
+                        return;
+                    }
+
+                    showFullScreenLoading(true);
+
+                    // Simulate upload process
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    const newSermon = {
+                        id: `sermon${sermonsData.length + 1}`, // Simple ID generation
+                        title: uploadSermonForm.sermonTitle.value,
+                        preacher: uploadSermonForm.sermonPreacher.value,
+                        date: uploadSermonForm.sermonDate.value,
+                        area: uploadSermonForm.sermonArea.value,
+                        link: uploadSermonForm.sermonLink.value,
+                        description: uploadSermonForm.sermonDescription.value || "Sin descripción."
+                    };
+
+                    sermonsData.unshift(newSermon); // Add to the beginning of the array (latest first)
+                    sermonsData.sort((a, b) => new Date(b.date) - new Date(a.date)); // Re-sort by date
+
+                    showFullScreenLoading(false);
+                    uploadMessage.textContent = '¡Predicación subida con éxito! (Nota: Solo demo, no se guarda de forma persistente)';
+                    uploadMessage.classList.remove('danger');
+                    uploadMessage.classList.add('success', 'show');
+
+                    uploadSermonForm.reset();
+                    hideModal('sermonAuthModal'); // Close modal after successful upload
+
+                    // Re-render sermons and update filters
+                    populateFilterOptions();
+                    applySermonFilters();
+                });
+            }
+
+            // --- Contact Form Submission (Example) ---
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showFullScreenLoading(true);
+
+                    // Simulate API call (replace with your actual backend/Apps Script call)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    showFullScreenLoading(false);
+
+                    const success = Math.random() > 0.5; // Simulate success/failure
+
+                    if (success) {
+                        showMessageModal('Mensaje Enviado', 'Gracias por contactarnos. Te responderemos pronto.', 'success');
+                        contactForm.reset();
+                    } else {
+                        showMessageModal('Error al Enviar', 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.', 'danger');
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+
+</html>
