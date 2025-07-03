@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Éxodo Runner - Escape de Egipto</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             background: linear-gradient(135deg, #1a0033, #2d1b69, #4a148c);
             font-family: 'Orbitron', monospace;
             overflow: hidden;
             color: white;
         }
-        
+
         /* Mensaje de orientación */
         #orientationMessage {
             position: fixed;
@@ -35,7 +36,7 @@
             text-align: center;
             padding: 20px;
         }
-        
+
         #orientationMessage .content {
             background: rgba(0, 0, 0, 0.8);
             padding: 30px;
@@ -43,43 +44,51 @@
             border: 3px solid #FFD700;
             max-width: 300px;
         }
-        
+
         #orientationMessage h2 {
             color: #FFD700;
             font-size: 24px;
             margin-bottom: 15px;
         }
-        
+
         #orientationMessage p {
             color: #E1BEE7;
             font-size: 16px;
             margin-bottom: 20px;
         }
-        
+
         .phone-rotate {
             font-size: 60px;
             animation: rotate 2s infinite;
         }
-        
+
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(90deg); }
-            100% { transform: rotate(0deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
         }
-        
+
         #gameContainer {
             position: relative;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
         }
-        
+
         #gameCanvas {
             display: block;
             border: 3px solid #FFD700;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
-        
+
         #gameUI {
             position: absolute;
             top: 20px;
@@ -91,20 +100,20 @@
             border: 2px solid #FFD700;
             backdrop-filter: blur(10px);
         }
-        
+
         #score {
             font-size: clamp(16px, 3vw, 24px);
             font-weight: 700;
             color: #FFD700;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
         }
-        
+
         #dayInfo {
             font-size: clamp(12px, 2.5vw, 16px);
             color: #E1BEE7;
             margin-top: 5px;
         }
-        
+
         #startScreen {
             position: absolute;
             top: 50%;
@@ -121,21 +130,21 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        
+
         #startScreen h1 {
             font-size: clamp(24px, 5vw, 36px);
             color: #FFD700;
             margin-bottom: 20px;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
         }
-        
+
         #startScreen p {
             font-size: clamp(12px, 2.5vw, 16px);
             margin-bottom: 15px;
             color: #E1BEE7;
             line-height: 1.5;
         }
-        
+
         #startBtn {
             background: linear-gradient(135deg, #FFD700, #FFA500);
             color: #1a0033;
@@ -150,12 +159,12 @@
             width: 100%;
             max-width: 300px;
         }
-        
+
         #startBtn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
-        
+
         #countdown {
             position: absolute;
             top: 50%;
@@ -168,7 +177,7 @@
             z-index: 20;
             display: none;
         }
-        
+
         #gameOver {
             position: absolute;
             top: 50%;
@@ -184,20 +193,20 @@
             z-index: 20;
             max-width: 90vw;
         }
-        
+
         #gameOver h2 {
             font-size: clamp(20px, 4vw, 32px);
             color: #FFD700;
             margin-bottom: 15px;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
         }
-        
+
         #gameOver p {
             font-size: clamp(14px, 3vw, 18px);
             margin-bottom: 15px;
             color: #E1BEE7;
         }
-        
+
         #restartBtn {
             background: linear-gradient(135deg, #FFD700, #FFA500);
             color: #1a0033;
@@ -212,12 +221,12 @@
             width: 100%;
             max-width: 250px;
         }
-        
+
         #restartBtn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
-        
+
         .stars {
             position: fixed;
             top: 0;
@@ -227,7 +236,7 @@
             pointer-events: none;
             z-index: 1;
         }
-        
+
         .star {
             position: absolute;
             width: 2px;
@@ -236,49 +245,69 @@
             border-radius: 50%;
             animation: twinkle 2s infinite;
         }
-        
+
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
-        
+
         @keyframes countdownPulse {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
         }
-        
+
         .countdown-animate {
             animation: countdownPulse 1s ease-in-out;
         }
-        
+
         /* Responsive */
         @media (max-height: 500px) and (orientation: portrait) {
             #orientationMessage {
                 display: flex !important;
             }
+
             #gameContainer {
                 display: none;
             }
         }
-        
+
         @media (max-width: 768px) {
             #gameUI {
                 top: 10px;
                 left: 10px;
                 padding: 10px;
             }
-            
+
             #startScreen {
                 padding: 20px;
             }
-            
+
             #gameOver {
                 padding: 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="orientationMessage">
         <div class="content">
@@ -287,27 +316,28 @@
             <p>Para una mejor experiencia, gira tu dispositivo horizontalmente</p>
         </div>
     </div>
-    
+
     <div class="stars"></div>
-    
+
     <div id="gameContainer">
         <div id="startScreen">
             <h1>🏺 ÉXODO RUNNER 🏺</h1>
             <p><strong>Ayuda a Moisés a escapar de Egipto</strong></p>
-            <p>El Faraón te persigue en su carruaje dorado. Debes atravesar el desierto durante 3 días y cruzar el Mar Rojo para llegar a la Tierra Prometida.</p>
+            <p>El Faraón te persigue en su carruaje dorado. Debes atravesar el desierto durante 3 días y cruzar el Mar
+                Rojo para llegar a la Tierra Prometida.</p>
             <p><strong>Controles:</strong> TOCA LA PANTALLA o ESPACIO para saltar</p>
             <button id="startBtn">🏃‍♂️ ¡COMENZAR ESCAPE!</button>
         </div>
-        
+
         <div id="countdown">3</div>
-        
+
         <div id="gameUI" style="display: none;">
             <div id="score">Distancia: 0m</div>
             <div id="dayInfo">Día 1 - Desierto</div>
         </div>
-        
+
         <canvas id="gameCanvas"></canvas>
-        
+
         <div id="gameOver">
             <h2>¡El Faraón te alcanzó!</h2>
             <p>Pero Dios liberará a su pueblo</p>
@@ -325,8 +355,8 @@
     </div>
 
     <script>
-// Crear estrellas en el fondo
-function createStars() {
+        // Crear estrellas en el fondo
+        function createStars() {
             const starsContainer = document.querySelector('.stars');
             for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
@@ -342,7 +372,7 @@ function createStars() {
         // Configuración del juego
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -359,7 +389,7 @@ function createStars() {
         let currentDay = 1;
         let dayProgress = 0;
         let isNight = false; // Variable para saber si es de noche
-        let inSea = false;
+        let inSea = false; // Variable para saber si está en el mar
 
         // Referencia a los elementos de audio
         const gameMusic = document.getElementById('gameMusic');
@@ -409,39 +439,25 @@ function createStars() {
 
         // Función para obtener colores según la hora del día
         function getTimeColors() {
-            const timeOfDay = (score / 100) % 24; // 24 horas del día
-            
-            if (timeOfDay < 6) { // Noche
-                isNight = true; // Actualizar estado de noche
+            // El score / 800 define el día. Podemos usar un ciclo de 24 "unidades de tiempo" por día.
+            // Para simplificar, asumiremos que cada día (800m) tiene un ciclo de luz/noche.
+            const daySegment = (score % 800) / 800; // Progreso dentro del día actual (0 a 1)
+
+            if (daySegment < 0.25 || daySegment >= 0.75) { // Noche (primer cuarto y último cuarto del día)
+                isNight = true;
                 return {
-                    sky: ['#191970', '#2F4F4F', '#483D8B'],
-                    ground: inSea ? '#1e3a8a' : '#8B4513',
-                    sun: '#F5F5DC',
+                    sky: ['#191970', '#2F4F4F', '#483D8B'], // Tonos de azul oscuro/púrpura
+                    ground: inSea ? '#1e3a8a' : '#8B4513', // Azul oscuro para mar, marrón oscuro para desierto
+                    sun: '#F5F5DC', // Color de la luna
                     isNight: true
                 };
-            } else if (timeOfDay < 12) { // Mañana
-                isNight = false; // Actualizar estado de noche
+            } else { // Día (del 25% al 75% del día)
+                isNight = false;
                 return {
-                    sky: ['#87CEEB', '#F0E68C', '#FFE4B5'],
-                    ground: inSea ? '#4682B4' : '#F4A460',
-                    sun: '#FFD700',
+                    sky: ['#87CEEB', '#F0E68C', '#FFE4B5'], // Tonos de azul claro/amarillo
+                    ground: inSea ? '#4682B4' : '#F4A460', // Azul medio para mar, naranja para desierto
+                    sun: '#FFD700', // Color del sol
                     isNight: false
-                };
-            } else if (timeOfDay < 18) { // Tarde
-                isNight = false; // Actualizar estado de noche
-                return {
-                    sky: ['#87CEEB', '#FFA500', '#FF6347'],
-                    ground: inSea ? '#4682B4' : '#D2691E',
-                    sun: '#FF4500',
-                    isNight: false
-                };
-            } else { // Noche
-                isNight = true; // Actualizar estado de noche
-                return {
-                    sky: ['#2F4F4F', '#483D8B', '#191970'],
-                    ground: inSea ? '#1e3a8a' : '#8B4513',
-                    sun: '#F5F5DC',
-                    isNight: true
                 };
             }
         }
@@ -456,25 +472,25 @@ function createStars() {
             // Túnica
             ctx.fillStyle = '#4169E1';
             ctx.fillRect(x + 5, y + 20, w - 10, h - 25);
-            
+
             // Manto
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(x + 2, y + 15, w - 4, h - 35);
-            
+
             // Cuerpo
             ctx.fillStyle = '#D2B48C';
             ctx.fillRect(x + 12, y + 10, 16, 25);
-            
+
             // Cabeza
             ctx.fillStyle = '#D2B48C';
             ctx.beginPath();
             ctx.arc(x + 20, y + 12, 8, 0, Math.PI * 2);
             ctx.fill();
-            
+
             // Barba
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(x + 16, y + 16, 8, 15);
-            
+
             // Bastón
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 3;
@@ -482,7 +498,7 @@ function createStars() {
             ctx.moveTo(x + w + 2, y + 5);
             ctx.lineTo(x + w + 2, y + h - 15);
             ctx.stroke();
-            
+
             // Punta del bastón
             ctx.fillStyle = '#FFD700';
             ctx.beginPath();
@@ -507,42 +523,42 @@ function createStars() {
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(scaledX - 40, scaledY + 15, 35, 20);
             ctx.fillRect(scaledX - 35, scaledY + 5, 12, 12);
-            
+
             // Ruedas grandes
             ctx.fillStyle = '#8B4513';
             ctx.beginPath();
-            ctx.arc(scaledX + 15, scaledY + h/1.2 - 5, 18, 0, Math.PI * 2);
+            ctx.arc(scaledX + 15, scaledY + h / 1.2 - 5, 18, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(scaledX + w/1.2 - 15, scaledY + h/1.2 - 5, 18, 0, Math.PI * 2);
+            ctx.arc(scaledX + w / 1.2 - 15, scaledY + h / 1.2 - 5, 18, 0, Math.PI * 2);
             ctx.fill();
-            
+
             // Aros dorados
             ctx.strokeStyle = '#FFD700';
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.arc(scaledX + 15, scaledY + h/1.2 - 5, 18, 0, Math.PI * 2);
+            ctx.arc(scaledX + 15, scaledY + h / 1.2 - 5, 18, 0, Math.PI * 2);
             ctx.stroke();
             ctx.beginPath();
-            ctx.arc(scaledX + w/1.2 - 15, scaledY + h/1.2 - 5, 18, 0, Math.PI * 2);
+            ctx.arc(scaledX + w / 1.2 - 15, scaledY + h / 1.2 - 5, 18, 0, Math.PI * 2);
             ctx.stroke();
 
             // Cuerpo del carruaje
             ctx.fillStyle = '#B8860B';
-            ctx.fillRect(scaledX + 30, scaledY + 5, w/1.2 - 50, h/1.2 - 20);
-            
+            ctx.fillRect(scaledX + 30, scaledY + 5, w / 1.2 - 50, h / 1.2 - 20);
+
             // Decoraciones doradas
             ctx.fillStyle = '#FFD700';
-            ctx.fillRect(scaledX + 25, scaledY, w/1.2 - 40, 8);
-            
+            ctx.fillRect(scaledX + 25, scaledY, w / 1.2 - 40, 8);
+
             // Faraón
             ctx.fillStyle = '#D2B48C';
             ctx.fillRect(scaledX + 50, scaledY + 10, 15, 20);
-            
+
             // Corona
             ctx.fillStyle = '#FFD700';
             ctx.fillRect(scaledX + 45, scaledY + 5, 25, 8);
-            
+
             // Lanzas
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 2;
@@ -558,19 +574,19 @@ function createStars() {
         function createObstacle() {
             const now = Date.now();
             // Ajusta la frecuencia de los obstáculos basados en gameSpeed
-            const obstacleInterval = Math.max(700, 3000 - gameSpeed * 100); 
+            const obstacleInterval = Math.max(700, 3000 - gameSpeed * 100);
 
             if (now - lastObstacleTime > obstacleInterval + Math.random() * 1000) {
                 let obstacle;
-                
+
                 if (inSea) {
                     // Obstáculos del mar (simulando peces)
                     obstacle = {
                         x: canvas.width,
                         y: groundY - (Math.random() * 40 + 20), // Altura variable para peces
-                        width: 25,
-                        height: 20,
-                        type: 'fish' // Cambiado a 'fish' para claridad
+                        width: 30, // Ancho de un pez
+                        height: 25, // Alto de un pez
+                        type: 'fish'
                     };
                 } else {
                     // Obstáculos del desierto
@@ -593,7 +609,7 @@ function createStars() {
                         };
                     }
                 }
-                
+
                 obstacles.push(obstacle);
                 lastObstacleTime = now;
             }
@@ -606,7 +622,7 @@ function createStars() {
 
                 if (inSea) {
                     // Color para peces en el mar
-                    obstacleColor = 'rgba(135, 206, 235, 0.8)'; // Azul claro para peces
+                    obstacleColor = 'rgba(135, 206, 250, 0.9)'; // Azul claro brillante para peces
                 } else if (isNight) {
                     // Color para obstáculos de noche en el desierto
                     obstacleColor = '#FFFFFF'; // Blanco
@@ -618,25 +634,28 @@ function createStars() {
                 ctx.fillStyle = obstacleColor;
 
                 if (obstacle.type === 'rock') {
+                    // Dibujar una roca como un círculo
                     ctx.beginPath();
-                    ctx.arc(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2, obstacle.width/2, 0, Math.PI * 2);
+                    ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, obstacle.width / 2, 0, Math.PI * 2);
                     ctx.fill();
                 } else if (obstacle.type === 'hole') {
+                    // Dibujar un hoyo (recuadro)
                     // Los hoyos pueden ser un poco más oscuros para distinguirse
-                    ctx.fillStyle = isNight ? '#CCCCCC' : '#00AA00'; // Blanco o verde oscuro para hoyos
+                    ctx.fillStyle = isNight ? '#CCCCCC' : '#00AA00'; // Blanco grisáceo o verde oscuro para hoyos
                     ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
                 } else if (obstacle.type === 'fish') {
                     // Dibujar un óvalo para simular un pez
                     ctx.beginPath();
+                    // Usar ellipse para una forma más de pez
                     ctx.ellipse(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2,
-                                obstacle.width / 2, obstacle.height / 2,
-                                0, 0, Math.PI * 2);
+                        obstacle.width / 2, obstacle.height / 2,
+                        Math.PI / 4, 0, Math.PI * 2); // Rotado ligeramente para una forma más dinámica
                     ctx.fill();
-                    // Opcional: una pequeña aleta para darle más forma de pez
+                    // Opcional: una pequeña aleta de cola para darle más forma de pez
                     ctx.beginPath();
                     ctx.moveTo(obstacle.x + obstacle.width, obstacle.y + obstacle.height / 2);
-                    ctx.lineTo(obstacle.x + obstacle.width + 5, obstacle.y + obstacle.height / 2 - 5);
-                    ctx.lineTo(obstacle.x + obstacle.width + 5, obstacle.y + obstacle.height / 2 + 5);
+                    ctx.lineTo(obstacle.x + obstacle.width + 10, obstacle.y + obstacle.height / 2 - 8);
+                    ctx.lineTo(obstacle.x + obstacle.width + 10, obstacle.y + obstacle.height / 2 + 8);
                     ctx.closePath();
                     ctx.fill();
                 }
@@ -647,9 +666,9 @@ function createStars() {
         function drawParticles() {
             particles.forEach(particle => {
                 if (particle.type === 'water') {
-                    ctx.fillStyle = `rgba(135, 206, 235, ${particle.opacity})`;
+                    ctx.fillStyle = `rgba(135, 206, 235, ${particle.opacity})`; // Azul para el agua
                 } else {
-                    ctx.fillStyle = `rgba(244, 164, 96, ${particle.opacity})`;
+                    ctx.fillStyle = `rgba(244, 164, 96, ${particle.opacity})`; // Naranja para la arena
                 }
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
@@ -660,7 +679,7 @@ function createStars() {
         // Función para dibujar el fondo
         function drawBackground() {
             const colors = getTimeColors();
-            
+
             // Cielo
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
             gradient.addColorStop(0, colors.sky[0]);
@@ -668,32 +687,32 @@ function createStars() {
             gradient.addColorStop(1, colors.sky[2]);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             // Suelo
             ctx.fillStyle = colors.ground;
             ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
-            
+
             // Sol/Luna
             ctx.fillStyle = colors.sun;
             ctx.beginPath();
             ctx.arc(canvas.width - 100, 80, colors.isNight ? 30 : 35, 0, Math.PI * 2);
             ctx.fill();
-            
+
             // Estrellas si es de noche
             if (colors.isNight) {
                 ctx.fillStyle = '#FFFFFF';
                 for (let i = 0; i < 20; i++) {
-                    const x = (score * 0.1 + i * 50) % canvas.width;
-                    const y = 30 + (i * 23) % 150;
+                    const x = (score * 0.1 + i * 50) % canvas.width; // Desplazamiento basado en el score
+                    const y = 30 + (i * 23) % 150; // Posición vertical
                     ctx.beginPath();
                     ctx.arc(x, y, 1, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
-            
-            // Efectos del mar
+
+            // Efectos del mar (capa superior del agua)
             if (inSea) {
-                ctx.fillStyle = 'rgba(135, 206, 235, 0.3)'; // Sombra de agua
+                ctx.fillStyle = 'rgba(70, 130, 180, 0.4)'; // Una capa de azul translúcido
                 ctx.fillRect(0, groundY - 20, canvas.width, 20);
             }
         }
@@ -701,10 +720,38 @@ function createStars() {
         // Función para verificar colisiones
         function checkCollisions() {
             obstacles.forEach(obstacle => {
-                if (moses.x + 8 < obstacle.x + obstacle.width &&
-                    moses.x + moses.width - 8 > obstacle.x &&
-                    moses.y + 8 < obstacle.y + obstacle.height &&
-                    moses.y + moses.height - 5 > obstacle.y) {
+                // Ajustar el área de colisión de Moisés para que sea más indulgente
+                const mosesHitbox = {
+                    x: moses.x + 10,
+                    y: moses.y + 10,
+                    width: moses.width - 20,
+                    height: moses.height - 15
+                };
+
+                // Ajustar el área de colisión del obstáculo si es un pez (óvalo)
+                let obstacleHitbox = {
+                    x: obstacle.x,
+                    y: obstacle.y,
+                    width: obstacle.width,
+                    height: obstacle.height
+                };
+
+                if (obstacle.type === 'fish') {
+                    // Para peces, consideramos su forma ovalada en la colisión
+                    // Esto es una simplificación, una colisión de píxel sería más precisa pero más compleja
+                    obstacleHitbox = {
+                        x: obstacle.x + obstacle.width * 0.1, // Ajuste para el óvalo rotado
+                        y: obstacle.y + obstacle.height * 0.1,
+                        width: obstacle.width * 0.8,
+                        height: obstacle.height * 0.8
+                    };
+                }
+
+
+                if (mosesHitbox.x < obstacleHitbox.x + obstacleHitbox.width &&
+                    mosesHitbox.x + mosesHitbox.width > obstacleHitbox.x &&
+                    mosesHitbox.y < obstacleHitbox.y + obstacleHitbox.height &&
+                    mosesHitbox.y + mosesHitbox.height > obstacleHitbox.y) {
                     gameOver();
                 }
             });
@@ -717,24 +764,24 @@ function createStars() {
             // Actualizar puntuación
             score += 1;
             document.getElementById('score').textContent = `Distancia: ${score}m`;
-            
+
             // Actualizar día
             // Cada 800m es un nuevo día
             const prevDay = currentDay;
             currentDay = Math.floor(score / 800) + 1;
-            dayProgress = (score % 800) / 800;
-            
+            dayProgress = (score % 800) / 800; // Progreso dentro del día actual (0 a 1)
+
             // Verificar si está en el mar (día 3 en adelante)
             inSea = currentDay >= 3;
-            
+
             let dayText = '';
             if (currentDay === 1) dayText = 'Día 1 - Desierto';
             else if (currentDay === 2) dayText = 'Día 2 - Desierto';
             else if (currentDay === 3) dayText = 'Día 3 - Mar Rojo';
             else dayText = `Día ${currentDay} - Tierra Prometida`;
-            
+
             document.getElementById('dayInfo').textContent = dayText;
-            
+
             // Incrementar velocidad gradualmente
             gameSpeed += 0.003;
 
@@ -742,7 +789,7 @@ function createStars() {
             if (moses.jumping) {
                 moses.velocityY += 0.9;
                 moses.y += moses.velocityY;
-                
+
                 if (moses.y >= groundY - moses.height) {
                     moses.y = groundY - moses.height;
                     moses.jumping = false;
@@ -781,7 +828,7 @@ function createStars() {
         // Función para dibujar el juego
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             drawBackground();
             drawParticles();
             drawPharaohChariot();
@@ -796,10 +843,11 @@ function createStars() {
             if (currentDay === 1) dayText = 'en el desierto';
             else if (currentDay === 2) dayText = 'en el segundo día';
             else if (currentDay >= 3) dayText = 'en el Mar Rojo';
-            
+
             document.getElementById('finalScore').textContent = `Llegaste ${dayText} - Distancia: ${score}m`;
             document.getElementById('gameOver').style.display = 'block';
             gameMusic.pause(); // Pausar música en Game Over
+            dangerSound.pause(); // Asegurarse de que el sonido de peligro también se detenga
             dangerSound.currentTime = 0;
         }
 
@@ -808,25 +856,26 @@ function createStars() {
             document.getElementById('startScreen').style.display = 'none';
             const countdownEl = document.getElementById('countdown');
             countdownEl.style.display = 'block';
-            
-            gameMusic.play(); // Reproducir música al iniciar la cuenta regresiva
+
+            gameMusic.play().catch(e => console.log("Error al reproducir música de fondo:", e)); // Reproducir música al iniciar la cuenta regresiva
 
             let count = 3;
             const countdownInterval = setInterval(() => {
                 if (count === 0) {
                     countdownEl.textContent = '¡GO!';
                     countdownEl.className = 'countdown-animate';
-                    
+
                     setTimeout(() => {
                         countdownEl.style.display = 'none';
                         document.getElementById('gameUI').style.display = 'block';
                         gameRunning = true;
                         gameStarted = true;
-                        
+
+                        gameMusic.pause(); // Pausar la música de fondo cuando termina la cuenta regresiva
                         gameMusic.currentTime = 0; // Opcional: Reiniciar la música al principio para la próxima vez
-                        dangerSound.play(); // Reproducir el sonido de peligro
+                        dangerSound.play().catch(e => console.log("Error al reproducir sonido de peligro:", e)); // Reproducir el sonido de peligro
                     }, 500);
-                    
+
                     clearInterval(countdownInterval);
                 } else {
                     countdownEl.textContent = count;
@@ -864,7 +913,7 @@ function createStars() {
         // Controles del jugador
         document.addEventListener('keydown', (e) => {
             if (!gameRunning || !gameStarted) return;
-            
+
             if (e.code === 'Space' || e.code === 'ArrowUp') {
                 e.preventDefault();
                 if (!moses.jumping) {
@@ -878,7 +927,7 @@ function createStars() {
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (!gameRunning || !gameStarted) return;
-            
+
             if (!moses.jumping) {
                 moses.jumping = true;
                 moses.velocityY = -16;
@@ -929,4 +978,5 @@ function createStars() {
         window.addEventListener('resize', checkOrientation); // Also check on resize for desktop/tablet
     </script>
 </body>
+
 </html>
