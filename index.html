@@ -535,6 +535,68 @@
             color: var(--text-muted);
         }
 
+        /* ESTILOS BOTON PARA INGRESAR A LOS JUEGOS DINAMICOS */
+
+        .church-logo-link {
+            /* New wrapper for the link */
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            /* Optional: Add a smooth transition for size changes if the link itself scales */
+            transition: all 0.7s ease-in-out;
+        }
+
+        .church-logo {
+            width: 60px;
+            height: 60px;
+            /* Make height equal to width for a perfect circle */
+            object-fit: cover;
+            /* Ensures the image covers the area without distortion */
+            display: block;
+            /* Ensures the image behaves as a block element within the link */
+
+            /* --- NEW CODE FOR ROUNDING --- */
+            border-radius: 50%;
+            /* This makes it perfectly circular */
+            /* --- END NEW CODE --- */
+        }
+
+        /* Media queries for .church-logo (adjust as needed if sizes are on the link wrapper) */
+        @media (max-width: 768px) {
+            .church-logo {
+                width: 50px;
+                height: 50px;
+                /* Adjust height here too */
+            }
+
+            .church-logo-link {
+                /* Adjust link position if needed for smaller screens */
+                bottom: 15px;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .church-logo {
+                width: 40px;
+                height: 40px;
+                /* Adjust height here too */
+            }
+
+            .church-logo-link {
+                /* Adjust link position if needed for smaller screens */
+                bottom: 10px;
+                left: 10px;
+            }
+        }
+
+        .church-logo-link:hover {
+            transform: scale(1.15);
+            /* Enlarge the whole link on hover */
+            cursor: pointer;
+        }
+
         /* Grid Layouts for Ministries, Sermons, Events */
         .ministries-grid,
         .sermons-grid,
@@ -568,50 +630,6 @@
             transform: translateY(-10px);
             box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.2);
         }
-
-        /* style.css */
-
-.church-logo-link { /* New wrapper for the link */
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    /* Optional: Add a smooth transition for size changes if the link itself scales */
-    transition: all 0.3s ease-in-out; 
-}
-
-.church-logo {
-    width: 150px;
-    height: auto;
-    display: block; /* Ensures the image behaves as a block element within the link */
-    /* Remove width transition here if you put it on the link wrapper */
-}
-
-/* Media queries for .church-logo (adjust as needed if sizes are on the link wrapper) */
-@media (max-width: 768px) {
-    .church-logo {
-        width: 100px;
-    }
-    .church-logo-link { /* Adjust link position if needed for smaller screens */
-        bottom: 15px;
-        left: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .church-logo {
-        width: 80px;
-    }
-    .church-logo-link { /* Adjust link position if needed for smaller screens */
-        bottom: 10px;
-        left: 10px;
-    }
-}
-
-.church-logo-link:hover {
-    transform: scale(1.05); /* Enlarge the whole link on hover */
-    cursor: pointer;
-}
 
         .ministry-card img,
         .sermon-card img,
@@ -1814,22 +1832,30 @@
                 </div>
 
                 <div class="glass-card mb-4">
-                    <h3 class="text-dark">Nuestra Historia</h3>
+                    <h3 class="text-dark">Nuestra Historia: De la Semilla a la Cosecha en Cristo </h3>
                     <div class="row d-flex align-items-center">
                         <div class="col-md-6 order-md-2">
                             <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/89319432_104784571150746_3683856675992764416_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGZ0MY-vHnhJ3ikuw1EtqFl-3XTQthDuJz7ddNC2EO4nDTwlIbyewjY94gljnTEHgTHdupnp0cy6Eba-7Zavxps&_nc_ohc=Tjc_QjGlVOUQ7kNvwHiHNpK&_nc_oc=AdmZnZdz0MAdp4YPp2ybwm_shDFC1FRfPMsxmKT-D7hW82DITIUwQ7269fwdpGKsQ-U&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=t2ZzT1_PJuaxlOmhWzYvVw&oh=00_AfMOqqJj6YYFa4brFaiFtzruHHpwcRQMnC80-ARw8QuAIQ&oe=688CA8F8"
                                 alt="Historia de la Iglesia" class="img-fluid rounded shadow-sm mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6 order-md-1 text-left">
-                            <p class="text-muted-dark">Fundada en 2017 por un pequeño grupo de creyentes
-                                con una gran visión, nuestra iglesia ha sido un faro de esperanza y fe en Cúcuta/La
-                                Fortaleza. Lo que comenzó como reuniones en casas, creció gracias a la fidelidad de
-                                Dios y el compromiso de Su pueblo.</p>
-                            <p class="text-muted-dark">A lo largo de los años, hemos sido testigos de innumerables vidas
-                                transformadas, familias restauradas y un impacto significativo en nuestra comunidad a
-                                través de diversos ministerios y programas. Seguimos construyendo sobre los cimientos de
-                                la Palabra de Dios, mirando hacia el futuro con la convicción de que lo mejor está por
-                                venir.</p>
+                            <p class="text-muted-dark">Nacimos en Cúcuta/La Fortaleza con un llamado claro: ser una
+                                iglesia en plantación con el corazón ardiente por el evangelismo. En 2017, un puñado de
+                                creyentes se lanzó con la visión de llevar las buenas nuevas a cada rincón, sabiendo que
+                                no sería fácil. Al principio, nos enfrentamos a los desafíos propios de plantar una
+                                nueva obra: la incertidumbre de encontrar un lugar, la escasez de recursos y la labor
+                                incansable de tocar puertas y compartir el mensaje uno a uno..</p>
+                            <p class="text-muted-dark">Hubo momentos donde la tarea parecía abrumadora, pero cada
+                                pequeño paso de fe nos recordaba que no estábamos solos. Poco a poco, la semilla del
+                                Evangelio comenzó a germinar. Vimos cómo las vidas se abrían al mensaje de Jesús, y cómo
+                                cada testimonio se convertía en un nuevo impulso para seguir adelante. Lo que inició
+                                como encuentros humildes, creció con la fuerza que solo Dios puede dar.</p>
+                            <p class="text-muted-dark">Hoy, miramos hacia atrás con gratitud y hacia adelante con la
+                                victoria en Cristo Jesús como nuestro estandarte. Hemos sido testigos de milagros, de
+                                familias encontrando esperanza y de corazones rotos siendo sanados. Cada persona que
+                                llega a nuestra iglesia es una nueva historia de triunfo de la fe. Seguimos firmes en
+                                nuestra misión evangelística, sabiendo que los desafíos son solo oportunidades para ver
+                                la grandeza de Dios manifestarse.</p>
                         </div>
                     </div>
                 </div>
@@ -2184,10 +2210,11 @@
                 </div>
             </div>
         </section>
-        <a href="index.html" class="church-logo-link">
-            <img src="https://yt3.googleusercontent.com/k3pMXQfzi7Bq95-FQ0gJ_83H-vkPiLcV9ph2u9BVl6AlOWWDNJv24Onkm4xp8xKjAk6Djku7VA=s900-c-k-c0x00ffffff-no-rj" alt="Logo de la Iglesia" class="church-logo">
-        </a>
 
+        <a href="biblical_games_web.html" class="church-logo-link">
+            <img src="https://img.freepik.com/vector-premium/ilustracion-mando-videojuegos-victor-diseno-logo-mascota_1146923-176.jpg"
+                alt="Logo de la Iglesia" class="church-logo">
+        </a>
         <section id="contacto" class="section">
             <div class="container">
                 <h2>Contáctanos</h2>
