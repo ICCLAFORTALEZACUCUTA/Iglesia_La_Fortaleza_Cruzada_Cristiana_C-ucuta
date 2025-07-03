@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos Bíblicos Interactivos - Edición Gamer</title>
+    <link rel="icon"
+    href="https://img.freepik.com/vector-premium/ilustracion-mando-videojuegos-victor-diseno-logo-mascota_1146923-176.jpg"
+    type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700; /* Oro */
+            --electric-blue: #00FFFF; /* Azul cian brillante */
+            --neon-pink: #FF00FF; /* Rosa neón */
+            --deep-purple-bg: #0f001f; /* Fondo púrpura muy oscuro */
+            --dark-blue-bg: #2a005a; /* Fondo azul oscuro */
+            --game-card-bg: rgba(45, 0, 75, 0.4); /* Fondo de tarjeta más oscuro y transparente */
+            --game-screen-bg: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%); /* Fondo de pantalla de juego */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--deep-purple-bg) 0%, var(--dark-blue-bg) 100%); /* Nuevo gradiente "gamer" */
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white; /* Color de texto predeterminado */
+        }
+
+        .game-card {
+            background: var(--game-card-bg);
+            backdrop-filter: blur(8px); /* Ligeramente menos blur para mejor rendimiento */
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.3); /* Borde púrpura sutil */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--electric-blue); /* Color de partícula más futurista */
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--electric-blue); /* Brillo a las partículas */
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.8;}
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3;}
+        }
+
+        .game-screen {
+            display: none;
+            min-height: 100vh;
+            background: var(--game-screen-bg); /* Fondo específico para pantallas de juego */
+            color: white;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .btn-game {
+            background: linear-gradient(45deg, var(--primary-gold), #FFA500);
+            border: none;
+            color: #1a1a2e; /* Color de texto oscuro para contraste con oro */
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-game:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .trivia-card, .character-card, .roulette-card, .differences-card, .word-search-card, .story-completion-card, .story-creator-card { /* Añadidas clases para todos los tipos de tarjetas */
+            background: rgba(255, 255, 255, 0.08); /* Fondo más sutil para tarjetas internas */
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hangman-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .hangman-svg {
+            width: clamp(200px, 70vw, 300px); /* Responsivo */
+            height: auto;
+        }
+
+        .judas-part {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .judas-part.show {
+            opacity: 1;
+        }
+
+        .word-display {
+            font-size: clamp(1.8rem, 5vw, 2.5rem); /* Responsivo */
+            font-weight: bold;
+            letter-spacing: clamp(0.3rem, 1vw, 0.5rem); /* Responsivo */
+            margin: 20px 0;
+            text-align: center;
+            color: var(--electric-blue); /* Color más gamer */
+            word-break: break-all;
+            text-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        .letter-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(40px, 10vw, 50px), 1fr)); /* Responsivo */
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .letter-btn {
+            width: clamp(40px, 10vw, 50px);
+            height: clamp(40px, 10vw, 50px);
+            border: 2px solid var(--electric-blue);
+            background: transparent;
+            color: var(--electric-blue);
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* Responsivo */
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+
+        .letter-btn:hover {
+            background: var(--electric-blue);
+            color: var(--deep-purple-bg);
+            box-shadow: 0 0 15px var(--electric-blue);
+        }
+
+        .letter-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .coins {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: clamp(1.2rem, 4vw, 1.5rem); /* Responsivo */
+            color: var(--primary-gold);
+            z-index: 1000;
+            text-shadow: 0 0 8px var(--primary-gold);
+        }
+
+        .roulette-container {
+            position: relative;
+            width: clamp(250px, 60vw, 300px); /* Responsivo */
+            height: clamp(250px, 60vw, 300px); /* Responsivo */
+            margin: 0 auto;
+        }
+
+        .roulette-wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 5px solid var(--primary-gold);
+            transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 20px var(--primary-gold);
+        }
+
+        .roulette-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+        }
+        /* Colores de sección para la ruleta, manteniéndolos vibrantes */
+        .roulette-section:nth-child(1) { background: #FF6B6B; } /* Rojo coral */
+        .roulette-section:nth-child(2) { background: #4ECDC4; } /* Verde menta */
+        .roulette-section:nth-child(3) { background: #45B7D1; } /* Azul cielo */
+        .roulette-section:nth-child(4) { background: #96CEB4; } /* Verde suave */
+        .roulette-section:nth-child(5) { background: #FFEAA7; } /* Amarillo pastel */
+        .roulette-section:nth-child(6) { background: #DDA0DD; } /* Morado claro */
+
+
+        .roulette-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid var(--primary-gold);
+            z-index: 10;
+        }
+
+        .differences-game {
+            display: grid;
+            grid-template-columns: 1fr; /* Una columna por defecto */
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) { /* Dos columnas en tablets y desktops */
+            .differences-game {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .image-container {
+            position: relative;
+            border: 3px solid var(--electric-blue); /* Borde más tecnológico */
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .difference-marker {
+            position: absolute;
+            width: clamp(25px, 8vw, 30px); /* Responsivo */
+            height: clamp(25px, 8vw, 30px); /* Responsivo */
+            border: 3px solid var(--neon-pink); /* Marcador neón */
+            border-radius: 50%;
+            background: rgba(255, 0, 255, 0.3);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .difference-marker.found {
+            opacity: 1;
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #0F0; /* Verde brillante */
+            box-shadow: 0 0 10px #0F0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-gold), var(--neon-pink)); /* Gradiente de progreso */
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .modal-custom {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content-custom {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%); /* Fondo oscuro de modal */
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .animate-bounce {
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--neon-pink); /* Confeti neón */
+            animation: confetti-fall 3s linear forwards;
+            box-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .header-title {
+            background: linear-gradient(45deg, var(--electric-blue), var(--neon-pink)); /* Título con gradiente neón */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2rem, 8vw, 3rem); /* Responsivo */
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.5); /* Sombra brillante */
+        }
+        
+        /* Ajustes para responsividad de imágenes SVG */
+        .differences-game svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* Ajustes para inputs y botones en pantallas pequeñas */
+        @media (max-width: 576px) {
+            .btn-game {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            .header-title {
+                font-size: 2rem;
+            }
+            .word-display {
+                font-size: 1.5rem;
+                letter-spacing: 0.2rem;
+            }
+            .letter-buttons {
+                grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+                gap: 5px;
+            }
+            .letter-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            .coins {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Word Search Grid Specifics */
+        #wordSearchGrid {
+            display: grid;
+            border: 2px solid var(--electric-blue);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .grid-cell {
+            width: clamp(25px, 8vw, 40px); /* Responsivo */
+            height: clamp(25px, 8vw, 40px); /* Responsivo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(1rem, 3.5vw, 1.4rem); /* Responsivo */
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .grid-cell.highlighted {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .grid-cell.selected {
+            background-color: var(--electric-blue);
+            color: var(--deep-purple-bg);
+            text-shadow: 0 0 5px var(--electric-blue);
+        }
+        .grid-cell.found {
+            background: linear-gradient(45deg, var(--primary-gold), var(--neon-pink));
+            color: #1a1a2e;
+            text-shadow: 0 0 5px var(--primary-gold);
+            box-shadow: inset 0 0 10px var(--primary-gold);
+        }
+
+        #wordList {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #wordList li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        #wordList li.found-word-item {
+            background: linear-gradient(90deg, #0F0, #0A0);
+            color: white;
+            text-decoration: line-through;
+            opacity: 0.7;
+            border-color: #0F0;
+            box-shadow: 0 0 10px #0F0;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="coins">
+        <i class="fas fa-coins"></i> <span id="coinCount">0</span>
+    </div>
+    
+    <div id="mainMenu" class="container-fluid py-5">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="header-title">🕊️ JUEGOS BÍBLICOS INTERACTIVOS 🕊️</h1>
+                <p class="text-center text-white mb-5 fs-4">Pon a prueba tu conocimiento bíblico con estos desafiantes juegos</p>
+            </div>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startTrivia()">
+                    <div class="mb-3">
+                        <i class="fas fa-question-circle" style="font-size: 4rem; color: var(--primary-gold);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">📖 TRIVIA BÍBLICA</h3>
+                    <p class="text-white-50 mb-4">15 preguntas difíciles sobre las Escrituras</p>
+                    <button class="btn btn-game">¡Comenzar!</button>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startHangman()">
+                    <div class="mb-3">
+                        <i class="fas fa-user-times" style="font-size: 4rem; color: var(--neon-pink);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">⚰️ JUDAS AHORCADO</h3>
+                    <p class="text-white-50 mb-4">Salva o condena a Judas con palabras bíblicas</p>
+                    <button class="btn btn-game">¡Jugar!</button>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startRoulette()">
+                    <div class="mb-3">
+                        <i class="fas fa-circle-notch" style="font-size: 4rem; color: var(--electric-blue);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">🎯 RULETA BÍBLICA</h3>
+                    <p class="text-white-50 mb-4">Gira la ruleta y responde preguntas</p>
+                    <button class="btn btn-game">¡Girar!</button>
+                </div>
+            </div>
+            
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startDifferences()">
+                    <div class="mb-3">
+                        <i class="fas fa-search" style="font-size: 4rem; color: var(--primary-gold);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">🔍 ENCUENTRA LAS DIFERENCIAS</h3>
+                    <p class="text-white-50 mb-4">Encuentra las diferencias entre personajes bíblicos</p>
+                    <button class="btn btn-game">¡Buscar!</button>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startGuessTheCharacter()">
+                    <div class="mb-3">
+                        <i class="fas fa-user-secret" style="font-size: 4rem; color: var(--electric-blue);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">❓ ADIVINA EL PERSONAJE</h3>
+                    <p class="text-white-50 mb-4">Descubre quién soy con pistas bíblicas</p>
+                    <button class="btn btn-game">¡Adivinar!</button>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startWordSearch()">
+                    <div class="mb-3">
+                        <i class="fas fa-puzzle-piece" style="font-size: 4rem; color: var(--neon-pink);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">🔠 SOPA DE LETRAS</h3>
+                    <p class="text-white-50 mb-4">Encuentra palabras bíblicas ocultas en la cuadrícula</p>
+                    <button class="btn btn-game">¡Jugar!</button>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startStoryCompletion()">
+                    <div class="mb-3">
+                        <i class="fas fa-book-open" style="font-size: 4rem; color: var(--primary-gold);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">📜 ¿QUÉ SUCEDE DESPUÉS?</h3>
+                    <p class="text-white-50 mb-4">Completa historias y pasajes bíblicos</p>
+                    <button class="btn btn-game">¡Completar!</button>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <div class="game-card h-100 p-4 text-center" onclick="startStoryCreator()">
+                    <div class="mb-3">
+                        <i class="fas fa-feather-alt" style="font-size: 4rem; color: var(--electric-blue);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">✍️ CREA TU PARÁBOLA</h3>
+                    <p class="text-white-50 mb-4">Escribe tu propia historia y obtén una puntuación</p>
+                    <button class="btn btn-game">¡Crear!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="triviaScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 class="text-warning">📖 TRIVIA BÍBLICA AVANZADA</h2>
+                        <p class="text-white-50">Pregunta <span id="questionNumber">1</span> de 15</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="triviaProgress"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="trivia-card" id="triviaCard">
+                        <h4 class="text-center mb-4" id="triviaQuestion">¿Cuál es el nombre del monte donde Moisés recibió los Diez Mandamientos?</h4>
+                        <div class="row g-3" id="triviaOptions">
+                            </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="nextQuestion()" id="nextBtn" style="display: none;">
+                            Siguiente Pregunta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="hangmanScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-4">
+                        <h2 class="text-warning">⚰️ JUDAS AHORCADO</h2>
+                        <p class="text-white-50">Errores: <span id="hangmanErrors">0</span>/4</p>
+                    </div>
+                    
+                    <div class="hangman-container">
+                        <svg class="hangman-svg" viewBox="0 0 300 300">
+                            <line x1="50" y1="280" x2="150" y2="280" stroke="brown" stroke-width="8"/>
+                            <line x1="80" y1="280" x2="80" y2="50" stroke="brown" stroke-width="8"/>
+                            <line x1="80" y1="50" x2="180" y2="50" stroke="brown" stroke-width="8"/>
+                            <line x1="180" y1="50" x2="180" y2="80" stroke="brown" stroke-width="8"/>
+                            
+                            <circle cx="180" cy="100" r="20" fill="peachpuff" stroke="black" stroke-width="2" class="judas-part" id="head"/>
+                            <line x1="180" y1="120" x2="180" y2="200" stroke="black" stroke-width="4" class="judas-part" id="body"/>
+                            <line x1="180" y1="150" x2="150" y2="180" stroke="black" stroke-width="4" class="judas-part" id="leftArm"/>
+                            <line x1="180" y1="150" x2="210" y2="180" stroke="black" stroke-width="4" class="judas-part" id="rightArm"/>
+                            <line x1="180" y1="200" x2="150" y2="240" stroke="black" stroke-width="4" class="judas-part" id="leftLeg"/>
+                            <line x1="180" y1="200" x2="210" y2="240" stroke="black" stroke-width="4" class="judas-part" id="rightLeg"/>
+                            
+                            <path d="M 170 85 Q 175 90 180 85" stroke="brown" stroke-width="3" fill="none" class="judas-part" id="rope"/>
+                            
+                            <circle cx="250" cy="100" r="8" fill="silver" stroke="gold" stroke-width="2" class="judas-part" id="coin1"/>
+                            <circle cx="240" cy="120" r="8" fill="silver" stroke="gold" stroke-width="2" class="judas-part" id="coin2"/>
+                            <circle cx="260" cy="120" r="8" fill="silver" stroke="gold" stroke-width="2" class="judas-part" id="coin3"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="word-display" id="wordDisplay">
+                        _ _ _ _ _ _ _ _ _
+                    </div>
+                    
+                    <div class="letter-buttons mb-4" id="letterButtons">
+                        </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="newHangmanGame()">
+                            <i class="fas fa-redo"></i> Nueva Palabra
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="rouletteScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 class="text-warning">🎯 RULETA BÍBLICA</h2>
+                        <p class="text-white-50">Gira la ruleta y responde la pregunta</p>
+                    </div>
+                    
+                    <div class="roulette-container mb-4">
+                        <div class="roulette-pointer"></div>
+                        <div class="roulette-wheel" id="rouletteWheel">
+                            <div class="roulette-section" style="background: #FF6B6B; transform: rotate(0deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">1</div>
+                            </div>
+                            <div class="roulette-section" style="background: #4ECDC4; transform: rotate(60deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">2</div>
+                            </div>
+                            <div class="roulette-section" style="background: #45B7D1; transform: rotate(120deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">3</div>
+                            </div>
+                            <div class="roulette-section" style="background: #96CEB4; transform: rotate(180deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">4</div>
+                            </div>
+                            <div class="roulette-section" style="background: #FFEAA7; transform: rotate(240deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">5</div>
+                            </div>
+                            <div class="roulette-section" style="background: #DDA0DD; transform: rotate(300deg);">
+                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">6</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <button class="btn btn-game" onclick="spinRoulette()" id="spinBtn">
+                            <i class="fas fa-circle-notch"></i> GIRAR RULETA
+                        </button>
+                    </div>
+                    
+                    <div class="trivia-card" id="rouletteQuestion" style="display: none;">
+                        <h4 class="text-center mb-4" id="rouletteQuestionText"></h4>
+                        <div class="row g-3" id="rouletteOptions">
+                            </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="differencesScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-4">
+                        <h2 class="text-warning">🔍 ENCUENTRA LAS DIFERENCIAS</h2>
+                        <p class="text-white-50">Encuentra las <span id="totalDifferences">5</span> diferencias entre los personajes</p>
+                        <p class="text-white">Diferencias encontradas: <span id="foundDifferences">0</span>/<span id="totalDifferencesCount">5</span></p>
+                    </div>
+                    
+                    <div class="differences-game mb-4" id="differencesGame">
+                        <div class="image-container" id="leftImage">
+                            <svg width="300" height="400" viewBox="0 0 300 400">
+                                <rect x="100" y="100" width="100" height="200" fill="brown" stroke="black" stroke-width="2"/>
+                                <circle cx="150" cy="70" r="30" fill="peachpuff" stroke="black" stroke-width="2"/>
+                                <rect x="120" y="140" width="60" height="80" fill="blue" stroke="black" stroke-width="2"/>
+                                <rect x="90" y="120" width="30" height="60" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="180" y="120" width="30" height="60" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="110" y="220" width="25" height="80" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="165" y="220" width="25" height="80" fill="brown" stroke="black" stroke-width="2"/>
+                                
+                                <ellipse cx="150" cy="45" rx="35" ry="15" fill="black"/>
+                                <circle cx="140" cy="65" r="3" fill="black"/>
+                                <circle cx="160" cy="65" r="3" fill="black"/>
+                                <path d="M 140 80 Q 150 85 160 80" stroke="black" stroke-width="2" fill="none"/>
+                                <ellipse cx="150" cy="90" rx="20" ry="10" fill="black"/>
+                                <rect x="125" y="180" width="50" height="8" fill="brown"/>
+                                <ellipse cx="122" cy="305" rx="15" ry="8" fill="brown"/>
+                                <ellipse cx="178" cy="305" rx="15" ry="8" fill="brown"/>
+                                
+                                <circle cx="150" cy="45" r="15" fill="transparent" class="difference-marker" data-diff="1"/>
+                                <circle cx="140" cy="65" r="10" fill="transparent" class="difference-marker" data-diff="2"/>
+                                <circle cx="150" cy="160" r="15" fill="transparent" class="difference-marker" data-diff="3"/>
+                                <circle cx="135" cy="185" r="10" fill="transparent" class="difference-marker" data-diff="4"/>
+                                <circle cx="122" cy="305" r="12" fill="transparent" class="difference-marker" data-diff="5"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="image-container" id="rightImage">
+                            <svg width="300" height="400" viewBox="0 0 300 400">
+                                <rect x="100" y="100" width="100" height="200" fill="brown" stroke="black" stroke-width="2"/>
+                                <circle cx="150" cy="70" r="30" fill="peachpuff" stroke="black" stroke-width="2"/>
+                                <rect x="120" y="140" width="60" height="80" fill="blue" stroke="black" stroke-width="2"/>
+                                <rect x="90" y="120" width="30" height="60" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="180" y="120" width="30" height="60" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="110" y="220" width="25" height="80" fill="brown" stroke="black" stroke-width="2"/>
+                                <rect x="165" y="220" width="25" height="80" fill="brown" stroke="black" stroke-width="2"/>
+                                
+                                <ellipse cx="150" cy="45" rx="35" ry="15" fill="brown"/>
+                                <circle cx="140" cy="65" r="3" fill="blue"/>
+                                <circle cx="160" cy="65" r="3" fill="black"/>
+                                <path d="M 140 80 Q 150 85 160 80" stroke="black" stroke-width="2" fill="none"/>
+                                <ellipse cx="150" cy="90" rx="20" ry="10" fill="black"/>
+                                <rect x="125" y="180" width="50" height="8" fill="brown"/>
+                                <circle cx="150" cy="160" r="5" fill="red"/>
+                                <rect x="135" y="182" width="8" height="4" fill="gold"/>
+                                <ellipse cx="122" cy="305" rx="15" ry="8" fill="brown"/>
+                                <ellipse cx="178" cy="305" rx="15" ry="8" fill="black"/>
+                                
+                                <circle cx="150" cy="45" r="15" fill="transparent" class="difference-marker" data-diff="1" onclick="foundDifference(1)"/>
+                                <circle cx="140" cy="65" r="10" fill="transparent" class="difference-marker" data-diff="2" onclick="foundDifference(2)"/>
+                                <circle cx="150" cy="160" r="15" fill="transparent" class="difference-marker" data-diff="3" onclick="foundDifference(3)"/>
+                                <circle cx="135" cy="185" r="10" fill="transparent" class="difference-marker" data-diff="4" onclick="foundDifference(4)"/>
+                                <circle cx="178" cy="305" r="12" fill="transparent" class="difference-marker" data-diff="5" onclick="foundDifference(5)"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="newDifferencesGame()">
+                            <i class="fas fa-redo"></i> Nuevo Juego
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="guessCharacterScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 style="color: var(--electric-blue);">❓ ADIVINA EL PERSONAJE BÍBLICO</h2>
+                        <p class="text-white-50">Intentos restantes: <span id="characterAttempts">3</span></p>
+                    </div>
+                    
+                    <div class="character-card" id="characterCard">
+                        <h4 class="text-center mb-4" id="characterClue">Aquí aparecerá la pista...</h4>
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control form-control-lg text-center" id="characterGuessInput" placeholder="Escribe tu adivinanza aquí...">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-game me-3" onclick="submitCharacterGuess()">
+                                <i class="fas fa-check"></i> Adivinar
+                            </button>
+                            <button class="btn btn-outline-light" onclick="loadNextCharacterClue()" id="nextClueBtn">
+                                <i class="fas fa-lightbulb"></i> Siguiente Pista
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="startGuessTheCharacter()">
+                            <i class="fas fa-redo"></i> Nuevo Personaje
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wordSearchScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 style="color: var(--neon-pink);">🔠 SOPA DE LETRAS BÍBLICA</h2>
+                        <p class="text-white-50">Encuentra las palabras ocultas. Palabras restantes: <span id="wordSearchRemaining">0</span></p>
+                    </div>
+
+                    <div class="word-search-card">
+                        <div id="wordSearchGrid">
+                            </div>
+                        <h5 class="text-center mt-4 mb-2 text-white-75">Palabras a encontrar:</h5>
+                        <ul id="wordList" class="text-center text-white-50">
+                            </ul>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="startWordSearch()">
+                            <i class="fas fa-redo"></i> Nuevo Juego
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="storyCompletionScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 style="color: var(--primary-gold);">📜 ¿QUÉ SUCEDE DESPUÉS?</h2>
+                        <p class="text-white-50">Pregunta <span id="storyQuestionNumber">1</span> de <span id="storyTotalQuestions"></span></p>
+                    </div>
+                    
+                    <div class="story-completion-card">
+                        <h4 class="text-center mb-4" id="storySnippet">...</h4>
+                        <div class="row g-3" id="storyOptions">
+                            </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="nextStoryQuestion()" id="nextStoryBtn" style="display: none;">
+                            Siguiente Historia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="storyCreatorScreen" class="game-screen">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-4">
+                        <h2 style="color: var(--electric-blue);">✍️ CREA TU PROPIA PARÁBOLA/HISTORIA</h2>
+                        <p class="text-white-50">Escribe una breve historia o parábola inspirada en principios bíblicos.</p>
+                        <p class="text-white-50">Intenta incluir palabras como "fe", "amor", "perdón", "esperanza", "servicio".</p>
+                    </div>
+                    
+                    <div class="story-creator-card">
+                        <textarea id="parableTextarea" class="form-control" rows="10" placeholder="Empieza a escribir tu historia aquí..." style="background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1);"></textarea>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-game" onclick="evaluateStory()">
+                                <i class="fas fa-calculator"></i> Evaluar Historia
+                            </button>
+                        </div>
+                        <div id="storyScoreResult" class="text-center mt-3 fs-4" style="color: var(--primary-gold); text-shadow: 0 0 10px var(--primary-gold);"></div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Menú Principal
+                        </button>
+                        <button class="btn btn-game" onclick="startStoryCreator()">
+                            <i class="fas fa-redo"></i> Nueva Historia
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title text-center w-100" id="successTitle">¡Felicitaciones!</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-trophy text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <p class="fs-5" id="successMessage">¡Has completado el juego exitosamente!</p>
+                    <div class="mt-4">
+                        <button class="btn btn-game me-3" onclick="closeModal()">Continuar</button>
+                        <button class="btn btn-secondary" onclick="showMainMenu()">Menú Principal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="gameOverModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title text-center w-100 text-danger">¡Juego Terminado!</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-skull text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    <p class="fs-5" id="gameOverMessage">¡Judas ha sido ahorcado!</p>
+                    <div class="mt-4">
+                        <button class="btn btn-game me-3" onclick="newHangmanGame()">Jugar Otra Vez</button>
+                        <button class="btn btn-secondary" onclick="showMainMenu()">Menú Principal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Game Variables
+        let coins = 0;
+        let currentGame = 'menu';
+        
+        // Trivia Game Variables
+        let currentQuestion = 0;
+        let triviaScore = 0;
+        const triviaQuestions = [
+            {
+                question: "¿Cuál es el nombre del monte donde Moisés recibió los Diez Mandamientos?",
+                options: ["Monte Sinaí", "Monte Carmelo", "Monte Hermón", "Monte Tabor"],
+                correct: 0
+            },
+            {
+                question: "¿Cuántos años vivió Matusalén según la Biblia?",
+                options: ["865 años", "912 años", "969 años", "1000 años"],
+                correct: 2
+            },
+            {
+                question: "¿Cuál era el nombre original de Pablo antes de su conversión?",
+                options: ["Simón", "Saulo", "Samuel", "Salomón"],
+                correct: 1
+            },
+            {
+                question: "¿En qué río fue bautizado Jesús?",
+                options: ["Río Nilo", "Río Éufrates", "Río Jordán", "Río Tigris"],
+                correct: 2
+            },
+            {
+                question: "¿Cuántas veces negó Pedro a Jesús?",
+                options: ["2 veces", "3 veces", "4 veces", "5 veces"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál es el libro más largo de la Biblia?",
+                options: ["Génesis", "Salmos", "Isaías", "Jeremías"],
+                correct: 1
+            },
+            {
+                question: "¿Quién fue el primer mártir cristiano?",
+                options: ["Santiago", "Esteban", "Pedro", "Juan"],
+                correct: 1
+            },
+            {
+                question: "¿Cuántos días y noches llovió durante el diluvio?",
+                options: ["30 días", "40 días", "50 días", "60 días"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál era el nombre de la esposa de Abraham?",
+                options: ["Sara", "Rebeca", "Raquel", "Lea"],
+                correct: 0
+            },
+            {
+                question: "¿Cuántos hermanos tenía José (hijo de Jacob)?",
+                options: ["10", "11", "12", "13"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál fue el último libro del Antiguo Testamento en ser escrito?",
+                options: ["Malaquías", "Zacarías", "Nehemías", "Ester"],
+                correct: 0
+            },
+            {
+                question: "¿Cuántas plagas envió Dios sobre Egipto?",
+                options: ["8", "9", "10", "12"],
+                correct: 2
+            },
+            {
+                question: "¿Cuál era el nombre del gigante que mató David?",
+                options: ["Goliat", "Og", "Sehón", "Anac"],
+                correct: 0
+            },
+            {
+                question: "¿Cuántos discípulos eligió Jesús inicialmente?",
+                options: ["10", "12", "14", "16"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál es el versículo más corto de la Biblia?",
+                options: ["Jesús lloró", "Dios es amor", "En el principio", "Orad sin cesar"],
+                correct: 0
+            }
+        ];
+        
+        // Hangman Game Variables
+        let hangmanErrors = 0;
+        let currentWord = '';
+        let guessedLetters = [];
+        let wordDisplay = [];
+        const hangmanWords = [
+            'JERUSALÉN', 'CALVARIO', 'GÓLGOTA', 'PENTECOSTÉS', 'APOCALIPSIS',
+            'RESURRECCIÓN', 'CRUCIFIXIÓN', 'TRANSFIGURACIÓN', 'ASCENSIÓN',
+            'NAZARET', 'BETANIA', 'CAPERNAUM', 'MACEDONIA', 'CORINTO'
+        ];
+        
+        // Roulette Game Variables
+        let isSpinning = false;
+        const rouletteQuestions = [
+            {
+                question: "¿Quién construyó el arca?",
+                options: ["Noé", "Abraham", "Moisés", "David"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál era el nombre del padre de Jesús terrenal?",
+                options: ["Juan", "Pedro", "José", "Santiago"],
+                correct: 2
+            },
+            {
+                question: "¿Cuántos días estuvo Jonás en el vientre del pez?",
+                options: ["1 día", "2 días", "3 días", "7 días"],
+                correct: 2
+            },
+            {
+                question: "¿Cuál era el nombre del hermano de Moisés?",
+                options: ["Aarón", "Caleb", "Josué", "Miriam"],
+                correct: 0
+            },
+            {
+                question: "¿Cuántos panes y peces usó Jesús para alimentar a los 5000?",
+                options: ["3 panes y 2 peces", "5 panes y 2 peces", "7 panes y 3 peces", "10 panes y 5 peces"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál era el nombre del sumo sacerdote cuando Jesús fue crucificado?",
+                options: ["Anás", "Caifás", "Sadoc", "Eleazar"],
+                correct: 1
+            }
+        ];
+        
+        // Differences Game Variables
+        let foundDifferencesCount = 0;
+        let differencesFound = [];
+
+        // Guess The Character Game Variables
+        let characterAttempts = 0;
+        let currentMysteryCharacter = null;
+        let currentClueIndex = 0;
+        const biblicalCharacters = [
+            { name: "MOISÉS", clues: ["Fui encontrado en una cesta en el río.", "Hablé con Dios desde una zarza ardiente.", "Separé un mar en dos.", "Recibí los Diez Mandamientos de Dios.", "Guié a mi pueblo fuera de Egipto."] },
+            { name: "MARÍA", clues: ["Soy la madre de Jesús.", "Un ángel me visitó para anunciarme una gran noticia.", "Estuve presente en la crucifixión de Jesús.", "Canté una canción de alabanza conocida como el Magníficat."] },
+            { name: "DAVID", clues: ["Fui un pastor antes de ser rey.", "Derroté a un gigante con una honda y una piedra.", "Escribí muchos Salmos.", "Fui el segundo rey de Israel."] },
+            { name: "NOÉ", clues: ["Construí un arca muy grande.", "Sobreviví a un gran diluvio con mi familia y animales.", "Hice un pacto con Dios simbolizado por el arcoíris.", "Tuve tres hijos: Sem, Cam y Jafet."] },
+            { name: "JONÁS", clues: ["Intenté huir de la voluntad de Dios.", "Fui tragado por un gran pez.", "Prediqué en la ciudad de Nínive.", "Mi historia enseña sobre el arrepentimiento y la misericordia de Dios."] },
+            { name: "ABRAHAM", clues: ["Soy considerado el padre de la fe.", "Dios me prometió una descendencia numerosa como las estrellas.", "Estuve dispuesto a sacrificar a mi hijo Isaac.", "Mi esposa se llamaba Sara."] },
+            { name: "JOSÉ", clues: ["Fui vendido por mis hermanos.", "Interpreté sueños en Egipto.", "Me convertí en gobernador de Egipto.", "Perdoné a mis hermanos y salvé a mi familia del hambre."] },
+            { name: "PEDRO", clues: ["Era un pescador antes de seguir a Jesús.", "Caminé sobre el agua brevemente.", "Negé a Jesús tres veces antes de que cantara el gallo.", "Fui una de las columnas de la iglesia primitiva."] },
+            { name: "ESTEBAN", clues: ["Fui uno de los primeros diáconos.", "Realicé grandes prodigios y señales entre el pueblo.", "Fui el primer mártir cristiano.", "Vi los cielos abiertos y a Jesús a la diestra de Dios antes de morir."] },
+            { name: "SANSÓN", clues: ["Mi fuerza residía en mi cabello.", "Fui un juez de Israel.", "Derroté a mil filisteos con una quijada de asno.", "Mi historia termina en el templo de Dagón."] }
+        ];
+
+        // Word Search Game Variables (NUEVAS VARIABLES)
+        const wordSearchWords = ['AMOR', 'FE', 'PAZ', 'GOZO', 'GRACIA', 'BIBLIA', 'ORACIÓN', 'CRISTO', 'PROFETAS', 'EVANGELIO'];
+        const wordSearchGridSize = 10;
+        let wordGrid = [];
+        let wordSearchFoundWords = [];
+        let selectedCells = [];
+        let isSelecting = false;
+
+        // Story Completion Game Variables (NUEVAS VARIABLES)
+        let currentStoryQuestion = 0;
+        let storyCompletionScore = 0;
+        const storyCompletionQuestions = [
+            {
+                snippet: "Y Jesús, llamando a un niño, lo puso en medio de ellos, y dijo: De cierto os digo, que si no os volvéis y os hacéis como niños...",
+                options: ["...no podréis entrar en el reino de los cielos.", "...seréis los más grandes en mi reino.", "...seréis mis discípulos.", "...no tendréis herencia."],
+                correct: 0
+            },
+            {
+                snippet: "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree...",
+                options: ["...tenga abundancia de riquezas.", "...no se pierda, mas tenga vida eterna.", "...sea sanado de toda enfermedad.", "...goce de la paz en la tierra."],
+                correct: 1
+            },
+            {
+                snippet: "Por tanto, id, y haced discípulos a todas las naciones, bautizándolos en el nombre del Padre, y del Hijo, y del Espíritu Santo...",
+                options: ["...enseñándoles a guardar todo lo que os he mandado; y he aquí yo estoy con vosotros todos los días, hasta el fin del mundo.", "...y predicad el evangelio a toda criatura en el mundo.", "...porque el fin de todas las cosas se acerca rápidamente.", "...y sanad a los enfermos y echad fuera demonios."],
+                correct: 0
+            },
+            {
+                snippet: "El que es fiel en lo muy poco, también en lo mucho es fiel; y el que en lo muy poco es injusto...",
+                options: ["...también en lo mucho es injusto.", "...será perdonado al final.", "...nunca prosperará.", "...debe pedir perdón a Dios."],
+                correct: 0
+            },
+            {
+                snippet: "Así también la fe, si no tiene obras, es muerta en sí misma. Pero alguno dirá: Tú tienes fe, y yo tengo obras. Muéstrame tu fe sin tus obras, y yo te mostraré...",
+                options: ["...mis obras que provienen de la fe.", "...el camino de la salvación.", "...cómo la fe sin obras no vale.", "...mi fe por mis obras."],
+                correct: 3
+            }
+        ];
+
+        // Story Creator Game Variables (NUEVAS VARIABLES)
+        const storyCreatorKeywords = ['FE', 'AMOR', 'PERDÓN', 'ESPERANZA', 'SERVICIO', 'DIOS', 'JESÚS', 'GRACIA', 'MISERICORDIA', 'JUSTICIA'];
+
+        // Initialize the game
+        window.onload = function() {
+            createParticles();
+            updateCoins();
+            showMainMenu();
+        };
+        
+        // Create floating particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+        
+        // Update coin display
+        function updateCoins() {
+            document.getElementById('coinCount').textContent = coins;
+        }
+        
+        // Add coins with animation
+        function addCoins(amount) {
+            coins += amount;
+            updateCoins();
+            
+            // Create coin animation
+            const coinElement = document.createElement('div');
+            coinElement.innerHTML = (amount > 0 ? '+' : '') + amount + ' 🪙';
+            coinElement.style.position = 'fixed';
+            coinElement.style.top = '50px';
+            coinElement.style.right = '20px';
+            coinElement.style.color = amount > 0 ? 'var(--primary-gold)' : 'var(--neon-pink)';
+            coinElement.style.fontSize = '1.5rem';
+            coinElement.style.fontWeight = 'bold';
+            coinElement.style.zIndex = '9999';
+            coinElement.style.animation = 'bounce 1s ease-in-out';
+            coinElement.style.textShadow = `0 0 8px ${amount > 0 ? 'var(--primary-gold)' : 'var(--neon-pink)'}`;
+            document.body.appendChild(coinElement);
+            
+            setTimeout(() => {
+                coinElement.remove();
+            }, 1000);
+        }
+        
+        // Show main menu
+        function showMainMenu() {
+            document.querySelectorAll('.game-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById('mainMenu').style.display = 'block';
+            currentGame = 'menu';
+        }
+        
+        // Hide main menu and show game screen
+        function showGameScreen(screenId) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.querySelectorAll('.game-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+        
+        // TRIVIA GAME FUNCTIONS
+        function startTrivia() {
+            currentQuestion = 0;
+            triviaScore = 0;
+            showGameScreen('triviaScreen');
+            currentGame = 'trivia';
+            loadTriviaQuestion();
+        }
+        
+        function loadTriviaQuestion() {
+            const question = triviaQuestions[currentQuestion];
+            document.getElementById('questionNumber').textContent = currentQuestion + 1;
+            document.getElementById('triviaQuestion').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('triviaOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-3';
+                col.innerHTML = `
+                    <button class="btn btn-outline-light w-100 p-3 trivia-option" 
+                            onclick="selectTriviaAnswer(${index})" 
+                            style="transition: all 0.3s ease;">
+                        ${option}
+                    </button>
+                `;
+                optionsContainer.appendChild(col);
+            });
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / triviaQuestions.length) * 100;
+            document.getElementById('triviaProgress').style.width = progress + '%';
+            
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+        
+        function selectTriviaAnswer(selectedIndex) {
+            const question = triviaQuestions[currentQuestion];
+            const options = document.querySelectorAll('.trivia-option');
+            
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === question.correct) {
+                    option.classList.add('btn-success');
+                    option.classList.remove('btn-outline-light');
+                } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                    option.classList.add('btn-danger');
+                    option.classList.remove('btn-outline-light');
+                } else {
+                    option.classList.add('btn-secondary');
+                    option.classList.remove('btn-outline-light');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                triviaScore++;
+                addCoins(10);
+                createCelebration();
+            }
+            
+            document.getElementById('nextBtn').style.display = 'inline-block';
+        }
+        
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < triviaQuestions.length) {
+                loadTriviaQuestion();
+            } else {
+                showTriviaResults();
+            }
+        }
+        
+        function showTriviaResults() {
+            const percentage = Math.round((triviaScore / triviaQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = `¡Excelente! Obtuviste ${triviaScore}/${triviaQuestions.length} respuestas correctas (${percentage}%). ¡Eres un verdadero erudito bíblico!`;
+                addCoins(50);
+            } else if (percentage >= 70) {
+                message = `¡Muy bien! Obtuviste ${triviaScore}/${triviaQuestions.length} respuestas correctas (${percentage}%). ¡Buen conocimiento bíblico!`;
+                addCoins(30);
+            }
+            else if (percentage >= 50) {
+                message = `¡No está mal! Obtuviste ${triviaScore}/${triviaQuestions.length} respuestas correctas (${percentage}%). ¡Sigue estudiando!`;
+                addCoins(20);
+            } else {
+                message = `Obtuviste ${triviaScore}/${triviaQuestions.length} respuestas correctas (${percentage}%). ¡Necesitas estudiar más la Biblia!`;
+                addCoins(10);
+            }
+            
+            document.getElementById('successTitle').textContent = '¡Trivia Completada!';
+            document.getElementById('successMessage').textContent = message;
+            
+            const modal = new bootstrap.Modal(document.getElementById('successModal'));
+            modal.show();
+        }
+        
+        // HANGMAN GAME FUNCTIONS
+        function startHangman() {
+            showGameScreen('hangmanScreen');
+            currentGame = 'hangman';
+            newHangmanGame();
+        }
+        
+        function newHangmanGame() {
+            hangmanErrors = 0;
+            guessedLetters = [];
+            currentWord = hangmanWords[Math.floor(Math.random() * hangmanWords.length)];
+            wordDisplay = Array(currentWord.length).fill('_');
+            
+            updateHangmanDisplay();
+            createLetterButtons();
+            updateHangmanDrawing();
+            
+            // Hide all Judas parts
+            document.querySelectorAll('.judas-part').forEach(part => {
+                part.classList.remove('show');
+            });
+        }
+        
+        function createLetterButtons() {
+            const container = document.getElementById('letterButtons');
+            container.innerHTML = '';
+            
+            const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+            
+            letters.split('').forEach(letter => {
+                const button = document.createElement('button');
+                button.className = 'letter-btn';
+                button.textContent = letter;
+                button.onclick = () => guessLetter(letter);
+                container.appendChild(button);
+            });
+        }
+        
+        function guessLetter(letter) {
+            if (guessedLetters.includes(letter)) return;
+            
+            guessedLetters.push(letter);
+            const button = event.target;
+            button.disabled = true;
+            
+            if (currentWord.includes(letter)) {
+                // Correct guess
+                button.classList.add('btn-success');
+                button.style.background = 'green';
+                button.style.color = 'white';
+                
+                // Update word display
+                for (let i = 0; i < currentWord.length; i++) {
+                    if (currentWord[i] === letter) {
+                        wordDisplay[i] = letter;
+                    }
+                }
+                
+                addCoins(5);
+                updateHangmanDisplay();
+                
+                // Check if word is complete
+                if (!wordDisplay.includes('_')) {
+                    addCoins(25);
+                    createCelebration();
+                    document.getElementById('successTitle').textContent = '¡Palabra Completada!';
+                    document.getElementById('successMessage').textContent = `¡Felicitaciones! La palabra era: ${currentWord}. ¡Judas se salvó!`;
+                    
+                    setTimeout(() => {
+                        const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                        modal.show();
+                    }, 1000);
+                }
+            } else {
+                // Wrong guess
+                button.classList.add('btn-danger');
+                button.style.background = 'red';
+                button.style.color = 'white';
+                
+                hangmanErrors++;
+                updateHangmanDrawing();
+                
+                if (hangmanErrors >= 4) {
+                    // Game over
+                    document.getElementById('gameOverMessage').textContent = `¡Judas ha sido ahorcado! La palabra era: ${currentWord}`;
+                    
+                    setTimeout(() => {
+                        const modal = new bootstrap.Modal(document.getElementById('gameOverModal'));
+                        modal.show();
+                    }, 1000);
+                }
+            }
+            
+            document.getElementById('hangmanErrors').textContent = hangmanErrors;
+        }
+        
+        function updateHangmanDisplay() {
+            document.getElementById('wordDisplay').textContent = wordDisplay.join(' ');
+        }
+        
+        function updateHangmanDrawing() {
+            const parts = ['head', 'body', 'leftArm', 'rightArm'];
+            
+            if (hangmanErrors > 0 && hangmanErrors <= parts.length) {
+                document.getElementById(parts[hangmanErrors - 1]).classList.add('show');
+            }
+            
+            if (hangmanErrors >= 4) {
+                document.getElementById('rope').classList.add('show');
+            }
+        }
+        
+        // ROULETTE GAME FUNCTIONS
+        function startRoulette() {
+            showGameScreen('rouletteScreen');
+            currentGame = 'roulette';
+            document.getElementById('rouletteQuestion').style.display = 'none';
+            document.getElementById('spinBtn').style.display = 'block';
+            document.getElementById('spinBtn').disabled = false;
+        }
+        
+        function spinRoulette() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            
+            const wheel = document.getElementById('rouletteWheel');
+            const spins = Math.floor(Math.random() * 5) + 5; // 5-10 spins
+            const finalRotation = spins * 360 + Math.floor(Math.random() * 360);
+            
+            wheel.style.transform = `rotate(${finalRotation}deg)`;
+            
+            setTimeout(() => {
+                isSpinning = false;
+                document.getElementById('spinBtn').style.display = 'none';
+                showRouletteQuestion();
+            }, 3000);
+        }
+        
+        function showRouletteQuestion() {
+            const questionIndex = Math.floor(Math.random() * rouletteQuestions.length);
+            const question = rouletteQuestions[questionIndex];
+            
+            document.getElementById('rouletteQuestionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('rouletteOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-3';
+                col.innerHTML = `
+                    <button class="btn btn-outline-light w-100 p-3 roulette-option" 
+                            onclick="selectRouletteAnswer(${index}, ${question.correct})" 
+                            style="transition: all 0.3s ease;">
+                        ${option}
+                    </button>
+                `;
+                optionsContainer.appendChild(col);
+            });
+            
+            document.getElementById('rouletteQuestion').style.display = 'block';
+        }
+        
+        function selectRouletteAnswer(selectedIndex, correctIndex) {
+            const options = document.querySelectorAll('.roulette-option');
+            
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === correctIndex) {
+                    option.classList.add('btn-success');
+                    option.classList.remove('btn-outline-light');
+                } else if (index === selectedIndex && selectedIndex !== correctIndex) {
+                    option.classList.add('btn-danger');
+                    option.classList.remove('btn-outline-light');
+                } else {
+                    option.classList.add('btn-secondary');
+                    option.classList.remove('btn-outline-light');
+                }
+            });
+            
+            if (selectedIndex === correctIndex) {
+                addCoins(15);
+                createCelebration();
+                document.getElementById('successTitle').textContent = '¡Respuesta Correcta!';
+                document.getElementById('successMessage').textContent = '¡Excelente! Has ganado 15 monedas de plata.';
+            } else {
+                document.getElementById('successTitle').textContent = '¡Respuesta Incorrecta!';
+                document.getElementById('successMessage').textContent = 'No te preocupes, ¡sigue intentando!';
+            }
+            
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+            }, 1500);
+        }
+        
+        // DIFFERENCES GAME FUNCTIONS
+        function startDifferences() {
+            showGameScreen('differencesScreen');
+            currentGame = 'differences';
+            newDifferencesGame();
+        }
+        
+        function newDifferencesGame() {
+            foundDifferencesCount = 0;
+            differencesFound = [];
+            
+            document.querySelectorAll('.difference-marker').forEach(marker => {
+                marker.classList.remove('found');
+            });
+            
+            updateDifferencesDisplay();
+        }
+        
+        function foundDifference(diffNumber) {
+            if (differencesFound.includes(diffNumber)) return;
+            
+            differencesFound.push(diffNumber);
+            foundDifferencesCount++;
+            
+            // Mark both left and right markers as found
+            document.querySelectorAll(`[data-diff="${diffNumber}"]`).forEach(marker => {
+                marker.classList.add('found');
+            });
+            
+            addCoins(8);
+            updateDifferencesDisplay();
+            
+            if (foundDifferencesCount >= 5) {
+                addCoins(20);
+                createCelebration();
+                document.getElementById('successTitle').textContent = '¡Todas las Diferencias Encontradas!';
+                document.getElementById('successMessage').textContent = '¡Felicitaciones! Has encontrado todas las diferencias entre los personajes bíblicos.';
+                
+                setTimeout(() => {
+                    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                    modal.show();
+                }, 1000);
+            }
+        }
+        
+        function updateDifferencesDisplay() {
+            document.getElementById('foundDifferences').textContent = foundDifferencesCount;
+        }
+
+        // GUESS THE CHARACTER GAME FUNCTIONS
+        function startGuessTheCharacter() {
+            showGameScreen('guessCharacterScreen');
+            currentGame = 'guessCharacter';
+            characterAttempts = 3; // Reset intentos
+            currentClueIndex = 0; // Reset indice de pista
+            document.getElementById('characterAttempts').textContent = characterAttempts;
+            document.getElementById('characterGuessInput').value = '';
+            document.getElementById('characterGuessInput').disabled = false;
+            document.getElementById('nextClueBtn').style.display = 'inline-block'; // Mostrar botón de siguiente pista
+            
+            currentMysteryCharacter = biblicalCharacters[Math.floor(Math.random() * biblicalCharacters.length)];
+            loadNextCharacterClue(); // Cargar la primera pista
+        }
+
+        function loadNextCharacterClue() {
+            if (currentClueIndex < currentMysteryCharacter.clues.length) {
+                document.getElementById('characterClue').textContent = currentMysteryCharacter.clues[currentClueIndex];
+                currentClueIndex++;
+            } else {
+                document.getElementById('characterClue').textContent = "No hay más pistas. ¡Es hora de adivinar!";
+                document.getElementById('nextClueBtn').style.display = 'none'; // Ocultar botón si no hay más pistas
+            }
+        }
+
+        function submitCharacterGuess() {
+            const guessInput = document.getElementById('characterGuessInput');
+            const playerGuess = guessInput.value.trim().toUpperCase();
+
+            if (playerGuess === currentMysteryCharacter.name) {
+                addCoins(30);
+                createCelebration();
+                document.getElementById('successTitle').textContent = '¡Adivinaste!';
+                document.getElementById('successMessage').textContent = `¡Felicidades! ¡El personaje era ${currentMysteryCharacter.name}!`;
+                
+                setTimeout(() => {
+                    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                    modal.show();
+                }, 1000);
+                guessInput.disabled = true;
+            } else {
+                characterAttempts--;
+                document.getElementById('characterAttempts').textContent = characterAttempts;
+                addCoins(-5); // Penalización por intento fallido
+
+                if (characterAttempts <= 0) {
+                    document.getElementById('gameOverMessage').textContent = `¡Se acabaron los intentos! El personaje era: ${currentMysteryCharacter.name}.`;
+                    
+                    setTimeout(() => {
+                        const modal = new bootstrap.Modal(document.getElementById('gameOverModal'));
+                        modal.show();
+                    }, 1000);
+                    guessInput.disabled = true;
+                    document.getElementById('nextClueBtn').style.display = 'none';
+                } else {
+                    document.getElementById('characterClue').textContent = "Incorrecto. ¡Intenta de nuevo o pide otra pista!";
+                }
+            }
+        }
+
+        // WORD SEARCH GAME FUNCTIONS (NUEVAS FUNCIONES)
+        function startWordSearch() {
+            showGameScreen('wordSearchScreen');
+            currentGame = 'wordSearch';
+            wordSearchFoundWords = [];
+            generateWordSearchGrid();
+            displayWordList();
+            updateWordSearchRemaining();
+        }
+
+        function generateWordSearchGrid() {
+            wordGrid = Array(wordSearchGridSize).fill(null).map(() => Array(wordSearchGridSize).fill(''));
+            
+            // Fisher-Yates shuffle for words
+            let shuffledWords = [...wordSearchWords].sort(() => Math.random() - 0.5);
+
+            for (let word of shuffledWords) {
+                let placed = false;
+                let attempts = 0;
+                while (!placed && attempts < 100) { // Limit attempts to avoid infinite loops
+                    const direction = Math.floor(Math.random() * 4); // 0: horizontal, 1: vertical, 2: horizontal-reverse, 3: vertical-reverse
+                    const row = Math.floor(Math.random() * wordSearchGridSize);
+                    const col = Math.floor(Math.random() * wordSearchGridSize);
+
+                    if (tryPlaceWord(word, row, col, direction)) {
+                        placed = true;
+                    }
+                    attempts++;
+                }
+            }
+
+            fillEmptyCells();
+            drawWordSearchGrid();
+            addGridListeners();
+        }
+
+        function tryPlaceWord(word, row, col, direction) {
+            let letters = word.split('');
+            if (direction === 0) { // Horizontal
+                if (col + letters.length > wordSearchGridSize) return false;
+                for (let i = 0; i < letters.length; i++) {
+                    if (wordGrid[row][col + i] !== '' && wordGrid[row][col + i] !== letters[i]) return false;
+                }
+                for (let i = 0; i < letters.length; i++) wordGrid[row][col + i] = letters[i];
+            } else if (direction === 1) { // Vertical
+                if (row + letters.length > wordSearchGridSize) return false;
+                for (let i = 0; i < letters.length; i++) {
+                    if (wordGrid[row + i][col] !== '' && wordGrid[row + i][col] !== letters[i]) return false;
+                }
+                for (let i = 0; i < letters.length; i++) wordGrid[row + i][col] = letters[i];
+            } else if (direction === 2) { // Horizontal reverse
+                if (col - letters.length + 1 < 0) return false;
+                for (let i = 0; i < letters.length; i++) {
+                    if (wordGrid[row][col - i] !== '' && wordGrid[row][col - i] !== letters[i]) return false;
+                }
+                for (let i = 0; i < letters.length; i++) wordGrid[row][col - i] = letters[i];
+            } else if (direction === 3) { // Vertical reverse
+                if (row - letters.length + 1 < 0) return false;
+                for (let i = 0; i < letters.length; i++) {
+                    if (wordGrid[row - i][col] !== '' && wordGrid[row - i][col] !== letters[i]) return false;
+                }
+                for (let i = 0; i < letters.length; i++) wordGrid[row - i][col] = letters[i];
+            }
+            return true;
+        }
+
+        function fillEmptyCells() {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let r = 0; r < wordSearchGridSize; r++) {
+                for (let c = 0; c < wordSearchGridSize; c++) {
+                    if (wordGrid[r][c] === '') {
+                        wordGrid[r][c] = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    }
+                }
+            }
+        }
+
+        function drawWordSearchGrid() {
+            const gridContainer = document.getElementById('wordSearchGrid');
+            gridContainer.innerHTML = '';
+            gridContainer.style.gridTemplateColumns = `repeat(${wordSearchGridSize}, 1fr)`;
+
+            for (let r = 0; r < wordSearchGridSize; r++) {
+                for (let c = 0; c < wordSearchGridSize; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.textContent = wordGrid[r][c];
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    gridContainer.appendChild(cell);
+                }
+            }
+        }
+
+        function displayWordList() {
+            const wordListEl = document.getElementById('wordList');
+            wordListEl.innerHTML = '';
+            wordSearchWords.forEach(word => {
+                const li = document.createElement('li');
+                li.textContent = word;
+                li.id = `word-list-${word}`;
+                wordListEl.appendChild(li);
+            });
+        }
+
+        function addGridListeners() {
+            const gridContainer = document.getElementById('wordSearchGrid');
+            gridContainer.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('grid-cell') && !e.target.classList.contains('found')) {
+                    isSelecting = true;
+                    selectedCells = [e.target];
+                    e.target.classList.add('selected');
+                }
+            });
+
+            gridContainer.addEventListener('mouseover', (e) => {
+                if (isSelecting && e.target.classList.contains('grid-cell') && !e.target.classList.contains('found')) {
+                    const currentRow = parseInt(e.target.dataset.row);
+                    const currentCol = parseInt(e.target.dataset.col);
+                    const startCell = selectedCells[0];
+                    const startRow = parseInt(startCell.dataset.row);
+                    const startCol = parseInt(startCell.dataset.col);
+
+                    // Clear previous highlights
+                    document.querySelectorAll('.grid-cell.highlighted').forEach(cell => cell.classList.remove('highlighted'));
+                    
+                    // Highlight current selection (simplified: horizontal or vertical)
+                    if (startRow === currentRow) { // Horizontal
+                        const minCol = Math.min(startCol, currentCol);
+                        const maxCol = Math.max(startCol, currentCol);
+                        for (let c = minCol; c <= maxCol; c++) {
+                            gridContainer.querySelector(`[data-row="${startRow}"][data-col="${c}"]`).classList.add('highlighted');
+                        }
+                    } else if (startCol === currentCol) { // Vertical
+                        const minRow = Math.min(startRow, currentRow);
+                        const maxRow = Math.max(startRow, currentRow);
+                        for (let r = minRow; r <= maxRow; r++) {
+                            gridContainer.querySelector(`[data-row="${r}"][data-col="${startCol}"]`).classList.add('highlighted');
+                        }
+                    }
+                    // Add current cell to selectedCells if it's new and valid for straight line
+                    // This can be complex for perfect straight line detection, simplified for direct neighbor
+                    if (!selectedCells.includes(e.target)) {
+                        selectedCells.push(e.target);
+                    }
+                }
+            });
+
+            gridContainer.addEventListener('mouseup', (e) => {
+                if (isSelecting) {
+                    isSelecting = false;
+                    document.querySelectorAll('.grid-cell.highlighted').forEach(cell => cell.classList.remove('highlighted'));
+                    
+                    if (selectedCells.length > 0) {
+                        checkSelectedWord();
+                    }
+                    document.querySelectorAll('.grid-cell.selected').forEach(cell => cell.classList.remove('selected'));
+                    selectedCells = [];
+                }
+            });
+            // Also handle touch events for mobile
+            gridContainer.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                 if (target && target.classList.contains('grid-cell') && !target.classList.contains('found')) {
+                    isSelecting = true;
+                    selectedCells = [target];
+                    target.classList.add('selected');
+                    e.preventDefault(); // Prevent scrolling
+                }
+            }, { passive: false });
+
+            gridContainer.addEventListener('touchmove', (e) => {
+                if (isSelecting) {
+                    const touch = e.touches[0];
+                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (target && target.classList.contains('grid-cell') && !target.classList.contains('found')) {
+                        const currentRow = parseInt(target.dataset.row);
+                        const currentCol = parseInt(target.dataset.col);
+                        const startCell = selectedCells[0];
+                        const startRow = parseInt(startCell.dataset.row);
+                        const startCol = parseInt(startCell.dataset.col);
+
+                        document.querySelectorAll('.grid-cell.highlighted').forEach(cell => cell.classList.remove('highlighted'));
+
+                        if (startRow === currentRow) { // Horizontal
+                            const minCol = Math.min(startCol, currentCol);
+                            const maxCol = Math.max(startCol, currentCol);
+                            for (let c = minCol; c <= maxCol; c++) {
+                                gridContainer.querySelector(`[data-row="${startRow}"][data-col="${c}"]`).classList.add('highlighted');
+                            }
+                        } else if (startCol === currentCol) { // Vertical
+                            const minRow = Math.min(startRow, currentRow);
+                            const maxRow = Math.max(startRow, currentRow);
+                            for (let r = minRow; r <= maxRow; r++) {
+                                gridContainer.querySelector(`[data-row="${r}"][data-col="${startCol}"]`).classList.add('highlighted');
+                            }
+                        }
+                        if (!selectedCells.includes(target)) { // Simple add to track touch path
+                            selectedCells.push(target);
+                        }
+                    }
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            gridContainer.addEventListener('touchend', (e) => {
+                if (isSelecting) {
+                    isSelecting = false;
+                    document.querySelectorAll('.grid-cell.highlighted').forEach(cell => cell.classList.remove('highlighted'));
+                    
+                    if (selectedCells.length > 0) {
+                        checkSelectedWord();
+                    }
+                    document.querySelectorAll('.grid-cell.selected').forEach(cell => cell.classList.remove('selected'));
+                    selectedCells = [];
+                }
+            });
+        }
+
+        function checkSelectedWord() {
+            if (selectedCells.length < 2) return; // Need at least two cells for a word
+
+            const firstCell = selectedCells[0];
+            const lastCell = selectedCells[selectedCells.length - 1];
+
+            const startRow = parseInt(firstCell.dataset.row);
+            const startCol = parseInt(firstCell.dataset.col);
+            const endRow = parseInt(lastCell.dataset.row);
+            const endCol = parseInt(lastCell.dataset.col);
+
+            let selectedWordText = '';
+            let cellsInWord = [];
+
+            // Determine direction and build word
+            if (startRow === endRow) { // Horizontal
+                const minCol = Math.min(startCol, endCol);
+                const maxCol = Math.max(startCol, endCol);
+                for (let c = minCol; c <= maxCol; c++) {
+                    selectedWordText += wordGrid[startRow][c];
+                    cellsInWord.push(document.querySelector(`#wordSearchGrid [data-row="${startRow}"][data-col="${c}"]`));
+                }
+            } else if (startCol === endCol) { // Vertical
+                const minRow = Math.min(startRow, endRow);
+                const maxRow = Math.max(startRow, endRow);
+                for (let r = minRow; r <= maxRow; r++) {
+                    selectedWordText += wordGrid[r][startCol];
+                    cellsInWord.push(document.querySelector(`#wordSearchGrid [data-row="${r}"][data-col="${startCol}"]`));
+                }
+            } else {
+                // Diagonal (simplified - not implemented for this version, but can be added)
+                // For now, only straight lines are valid
+                return; 
+            }
+
+            if (selectedWordText.length === 0) return;
+
+            const reversedSelectedWordText = selectedWordText.split('').reverse().join('');
+
+            // Check if selected word (or its reverse) is in our list and not already found
+            let foundMatch = false;
+            let originalWord = '';
+
+            for (let word of wordSearchWords) {
+                if (!wordSearchFoundWords.includes(word)) {
+                    if (word === selectedWordText || word === reversedSelectedWordText) {
+                        foundMatch = true;
+                        originalWord = word; // Store the original word from the list
+                        break;
+                    }
+                }
+            }
+
+            if (foundMatch) {
+                // Mark cells as found
+                cellsInWord.forEach(cell => {
+                    cell.classList.remove('selected', 'highlighted');
+                    cell.classList.add('found');
+                });
+                
+                wordSearchFoundWords.push(originalWord); // Use the original word for tracking
+                document.getElementById(`word-list-${originalWord}`).classList.add('found-word-item');
+                addCoins(10);
+                updateWordSearchRemaining();
+                createCelebration();
+
+                if (wordSearchFoundWords.length === wordSearchWords.length) {
+                    document.getElementById('successTitle').textContent = '¡Sopa de Letras Completada!';
+                    document.getElementById('successMessage').textContent = '¡Felicitaciones! Has encontrado todas las palabras bíblicas.';
+                    setTimeout(() => {
+                        const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                        modal.show();
+                    }, 1000);
+                }
+            }
+        }
+
+        function updateWordSearchRemaining() {
+            document.getElementById('wordSearchRemaining').textContent = wordSearchWords.length - wordSearchFoundWords.length;
+        }
+
+        // STORY COMPLETION GAME FUNCTIONS (NUEVAS FUNCIONES)
+        function startStoryCompletion() {
+            showGameScreen('storyCompletionScreen');
+            currentGame = 'storyCompletion';
+            currentStoryQuestion = 0;
+            storyCompletionScore = 0;
+            document.getElementById('storyTotalQuestions').textContent = storyCompletionQuestions.length;
+            loadStoryQuestion();
+        }
+
+        function loadStoryQuestion() {
+            if (currentStoryQuestion >= storyCompletionQuestions.length) {
+                showStoryCompletionResults();
+                return;
+            }
+
+            const question = storyCompletionQuestions[currentStoryQuestion];
+            document.getElementById('storyQuestionNumber').textContent = currentStoryQuestion + 1;
+            document.getElementById('storySnippet').textContent = question.snippet;
+
+            const optionsContainer = document.getElementById('storyOptions');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-3';
+                col.innerHTML = `
+                    <button class="btn btn-outline-light w-100 p-3 story-option" 
+                            onclick="selectStoryAnswer(${index})" 
+                            style="transition: all 0.3s ease;">
+                        ${option}
+                    </button>
+                `;
+                optionsContainer.appendChild(col);
+            });
+            document.getElementById('nextStoryBtn').style.display = 'none';
+        }
+
+        function selectStoryAnswer(selectedIndex) {
+            const question = storyCompletionQuestions[currentStoryQuestion];
+            const options = document.querySelectorAll('.story-option');
+
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === question.correct) {
+                    option.classList.add('btn-success');
+                    option.classList.remove('btn-outline-light');
+                } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                    option.classList.add('btn-danger');
+                    option.classList.remove('btn-outline-light');
+                } else {
+                    option.classList.add('btn-secondary');
+                    option.classList.remove('btn-outline-light');
+                }
+            });
+
+            if (selectedIndex === question.correct) {
+                storyCompletionScore++;
+                addCoins(15);
+                createCelebration();
+            } else {
+                addCoins(-5);
+            }
+            document.getElementById('nextStoryBtn').style.display = 'inline-block';
+        }
+
+        function nextStoryQuestion() {
+            currentStoryQuestion++;
+            loadStoryQuestion();
+        }
+
+        function showStoryCompletionResults() {
+            const totalQuestions = storyCompletionQuestions.length;
+            const percentage = Math.round((storyCompletionScore / totalQuestions) * 100);
+            let message = '';
+
+            if (percentage >= 80) {
+                message = `¡Magnífico! Has completado ${storyCompletionScore} de ${totalQuestions} historias correctamente (${percentage}%). ¡Tienes un gran entendimiento bíblico!`;
+                addCoins(40);
+            } else if (percentage >= 50) {
+                message = `¡Bien hecho! Has completado ${storyCompletionScore} de ${totalQuestions} historias correctamente (${percentage}%). ¡Sigue practicando!`;
+                addCoins(25);
+            } else {
+                message = `Has completado ${storyCompletionScore} de ${totalQuestions} historias correctamente (${percentage}%). ¡Anímate a leer más las Escrituras!`;
+                addCoins(10);
+            }
+
+            document.getElementById('successTitle').textContent = '¡Historias Completadas!';
+            document.getElementById('successMessage').textContent = message;
+            
+            const modal = new bootstrap.Modal(document.getElementById('successModal'));
+            modal.show();
+        }
+
+        // STORY CREATOR GAME FUNCTIONS (NUEVAS FUNCIONES)
+        function startStoryCreator() {
+            showGameScreen('storyCreatorScreen');
+            currentGame = 'storyCreator';
+            document.getElementById('parableTextarea').value = '';
+            document.getElementById('storyScoreResult').textContent = '';
+        }
+
+        function evaluateStory() {
+            const storyText = document.getElementById('parableTextarea').value.trim();
+            let score = 0;
+            const maxScoreLength = 50; // Max score for length (out of 100)
+            const maxScoreKeywords = 50; // Max score for keywords (out of 100)
+
+            // 1. Score based on length (e.g., 0-50 points)
+            const wordCount = storyText.split(/\s+/).filter(word => word.length > 0).length;
+            if (wordCount < 20) {
+                score += 0;
+            } else if (wordCount >= 20 && wordCount < 50) {
+                score += Math.round(maxScoreLength * 0.5); // 25 points for medium length
+            } else {
+                score += maxScoreLength; // 50 points for good length
+            }
+
+            // 2. Score based on keywords (e.g., 0-50 points)
+            let foundKeywords = 0;
+            const lowerCaseStory = storyText.toLowerCase();
+            storyCreatorKeywords.forEach(keyword => {
+                if (lowerCaseStory.includes(keyword.toLowerCase())) {
+                    foundKeywords++;
+                }
+            });
+            score += Math.round((foundKeywords / storyCreatorKeywords.length) * maxScoreKeywords);
+
+            // Ensure score is between 1 and 100
+            score = Math.max(1, Math.min(100, score));
+
+            document.getElementById('storyScoreResult').textContent = `Tu historia obtuvo una puntuación de: ${score}/100`;
+            addCoins(Math.round(score / 5)); // Reward coins based on score
+
+            document.getElementById('successTitle').textContent = '¡Historia Evaluada!';
+            document.getElementById('successMessage').textContent = `Tu parábola recibió una puntuación de ${score}/100. ¡Sigue practicando tu creatividad!`;
+            
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+            }, 1000);
+        }
+
+        // UTILITY FUNCTIONS
+        function createCelebration() {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            document.body.appendChild(celebration);
+            
+            // Create confetti
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                celebration.appendChild(confetti);
+            }
+            
+            setTimeout(() => {
+                celebration.remove();
+            }, 3000);
+        }
+        
+        function closeModal() {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                const bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) {
+                    bsModal.hide();
+                }
+            });
+            
+            if (currentGame === 'roulette') {
+                document.getElementById('rouletteQuestion').style.display = 'none';
+                document.getElementById('spinBtn').style.display = 'block';
+                document.getElementById('spinBtn').disabled = false;
+                document.getElementById('rouletteWheel').style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Handle modal close events
+        document.getElementById('successModal').addEventListener('hidden.bs.modal', function () {
+            closeModal();
+        });
+        
+        document.getElementById('gameOverModal').addEventListener('hidden.bs.modal', function () {
+            closeModal();
+        });
+        
+        // Add some interactive hover effects (already present, ensuring consistency)
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
