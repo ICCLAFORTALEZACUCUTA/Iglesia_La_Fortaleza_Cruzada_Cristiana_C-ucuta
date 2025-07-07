@@ -373,22 +373,24 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Variables del juego
+        // Variables del juego (declared at the top for scope)
         let gameRunning = false;
         let gameStarted = false;
         let score = 0;
         let gameSpeed = 4;
-        let groundY = canvas.height - 120;
+        let groundY; // Declared here, initialized in resizeCanvas
         let currentDay = 1;
         let isNight = false;
 
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            groundY = canvas.height - 120; // Recalculate groundY based on new height
+            if (!gameStarted) {
+                moses.y = groundY - 80; // Reset Moses's initial y if game hasn't started
+            }
+        }
+        
         // Journey parameters
         const journeyLength = 400000; // Total km for 40 years
         const dailyDistance = 833.33; // km per day
@@ -411,8 +413,8 @@
 
         // Moses (player)
         const moses = {
-            x: 120,
-            y: groundY - 80,
+            x: 200, // Moved Moses further forward
+            y: 0, // Temporarily set to 0, will be set correctly by resizeCanvas on initial call
             width: 40,
             height: 80,
             velocityY: 0,
@@ -422,8 +424,8 @@
 
         // Pharaoh's Chariot
         const pharaohChariot = {
-            x: moses.x - 150, // Initial position behind Moses
-            y: groundY - 60,
+            x: moses.x - 250, // Adjusted Pharaoh's starting position further back
+            y: 0, // Temporarily set to 0, will be adjusted after groundY is set
             width: 120,
             height: 60,
             chaseSpeed: 0.05, // How much the Pharaoh gains on Moses per frame
@@ -1040,10 +1042,11 @@
             isNight = false;
             obstacles = [];
             particles = [];
-            moses.y = groundY - moses.height;
+            moses.y = groundY - moses.height; // Use the current groundY
             moses.jumping = false;
             moses.velocityY = 0;
-            pharaohChariot.x = moses.x - 150; // Reset Pharaoh's position
+            pharaohChariot.x = moses.x - 250; // Reset Pharaoh's position
+            pharaohChariot.y = groundY - 60; // Reset Pharaoh's y position
             lastObstacleTime = 0;
             document.getElementById('gameOver').style.display = 'none';
             document.getElementById('gameUI').style.display = 'none';
@@ -1098,6 +1101,11 @@
 
         // Initialize game on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Call resizeCanvas initially to set up groundY and initial positions
+            resizeCanvas(); 
+            // Also set Pharaoh's initial Y based on groundY after resizeCanvas
+            pharaohChariot.y = groundY - 60;
+
             document.getElementById('startBtn').addEventListener('click', startCountdown);
             document.getElementById('restartBtn').addEventListener('click', restartGame);
             requestAnimationFrame(gameLoop);
@@ -1106,11 +1114,13 @@
         // Orientation message for mobile
         const orientationMessage = document.getElementById('orientationMessage');
         function checkOrientation() {
-            if (window.innerWidth > window.innerHeight) { // Landscape
+            // Display game if width is greater than height (landscape)
+            // Or if height is greater than width, but width is large enough (desktop portrait)
+            if (window.innerWidth > window.innerHeight || window.innerWidth >= 768) { 
                 orientationMessage.style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
                 resizeCanvas();
-            } else { // Portrait
+            } else { // Portrait mode on smaller screens
                 orientationMessage.style.display = 'flex';
                 document.getElementById('gameContainer').style.display = 'none';
             }
