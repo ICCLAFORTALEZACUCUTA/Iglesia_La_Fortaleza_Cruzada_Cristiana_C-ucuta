@@ -230,18 +230,35 @@
         }
 
         .roulette-section {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-        }
-        /* Colores de sección para la ruleta, manteniéndolos vibrantes */
-        .roulette-section:nth-child(1) { background: #FF6B6B; } /* Rojo coral */
-        .roulette-section:nth-child(2) { background: #4ECDC4; } /* Verde menta */
-        .roulette-section:nth-child(3) { background: #45B7D1; } /* Azul cielo */
-        .roulette-section:nth-child(4) { background: #96CEB4; } /* Verde suave */
-        .roulette-section:nth-child(5) { background: #FFEAA7; } /* Amarillo pastel */
-        .roulette-section:nth-child(6) { background: #DDA0DD; } /* Morado claro */
+    position: absolute; /* Posicionamiento absoluto dentro de .roulette-wheel */
+    top: 0;
+    left: 0;
+    width: 50%; /* Cada rebanada ocupa la mitad del ancho del contenedor .roulette-wheel */
+    height: 50%; /* Cada rebanada ocupa la mitad de la altura del contenedor .roulette-wheel */
+    transform-origin: 100% 100%; /* ¡ESTO ES CRÍTICO! Define el punto de pivote para la rotación. */
+    /* Expliación de transform-origin:
+       - 100% 100% significa que el punto de rotación está en la esquina inferior derecha de la sección.
+       - Cuando la sección se rota desde este punto, crea una rebanada triangular que apunta al centro del círculo.
+    */
+    overflow: hidden; /* También importante para recortar cualquier exceso y mantener la forma de rebanada */
+    /* border: 1px solid rgba(0,0,0,0.2); /* Opcional: para ver los bordes de cada sección */
+}
+
+/* Y si tienes estilos para el texto dentro de cada sección, como el número: */
+.roulette-section div {
+    position: absolute;
+    /* Ajusta top y left para posicionar el texto dentro de la "rebanada"
+       para que se vea centrado en la parte ancha de la rebanada */
+    top: 15%; /* Por ejemplo, un poco más abajo del centro */
+    left: 85%; /* Más hacia la derecha, en la parte ancha de la rebanada */
+    transform: translate(-50%, -50%) rotate(18deg); /* Rota el texto 18 grados (la mitad de 36) para que se alinee con la mitad de la rebanada */
+    /* Asegúrate que el rotate() aquí sea la mitad del ángulo de tu sección (36/2 = 18 grados para 10 secciones) */
+    color: white; /* Color del texto */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
 
 
         .roulette-pointer {
@@ -514,7 +531,7 @@
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
                 <div class="game-card h-100 p-4 text-center" onclick="startHangman()">
                     <div class="mb-3">
-                        <i class="fas fa-user-times" style="font-size: 4rem; color: var(--neon-pink);"></i>
+                        <i class="fas fa-user-times" style="font-size: 4rem; color: var(--electric-blue);"></i>
                     </div>
                     <h3 class="text-white mb-3">⚰️ JUDAS AHORCADO</h3>
                     <p class="text-white-50 mb-4">Salva o condena a Judas con palabras bíblicas</p>
@@ -525,7 +542,7 @@
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
                 <div class="game-card h-100 p-4 text-center" onclick="startRoulette()">
                     <div class="mb-3">
-                        <i class="fas fa-circle-notch" style="font-size: 4rem; color: var(--electric-blue);"></i>
+                        <i class="fas fa-circle-notch" style="font-size: 4rem; color: var(--neon-pink);"></i>
                     </div>
                     <h3 class="text-white mb-3">🎯 RULETA BÍBLICA</h3>
                     <p class="text-white-50 mb-4">Gira la ruleta y responde preguntas</p>
@@ -549,7 +566,7 @@
                     <div class="mb-3">
                         <i class="fas fa-user-secret" style="font-size: 4rem; color: var(--electric-blue);"></i>
                     </div>
-                    <h3 class="text-white mb-3">ADIVINA EL PERSONAJE ❓</h3>
+                    <h3 class="text-white mb-3">❓ ADIVINA EL PERSONAJE</h3>
                     <p class="text-white-50 mb-4">Descubre quién soy con pistas bíblicas</p>
                     <button class="btn btn-game">¡Adivinar!</button>
                 </div>
@@ -587,6 +604,16 @@
                     <button class="btn btn-game">¡Crear!</button>
                 </div>
             </div>
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-10">
+                <a href="exodo_runner.html" class="game-card h-100 p-4 text-center text-decoration-none d-block">
+                    <div class="mb-3">
+                        <i class="fas fa-running" style="font-size: 4rem; color: var(--neon-pink);"></i>
+                    </div>
+                    <h3 class="text-white mb-3">🏃‍♂️ ÉXODO RUNNER</h3>
+                    <p class="text-white-50 mb-4">Corre con Moisés y escapa del faraón</p>
+                    <button class="btn btn-game">¡Jugar!</button>
+                </a>
+            </div>        
         </div>
     </div>
     
@@ -684,24 +711,39 @@
                     <div class="roulette-container mb-4">
                         <div class="roulette-pointer"></div>
                         <div class="roulette-wheel" id="rouletteWheel">
-                            <div class="roulette-section" style="background: #FF6B6B; transform: rotate(0deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">1</div>
+                            <div class="roulette-wheel" id="rouletteWheel">
+                                <div class="roulette-section" style="background: #FF6B6B; transform: rotate(0deg);">
+                                    <div style="font-weight: bold;">1</div>
+                                </div>
+                                <div class="roulette-section" style="background: #4ECDC4; transform: rotate(36deg);">
+                                    <div style="font-weight: bold;">2</div>
+                                </div>
+                                <div class="roulette-section" style="background: #45B7D1; transform: rotate(72deg);">
+                                    <div style="font-weight: bold;">3</div>
+                                </div>
+                                <div class="roulette-section" style="background: #96CEB4; transform: rotate(108deg);">
+                                    <div style="font-weight: bold;">4</div>
+                                </div>
+                                <div class="roulette-section" style="background: #FFEAA7; transform: rotate(144deg);">
+                                    <div style="font-weight: bold;">5</div>
+                                </div>
+                                <div class="roulette-section" style="background: #DDA0DD; transform: rotate(180deg);">
+                                    <div style="font-weight: bold;">6</div>
+                                </div>
+                                <div class="roulette-section" style="background: #A0B9D9; transform: rotate(216deg);">
+                                    <div style="font-weight: bold;">7</div>
+                                </div>
+                                <div class="roulette-section" style="background: #FFC0CB; transform: rotate(252deg);">
+                                    <div style="font-weight: bold;">8</div>
+                                </div>
+                                <div class="roulette-section" style="background: #90EE90; transform: rotate(288deg);">
+                                    <div style="font-weight: bold;">9</div>
+                                </div>
+                                <div class="roulette-section" style="background: #FFDAB9; transform: rotate(324deg);">
+                                    <div style="font-weight: bold;">10</div>
+                                </div>
                             </div>
-                            <div class="roulette-section" style="background: #4ECDC4; transform: rotate(60deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">2</div>
-                            </div>
-                            <div class="roulette-section" style="background: #45B7D1; transform: rotate(120deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">3</div>
-                            </div>
-                            <div class="roulette-section" style="background: #96CEB4; transform: rotate(180deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">4</div>
-                            </div>
-                            <div class="roulette-section" style="background: #FFEAA7; transform: rotate(240deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">5</div>
-                            </div>
-                            <div class="roulette-section" style="background: #DDA0DD; transform: rotate(300deg);">
-                                <div style="position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold;">6</div>
-                            </div>
+                        </div>
                         </div>
                     </div>
                     
@@ -937,7 +979,7 @@
             </div>
         </div>
     </div>
-    
+     
     <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal-content-custom">
@@ -982,6 +1024,7 @@
         // Global Game Variables
         let coins = 0;
         let currentGame = 'menu';
+        let rouletteQuestionsAvailable = [];
         
         // Trivia Game Variables
         let currentQuestion = 0;
@@ -1116,7 +1159,17 @@
             {
                 question: "¿Cómo se llamaba la mujer de Job?",
                 options: ["Abigail", "Lamec", "Isiba", "La Biblia no Registra"],
-                correct: 1
+                correct: 3
+            },
+            {
+                question: "¿Cómo se llamaban los hijos de Noé?",
+                options: ["Sem, Cam y Jafet.", "Set, Cam y Jafet.", "Sem, Cam y Mefet.", "Sen, Can, Jefet"],
+                correct: 0
+            },
+            {
+                question: "¿A cuál de estas personas no se le cambió el nombre en la Biblia?",
+                options: ["David", "Jacob", "Saulo", "Pedro"],
+                correct: 0
             }
         ];
         
