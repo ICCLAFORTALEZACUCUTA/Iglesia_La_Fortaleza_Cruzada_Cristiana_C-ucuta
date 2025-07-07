@@ -1497,6 +1497,39 @@
                 padding: 1px 3px;
             }
         }
+
+        @media (max-width: 767px) {
+            .logo {
+                font-size: 1rem !important;
+                /* Reduce el tamaño del texto */
+                margin-right: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 70%;
+            }
+
+            .logo img {
+                height: 40px;
+                width: 40px;
+            }
+
+            .nav-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0;
+            }
+
+            .nav-links {
+                display: none !important;
+            }
+
+            .menu-toggle {
+                display: block !important;
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -1946,8 +1979,7 @@
                 <p class="text-muted-dark mb-5">Conoce las áreas en las que servimos a Dios y a nuestra comunidad.</p>
                 <div class="ministries-grid">
                     <div class="ministry-card" data-ministry-id="alabanza">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502996422_1099133635765724_4151336919706727999_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeG-McHvmrkD3OLMUduP45z3z6iQE-KN70rPqJAT4o3vSgr4LEowopBjvrdWRvUimLOeARcpdrKwqbOsl-9cdl-Q&_nc_ohc=ZVEGf7710UoQ7kNvwFhHIjJ&_nc_oc=AdntnUr0ECjit-noGJtyFj3hpPAcOHu7ejc1T6s-XfXAqIBe7w_uGADnVmt5cdf3Pdc&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=_dbZuGjbRXJ-He4VMwF36A&oh=00_AfNFZPjOWVEhD9I9WB6baiCVNuqbTQIUcjkIJbz6b7SpIw&oe=686B1E04"
-                            alt="Ministerio de Alabanza">
+                        <img src="./ULTIMO.png" alt="Ministerio de Alabanza">
                         <div class="ministry-card-content">
                             <h4 class="text-primary-dark">Ministerio de Alabanza</h4>
                             <p class="text-muted-dark">Dirigiendo a la congregación en adoración y exaltación a Dios.
@@ -2562,7 +2594,7 @@
             raines: {
                 name: "Raines Lara",
                 title: "Lider Alabanza",
-                photo: "https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/468174008_10236246597084542_4326832039647632234_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeGpiOTAMV24oGRMG86DMLggecLdqxnLLdV5wt2rGcst1b_tffT9UK32_bZm9kRT6bnPFKsonmUaQCI0Qodq_a70&_nc_ohc=epKBUWsxPg8Q7kNvwFhjiFK&_nc_oc=Adna3L9zi2-on-AAE63XCk8f6KkINUzjdVUvmnFgwLUHMyMPIk5tKt29jdf1lGAUoeU&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=D4ifTiGSjqWa2Hc0-9P0zQ&oh=00_AfPAH5BaLbzK3KzoMkK0JsxR1gOqDmjIU2W9bqqT6VG0Ig&oe=686B1485",
+                photo: "./ULTIMO.png",
                 bio: "El lider Raines es una lider apasionada de nuestro vibrante ministerio de jóvenes. Con un enfoque dinámico y relevante, busca conectar a los jóvenes con Dios y entre sí, preparándolos para ser líderes de impacto en su generación. Es conocido por su energía, creatividad y su habilidad para comunicarse con las nuevas generaciones, inspirándolos a seguir a Jesús."
             },
             brenda: {
@@ -2594,7 +2626,7 @@
         const ministriesData = {
             alabanza: {
                 name: "Ministerio de Alabanza",
-                photo: "https://picsum.photos/id/10/800/500",
+                photo: "./ULTIMO.png",
                 description: "El Ministerio de Alabanza y Adoración de nuestra iglesia busca guiar a la congregación en una experiencia profunda de adoración a Dios a través de la música y el canto. No solo elevamos nuestra voz, sino también nuestros corazones, creando un ambiente donde la presencia de Dios se manifiesta. Si tienes talento musical y un corazón para adorar, ¡te invitamos a unirte!",
                 info: "<p><strong>Líderes:</strong> Equipo de Adoración</p><p><strong>Ensayos:</strong> Jueves 7:00 PM</p><p><strong>Contacto:</strong> alabanza@iglesiaejemplo.com</p>"
             },
@@ -2635,7 +2667,7 @@
                 id: "conferenciaAnual",
                 name: "Evangelización",
                 photo: "https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/513871511_1119895793689508_1624337610483579564_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEQzFLb1bGvsdMy0VXyGcEV514voBIZ6-fnXi-gEhnr500y_o1p7ZQDrDSvdjzqMPPqeoSXsU0Enu6vPKtEmnIU&_nc_ohc=0fV7pDS7LIYQ7kNvwHIgtmg&_nc_oc=AdlUoLZ4HKs4iHhEuYxZ1GXCIJVxWndaqPX1bt-vZYaxVYDzQ8lXr4D2VdUOasakqxE&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fEl5aWGgWaRw_iZ8xT3hIA&oh=00_AfNj7WLV6EC20U5GVN5wg9I1U9YjcPvYONLGxXd-lh0XeQ&oe=686B233A",
-                date: "2025-06-208", // YYYY-MM-DD
+                date: "2025-06-20", // YYYY-MM-DD
                 location: "Cancha La Fortaleza",
                 description: "¡Prepárate para nuestra Evangelizacion! Una tarde de adoración intensa, enseñanzas profundas y experiencias transformadoras con oradores invitados de renombre nacional e internacional. Este es un tiempo para renovar tu fe, recibir dirección divina y ser equipado para un mayor impacto. No te lo puedes perder. ¡Regístrate con anticipación!",
                 links: [
@@ -3379,7 +3411,206 @@
             }
 
         });
+
     </script>
+
+    <script>
+        // Mostrar cualquier modal por ID
+        function showModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('show');
+                modal.style.display = 'block';
+            }
+        }
+
+        // Ocultar cualquier modal por ID
+        function hideModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            }
+        }
+
+        // Leer biografía del pastor/líder
+        const pastorBioModal = document.getElementById('pastorBioModal');
+        if (pastorBioModal) {
+            const readBioButtons = document.querySelectorAll('.read-bio-btn');
+            readBioButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const card = e.target.closest('.ministry-card');
+                    const pastorId = card.dataset.pastorId;
+                    const pastor = pastorsData[pastorId];
+
+                    if (pastor) {
+                        document.getElementById('pastorBioPhoto').src = pastor.photo;
+                        document.getElementById('pastorBioName').textContent = pastor.name;
+                        document.getElementById('pastorBioTitle').textContent = pastor.title;
+                        document.getElementById('pastorBioText').textContent = pastor.bio;
+                        showModal('pastorBioModal');
+                    }
+                });
+            });
+        }
+
+        // Mostrar detalle de ministerios
+        const ministryDetailModal = document.getElementById('ministryDetailModal');
+        if (ministryDetailModal) {
+            const viewMinistryButtons = document.querySelectorAll('.view-ministry-btn');
+            viewMinistryButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const card = e.target.closest('.ministry-card');
+                    const ministryId = card.dataset.ministryId;
+                    const ministry = ministriesData[ministryId];
+
+                    if (ministry) {
+                        document.getElementById('ministryDetailPhoto').src = ministry.photo;
+                        document.getElementById('ministryDetailName').textContent = ministry.name;
+                        document.getElementById('ministryDetailDescription').textContent = ministry.description;
+                        document.getElementById('ministryDetailInfo').innerHTML = ministry.info;
+                        showModal('ministryDetailModal');
+                    }
+                });
+            });
+        }
+
+        // Mostrar detalle de eventos
+        const eventDetailModal = document.getElementById('eventDetailModal');
+        if (eventDetailModal) {
+            const viewEventButtons = document.querySelectorAll('.view-event-btn');
+            viewEventButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const card = e.target.closest('.event-card');
+                    const eventId = card.dataset.eventId;
+                    const event = eventsData.find(ev => ev.id === eventId);
+
+                    if (event) {
+                        document.getElementById('eventDetailPhoto').src = event.photo;
+                        document.getElementById('eventDetailName').textContent = event.name;
+                        document.getElementById('eventDetailDate').innerHTML = `<i class="fas fa-calendar-alt me-2"></i> ${formatEventDates(event.date, event.endDate)}`;
+                        document.getElementById('eventDetailLocation').innerHTML = `<i class="fas fa-map-marker-alt me-2"></i> ${event.location}`;
+                        document.getElementById('eventDetailDescription').textContent = event.description;
+
+                        const eventDetailLinks = document.getElementById('eventDetailLinks');
+                        eventDetailLinks.innerHTML = '';
+                        if (event.links && event.links.length > 0) {
+                            event.links.forEach(link => {
+                                const btn = document.createElement('a');
+                                btn.href = link.url;
+                                btn.target = "_blank";
+                                btn.classList.add('btn', `btn-${link.type}`, 'btn-sm', 'me-2');
+                                btn.textContent = link.text;
+                                eventDetailLinks.appendChild(btn);
+                            });
+                        }
+
+                        showModal('eventDetailModal');
+                    }
+                });
+            });
+        }
+
+        // Función para formatear fechas de eventos
+        function formatEventDates(startDate, endDate) {
+            const start = new Date(startDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            let formattedDate = start.toLocaleDateString('es-ES', options);
+
+            if (endDate && startDate !== endDate) {
+                const end = new Date(endDate);
+                formattedDate += ` - ${end.toLocaleDateString('es-ES', options)}`;
+            }
+            return formattedDate;
+        }
+
+        // Mostrar calendario completo
+        const viewFullCalendarBtn = document.getElementById('viewFullCalendarBtn');
+        if (viewFullCalendarBtn) {
+            viewFullCalendarBtn.addEventListener('click', () => {
+                currentCalendarDate = new Date(); // Reinicia al mes actual
+                renderCalendar();
+                showModal('fullCalendarModal');
+            });
+        }
+
+        // Variables y lógica del calendario
+        const currentMonthYearHeader = document.getElementById('currentMonthYear');
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
+        const calendarDaysGrid = document.getElementById('calendarDaysGrid');
+        const eventsForCurrentMonthList = document.getElementById('eventsForCurrentMonth');
+
+        let currentCalendarDate = new Date();
+
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            currentMonthYearHeader.textContent = `${currentCalendarDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`;
+            calendarDaysGrid.innerHTML = '';
+            eventsForCurrentMonthList.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startWeekDay = firstDay.getDay();
+
+            for (let i = 0; i < startWeekDay; i++) {
+                calendarDaysGrid.innerHTML += `<div class="calendar-day prev-month"></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const events = eventsData.filter(e => {
+                    const d = new Date(e.date);
+                    return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+                });
+
+                const today = new Date();
+                const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+
+                const dayHTML = `
+                <div class="calendar-day ${isToday ? 'current-day' : ''} ${events.length > 0 ? 'has-event' : ''}">
+                    <span class="day-number">${day}</span>
+                    ${events.length > 0 ? '<span class="event-indicator"></span>' : ''}
+                </div>
+            `;
+                calendarDaysGrid.innerHTML += dayHTML;
+            }
+
+            const currentMonthEvents = eventsData.filter(event => {
+                const date = new Date(event.date);
+                return date.getMonth() === month && date.getFullYear() === year;
+            });
+
+            if (currentMonthEvents.length > 0) {
+                currentMonthEvents.forEach(event => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `<strong>${event.name}</strong> - ${formatEventDates(event.date, event.endDate)} en ${event.location}`;
+                    eventsForCurrentMonthList.appendChild(item);
+                });
+            } else {
+                eventsForCurrentMonthList.innerHTML = '<li>No hay eventos este mes.</li>';
+            }
+        }
+
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+                renderCalendar();
+            });
+        }
+
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+                renderCalendar();
+            });
+        }
+    </script>
+
+
 </body>
 
 </html>
