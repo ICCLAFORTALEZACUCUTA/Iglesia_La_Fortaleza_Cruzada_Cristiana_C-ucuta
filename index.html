@@ -889,8 +889,8 @@
         .btn-close {
             background: none;
             border: none;
-            font-size: 1.8rem;
-            color: #888;
+            font-size: 1rem;
+            color: #f80707;
             cursor: pointer;
             line-height: 1;
             /* Asegura que el X esté centrado */
@@ -898,7 +898,7 @@
         }
 
         .btn-close:hover {
-            color: #333;
+            color: #ecdd0a;
         }
 
         /* Specific modal image styling */
@@ -923,7 +923,6 @@
             /* Fixed height for consistency */
             object-fit: cover;
         }
-
 
         /* Alertas y Notificaciones */
         .alert {
@@ -2342,8 +2341,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="pastorBioModalLabel">Biografía del Pastor</h5>
-                    <button type="button" class="btn-close" onclick="hideModal('pastorBioModal');">×</button>
+
+                    <button type="button" class="btn-close" onclick="hideModal('pastorBioModal');"></button>
                 </div>
                 <div class="modal-body text-center">
                     <img id="pastorBioPhoto" src="" alt="Foto del Pastor" class="rounded-circle mb-3 pastor-photo">
@@ -3413,7 +3412,6 @@
         });
 
     </script>
-
     <script>
         // Mostrar cualquier modal por ID
         function showModal(id) {
@@ -3609,8 +3607,5 @@
             });
         }
     </script>
-
-
 </body>
-
 </html>
