@@ -323,8 +323,8 @@
         <div id="startScreen">
             <h1>🏺 ÉXODO RUNNER 🏺</h1>
             <p><strong>Ayuda a Moisés a escapar de Egipto</strong></p>
-            <p>El Faraón te persigue en su carruaje dorado. Debes atravesar el desierto durante 3 días y cruzar el Mar
-                Rojo para llegar a la Tierra Prometida.</p>
+            <p>El Faraón te persigue en su carruaje dorado. Debes atravesar el desierto, montañas, el Mar
+                Rojo y praderas, ¡una jornada de 400.000km para llegar a la Tierra Prometida!</p>
             <p><strong>Controles:</strong> TOCA LA PANTALLA o ESPACIO para saltar</p>
             <button id="startBtn">🏃‍♂️ ¡COMENZAR ESCAPE!</button>
         </div>
@@ -333,14 +333,14 @@
 
         <div id="gameUI" style="display: none;">
             <div id="score">Distancia: 0m</div>
-            <div id="dayInfo">Día 1 - Desierto</div>
+            <div id="dayInfo">Día 1 - Desierto (Día)</div>
         </div>
 
         <canvas id="gameCanvas"></canvas>
 
         <div id="gameOver">
-            <h2>¡El Faraón te alcanzó!</h2>
-            <p>Pero Dios liberará a su pueblo</p>
+            <h2 id="gameOverTitle">¡El Faraón te alcanzó!</h2>
+            <p id="gameOverMessage">Pero Dios liberará a su pueblo</p>
             <p id="finalScore">Distancia recorrida: 0m</p>
             <button id="restartBtn">🔄 Intentar de nuevo</button>
         </div>
@@ -387,15 +387,29 @@
         let gameSpeed = 4;
         let groundY = canvas.height - 120;
         let currentDay = 1;
-        let dayProgress = 0;
-        let isNight = false; // Variable para saber si es de noche
-        let inSea = false; // Variable para saber si está en el mar
+        let isNight = false;
 
-        // Referencia a los elementos de audio
+        // Journey parameters
+        const journeyLength = 400000; // Total km for 40 years
+        const dailyDistance = 833.33; // km per day
+        const dayPhaseKm = 600; // km for day phase
+        const nightPhaseKm = 233.33; // km for night phase
+
+        // Terrain segments
+        const segmentLength = journeyLength / 4; // 4 main segments: Desert, Mountains, Sea, Plains
+        let currentSegment = 1; // 1: Desert, 2: Mountains, 3: Sea, 4: Plains
+
+        let inDesert = true;
+        let inMountains = false;
+        let inSea = false;
+        let inPlains = false;
+
+
+        // Audio elements
         const gameMusic = document.getElementById('gameMusic');
         const dangerSound = document.getElementById('dangerSound');
 
-        // Moisés (jugador)
+        // Moses (player)
         const moses = {
             x: 120,
             y: groundY - 80,
@@ -406,24 +420,24 @@
             color: '#8B4513'
         };
 
-        // Carruaje del Faraón (más visible)
+        // Pharaoh's Chariot
         const pharaohChariot = {
-            x: -150,
+            x: moses.x - 150, // Initial position behind Moses
             y: groundY - 60,
             width: 120,
             height: 60,
-            speed: 3.5,
+            chaseSpeed: 0.05, // How much the Pharaoh gains on Moses per frame
             visible: true
         };
 
-        // Obstáculos
+        // Obstacles
         let obstacles = [];
         let lastObstacleTime = 0;
 
-        // Partículas
+        // Particles (sand/water)
         let particles = [];
 
-        // Función para crear partículas
+        // Function to create particles
         function createParticles() {
             if (Math.random() < 0.4) {
                 particles.push({
@@ -437,32 +451,64 @@
             }
         }
 
-        // Función para obtener colores según la hora del día
+        // Function to get colors based on time of day and terrain
         function getTimeColors() {
-            // El score / 800 define el día. Podemos usar un ciclo de 24 "unidades de tiempo" por día.
-            // Para simplificar, asumiremos que cada día (800m) tiene un ciclo de luz/noche.
-            const daySegment = (score % 800) / 800; // Progreso dentro del día actual (0 a 1)
+            // Determine if it's night based on progress within the current day
+            const distanceIntoCurrentDay = score % dailyDistance;
+            isNight = distanceIntoCurrentDay >= dayPhaseKm;
 
-            if (daySegment < 0.25 || daySegment >= 0.75) { // Noche (primer cuarto y último cuarto del día)
-                isNight = true;
-                return {
-                    sky: ['#191970', '#2F4F4F', '#483D8B'], // Tonos de azul oscuro/púrpura
-                    ground: inSea ? '#1e3a8a' : '#8B4513', // Azul oscuro para mar, marrón oscuro para desierto
-                    sun: '#F5F5DC', // Color de la luna
-                    isNight: true
-                };
-            } else { // Día (del 25% al 75% del día)
-                isNight = false;
-                return {
-                    sky: ['#87CEEB', '#F0E68C', '#FFE4B5'], // Tonos de azul claro/amarillo
-                    ground: inSea ? '#4682B4' : '#F4A460', // Azul medio para mar, naranja para desierto
-                    sun: '#FFD700', // Color del sol
-                    isNight: false
-                };
+            // Default colors for desert
+            let skyColors = ['#87CEEB', '#F0E68C', '#FFE4B5']; // Day desert sky
+            let groundColor = '#F4A460'; // Day desert ground
+            let sunColor = '#FFD700'; // Day sun
+
+            if (inDesert) {
+                if (isNight) {
+                    skyColors = ['#191970', '#2F4F4F', '#483D8B']; // Night desert sky
+                    groundColor = '#8B4513'; // Night desert ground
+                    sunColor = '#F5F5DC'; // Moon
+                } else {
+                    skyColors = ['#87CEEB', '#F0E68C', '#FFE4B5']; // Day desert sky
+                    groundColor = '#F4A460'; // Day desert ground
+                    sunColor = '#FFD700'; // Sun
+                }
+            } else if (inMountains) {
+                if (isNight) {
+                    skyColors = ['#2C3E50', '#34495E', '#4A627A']; // Night mountain sky
+                    groundColor = '#4F4F4F'; // Night mountain ground (darker rock)
+                    sunColor = '#F5F5DC'; // Moon
+                } else {
+                    skyColors = ['#B0E0E6', '#ADD8E6', '#C6E2FF']; // Day mountain sky (lighter blue)
+                    groundColor = '#778899'; // Day mountain ground (gray rock)
+                    sunColor = '#FFD700'; // Sun
+                }
+            } else if (inSea) {
+                // Sea is always day-like, but with distinct water colors
+                skyColors = ['#00BFFF', '#87CEFA', '#B0E0E6']; // Blue sea sky
+                groundColor = '#1E90FF'; // Darker blue for deep sea ground
+                sunColor = '#FFD700'; // Sun (always present over the sea)
+                isNight = false; // Override night for sea
+            } else if (inPlains) {
+                if (isNight) {
+                    skyColors = ['#0A192F', '#1A2F4A', '#2D4B6E']; // Night plains sky
+                    groundColor = '#3A4F3A'; // Night plains ground (darker green)
+                    sunColor = '#F5F5DC'; // Moon
+                } else {
+                    skyColors = ['#87CEEB', '#ADD8E6', '#98FB98']; // Day plains sky (blue with hint of green)
+                    groundColor = '#6B8E23'; // Day plains ground (green)
+                    sunColor = '#FFD700'; // Sun
+                }
             }
+
+            return {
+                sky: skyColors,
+                ground: groundColor,
+                sun: sunColor,
+                isNight: isNight
+            };
         }
 
-        // Función para dibujar Moisés
+        // Function to draw Moses
         function drawMoses() {
             const x = moses.x;
             const y = moses.y;
@@ -506,14 +552,13 @@
             ctx.fill();
         }
 
-        // Función para dibujar el carruaje del Faraón (más visible)
+        // Function to draw Pharaoh's Chariot
         function drawPharaohChariot() {
             const x = pharaohChariot.x;
             const y = pharaohChariot.y;
             const w = pharaohChariot.width;
             const h = pharaohChariot.height;
 
-            // Hacer el carruaje más visible
             ctx.save();
             ctx.scale(1.2, 1.2);
             const scaledX = x / 1.2;
@@ -570,26 +615,61 @@
             ctx.restore();
         }
 
-        // Función para crear obstáculos
+        // Function to create obstacles
         function createObstacle() {
             const now = Date.now();
-            // Ajusta la frecuencia de los obstáculos basados en gameSpeed
-            const obstacleInterval = Math.max(700, 3000 - gameSpeed * 100);
+            const obstacleInterval = Math.max(500, 2500 - gameSpeed * 100); // More frequent with higher speed
 
             if (now - lastObstacleTime > obstacleInterval + Math.random() * 1000) {
                 let obstacle;
 
                 if (inSea) {
-                    // Obstáculos del mar (simulando peces)
                     obstacle = {
                         x: canvas.width,
-                        y: groundY - (Math.random() * 40 + 20), // Altura variable para peces
-                        width: 30, // Ancho de un pez
-                        height: 25, // Alto de un pez
+                        y: groundY - (Math.random() * 40 + 20),
+                        width: 30,
+                        height: 25,
                         type: 'fish'
                     };
-                } else {
-                    // Obstáculos del desierto
+                } else if (inMountains) {
+                    const obstacleType = Math.random();
+                    if (obstacleType < 0.6) {
+                        obstacle = {
+                            x: canvas.width,
+                            y: groundY - (Math.random() * 30 + 30), // Taller rocks
+                            width: Math.random() * 20 + 30,
+                            height: Math.random() * 20 + 30,
+                            type: 'mountainRock'
+                        };
+                    } else {
+                        obstacle = {
+                            x: canvas.width,
+                            y: groundY - 15,
+                            width: 30,
+                            height: 15,
+                            type: 'crevice' // New obstacle type for mountains
+                        };
+                    }
+                } else if (inPlains) {
+                    const obstacleType = Math.random();
+                    if (obstacleType < 0.5) {
+                        obstacle = {
+                            x: canvas.width,
+                            y: groundY - 20,
+                            width: 25,
+                            height: 20,
+                            type: 'bush'
+                        };
+                    } else {
+                        obstacle = {
+                            x: canvas.width,
+                            y: groundY - 10,
+                            width: 35,
+                            height: 10,
+                            type: 'log' // New obstacle type for plains
+                        };
+                    }
+                } else { // In desert
                     const obstacleType = Math.random();
                     if (obstacleType < 0.7) {
                         obstacle = {
@@ -615,60 +695,72 @@
             }
         }
 
-        // Función para dibujar obstáculos con colores dinámicos
+        // Function to draw obstacles with dynamic colors
         function drawObstacles() {
             obstacles.forEach(obstacle => {
                 let obstacleColor;
 
-                if (inSea) {
-                    // Color para peces en el mar
-                    obstacleColor = 'rgba(135, 206, 250, 0.9)'; // Azul claro brillante para peces
-                } else if (isNight) {
-                    // Color para obstáculos de noche en el desierto
-                    obstacleColor = '#FFFFFF'; // Blanco
-                } else {
-                    // Color para obstáculos de día en el desierto
-                    obstacleColor = '#00FF00'; // Verde
+                if (obstacle.type === 'fish') {
+                    obstacleColor = 'rgba(135, 206, 250, 0.9)'; // Bright blue for fish
+                } else if (obstacle.type === 'mountainRock') {
+                    obstacleColor = isNight ? '#555555' : '#888888'; // Darker/lighter grey for mountain rocks
+                } else if (obstacle.type === 'crevice') {
+                    obstacleColor = isNight ? '#333333' : '#666666'; // Darker grey for crevices
+                } else if (obstacle.type === 'bush') {
+                    obstacleColor = isNight ? '#225522' : '#4CAF50'; // Darker/lighter green for bushes
+                } else if (obstacle.type === 'log') {
+                    obstacleColor = isNight ? '#5A3D2A' : '#8B4513'; // Darker/lighter brown for logs
+                } else { // Desert obstacles (rock, hole)
+                    obstacleColor = isNight ? '#FFFFFF' : '#00FF00'; // White or green
                 }
 
                 ctx.fillStyle = obstacleColor;
 
-                if (obstacle.type === 'rock') {
-                    // Dibujar una roca como un círculo
+                if (obstacle.type === 'rock' || obstacle.type === 'mountainRock') {
                     ctx.beginPath();
                     ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, obstacle.width / 2, 0, Math.PI * 2);
                     ctx.fill();
-                } else if (obstacle.type === 'hole') {
-                    // Dibujar un hoyo (recuadro)
-                    // Los hoyos pueden ser un poco más oscuros para distinguirse
-                    ctx.fillStyle = isNight ? '#CCCCCC' : '#00AA00'; // Blanco grisáceo o verde oscuro para hoyos
+                } else if (obstacle.type === 'hole' || obstacle.type === 'crevice') {
                     ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
                 } else if (obstacle.type === 'fish') {
-                    // Dibujar un óvalo para simular un pez
                     ctx.beginPath();
-                    // Usar ellipse para una forma más de pez
                     ctx.ellipse(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2,
                         obstacle.width / 2, obstacle.height / 2,
-                        Math.PI / 4, 0, Math.PI * 2); // Rotado ligeramente para una forma más dinámica
+                        Math.PI / 4, 0, Math.PI * 2);
                     ctx.fill();
-                    // Opcional: una pequeña aleta de cola para darle más forma de pez
                     ctx.beginPath();
                     ctx.moveTo(obstacle.x + obstacle.width, obstacle.y + obstacle.height / 2);
                     ctx.lineTo(obstacle.x + obstacle.width + 10, obstacle.y + obstacle.height / 2 - 8);
                     ctx.lineTo(obstacle.x + obstacle.width + 10, obstacle.y + obstacle.height / 2 + 8);
                     ctx.closePath();
                     ctx.fill();
+                } else if (obstacle.type === 'bush') {
+                    ctx.beginPath();
+                    ctx.arc(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, obstacle.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath(); // Add a second blob for bush effect
+                    ctx.arc(obstacle.x + obstacle.width * 0.7, obstacle.y + obstacle.height * 0.3, obstacle.width * 0.4, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (obstacle.type === 'log') {
+                    ctx.fillRect(obstacle.x, obstacle.y + obstacle.height * 0.2, obstacle.width, obstacle.height * 0.8);
+                    ctx.beginPath(); // For round ends
+                    ctx.arc(obstacle.x, obstacle.y + obstacle.height * 0.6, obstacle.height * 0.4, Math.PI / 2, Math.PI * 1.5);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(obstacle.x + obstacle.width, obstacle.y + obstacle.height * 0.6, obstacle.height * 0.4, Math.PI * 1.5, Math.PI / 2);
+                    ctx.fill();
                 }
             });
         }
 
-        // Función para dibujar partículas
+
+        // Function to draw particles
         function drawParticles() {
             particles.forEach(particle => {
                 if (particle.type === 'water') {
-                    ctx.fillStyle = `rgba(135, 206, 235, ${particle.opacity})`; // Azul para el agua
+                    ctx.fillStyle = `rgba(135, 206, 235, ${particle.opacity})`; // Blue for water
                 } else {
-                    ctx.fillStyle = `rgba(244, 164, 96, ${particle.opacity})`; // Naranja para la arena
+                    ctx.fillStyle = `rgba(244, 164, 96, ${particle.opacity})`; // Orange for sand
                 }
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
@@ -676,11 +768,11 @@
             });
         }
 
-        // Función para dibujar el fondo
+        // Function to draw background
         function drawBackground() {
             const colors = getTimeColors();
 
-            // Cielo
+            // Sky
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
             gradient.addColorStop(0, colors.sky[0]);
             gradient.addColorStop(0.5, colors.sky[1]);
@@ -688,39 +780,58 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Suelo
+            // Ground
             ctx.fillStyle = colors.ground;
             ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 
-            // Sol/Luna
+            // Sun/Moon
             ctx.fillStyle = colors.sun;
             ctx.beginPath();
             ctx.arc(canvas.width - 100, 80, colors.isNight ? 30 : 35, 0, Math.PI * 2);
             ctx.fill();
 
-            // Estrellas si es de noche
+            // Stars if it's night
             if (colors.isNight) {
                 ctx.fillStyle = '#FFFFFF';
                 for (let i = 0; i < 20; i++) {
-                    const x = (score * 0.1 + i * 50) % canvas.width; // Desplazamiento basado en el score
-                    const y = 30 + (i * 23) % 150; // Posición vertical
+                    const x = (score * 0.1 + i * 50) % canvas.width;
+                    const y = 30 + (i * 23) % 150;
                     ctx.beginPath();
                     ctx.arc(x, y, 1, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
 
-            // Efectos del mar (capa superior del agua)
-            if (inSea) {
-                ctx.fillStyle = 'rgba(70, 130, 180, 0.4)'; // Una capa de azul translúcido
+            // Specific terrain features
+            if (inMountains) {
+                // Draw some simple mountain peaks
+                ctx.fillStyle = isNight ? '#3D3D3D' : '#6A6A6A'; // Darker/lighter grey for mountains
+                ctx.beginPath();
+                ctx.moveTo(0, groundY);
+                ctx.lineTo(canvas.width * 0.2, groundY - 80);
+                ctx.lineTo(canvas.width * 0.4, groundY);
+                ctx.lineTo(canvas.width * 0.6, groundY - 120);
+                ctx.lineTo(canvas.width * 0.8, groundY - 40);
+                ctx.lineTo(canvas.width, groundY);
+                ctx.closePath();
+                ctx.fill();
+            } else if (inSea) {
+                ctx.fillStyle = 'rgba(70, 130, 180, 0.4)'; // A translucent blue layer for water surface
                 ctx.fillRect(0, groundY - 20, canvas.width, 20);
+            } else if (inPlains) {
+                // Draw some grassy textures
+                ctx.fillStyle = isNight ? 'rgba(50, 70, 50, 0.6)' : 'rgba(100, 150, 100, 0.6)';
+                for (let i = 0; i < 50; i++) {
+                    const x = (score * 0.5 + i * 80) % (canvas.width + 100);
+                    const y = groundY - (Math.random() * 10 + 5);
+                    ctx.fillRect(x, y, 5, 20); // Simple grass blades
+                }
             }
         }
 
-        // Función para verificar colisiones
+        // Function to check collisions
         function checkCollisions() {
             obstacles.forEach(obstacle => {
-                // Ajustar el área de colisión de Moisés para que sea más indulgente
                 const mosesHitbox = {
                     x: moses.x + 10,
                     y: moses.y + 10,
@@ -728,7 +839,6 @@
                     height: moses.height - 15
                 };
 
-                // Ajustar el área de colisión del obstáculo si es un pez (óvalo)
                 let obstacleHitbox = {
                     x: obstacle.x,
                     y: obstacle.y,
@@ -736,17 +846,23 @@
                     height: obstacle.height
                 };
 
+                // Adjust hitbox for specific obstacle types
                 if (obstacle.type === 'fish') {
-                    // Para peces, consideramos su forma ovalada en la colisión
-                    // Esto es una simplificación, una colisión de píxel sería más precisa pero más compleja
                     obstacleHitbox = {
-                        x: obstacle.x + obstacle.width * 0.1, // Ajuste para el óvalo rotado
+                        x: obstacle.x + obstacle.width * 0.1,
                         y: obstacle.y + obstacle.height * 0.1,
                         width: obstacle.width * 0.8,
                         height: obstacle.height * 0.8
                     };
+                } else if (obstacle.type === 'hole' || obstacle.type === 'crevice') {
+                    // For holes/crevices, collision happens if Moses is *above* them, not just touching
+                    if (moses.y + moses.height >= obstacle.y &&
+                        moses.x + moses.width > obstacle.x &&
+                        moses.x < obstacle.x + obstacle.width) {
+                        gameOver();
+                    }
+                    return; // Skip standard rect collision for holes
                 }
-
 
                 if (mosesHitbox.x < obstacleHitbox.x + obstacleHitbox.width &&
                     mosesHitbox.x + mosesHitbox.width > obstacleHitbox.x &&
@@ -757,35 +873,61 @@
             });
         }
 
-        // Función para actualizar el juego
+        // Function to update the game state
         function updateGame() {
             if (!gameRunning) return;
 
-            // Actualizar puntuación
+            // Update score
             score += 1;
             document.getElementById('score').textContent = `Distancia: ${score}m`;
 
-            // Actualizar día
-            // Cada 800m es un nuevo día
-            const prevDay = currentDay;
-            currentDay = Math.floor(score / 800) + 1;
-            dayProgress = (score % 800) / 800; // Progreso dentro del día actual (0 a 1)
+            // Update journey segment and day info
+            const oldSegment = currentSegment; // Keep track of old segment for potential changes
+            
+            // Determine current terrain segment
+            if (score < segmentLength) {
+                currentSegment = 1; // Desert
+                inDesert = true; inMountains = false; inSea = false; inPlains = false;
+            } else if (score < segmentLength * 2) {
+                currentSegment = 2; // Mountains
+                inDesert = false; inMountains = true; inSea = false; inPlains = false;
+            } else if (score < segmentLength * 3) {
+                currentSegment = 3; // Sea
+                inDesert = false; inMountains = false; inSea = true; inPlains = false;
+            } else if (score < journeyLength) {
+                currentSegment = 4; // Plains
+                inDesert = false; inMountains = false; inSea = false; inPlains = true;
+            } else {
+                // Reached Promised Land!
+                gameRunning = false;
+                document.getElementById('gameOverTitle').textContent = "¡Llegaste a la Tierra Prometida!";
+                document.getElementById('gameOverMessage').textContent = "¡40 años de jornada han terminado!";
+                document.getElementById('finalScore').textContent = `Distancia recorrida: ${score}m`;
+                document.getElementById('gameOver').style.display = 'block';
+                gameMusic.pause();
+                gameMusic.currentTime = 0;
+                dangerSound.pause();
+                dangerSound.currentTime = 0;
+                return; // Stop game loop if won
+            }
 
-            // Verificar si está en el mar (día 3 en adelante)
-            inSea = currentDay >= 3;
+            // Update current day and day/night status
+            currentDay = Math.floor(score / dailyDistance) + 1;
+            const distanceIntoCurrentDay = score % dailyDistance;
+            isNight = distanceIntoCurrentDay >= dayPhaseKm;
 
-            let dayText = '';
-            if (currentDay === 1) dayText = 'Día 1 - Desierto';
-            else if (currentDay === 2) dayText = 'Día 2 - Desierto';
-            else if (currentDay === 3) dayText = 'Día 3 - Mar Rojo';
-            else dayText = `Día ${currentDay} - Tierra Prometida`;
+            let terrainName = '';
+            if (currentSegment === 1) terrainName = 'Desierto';
+            else if (currentSegment === 2) terrainName = 'Montañas';
+            else if (currentSegment === 3) terrainName = 'Mar Rojo';
+            else if (currentSegment === 4) terrainName = 'Praderas';
 
-            document.getElementById('dayInfo').textContent = dayText;
+            document.getElementById('dayInfo').textContent = `Día ${currentDay} - ${terrainName} (${isNight ? 'Noche' : 'Día'})`;
 
-            // Incrementar velocidad gradualmente
-            gameSpeed += 0.003;
+            // Increment speed gradually
+            gameSpeed += 0.0005;
 
-            // Actualizar Moisés
+            // Update Moses
             if (moses.jumping) {
                 moses.velocityY += 0.9;
                 moses.y += moses.velocityY;
@@ -797,35 +939,41 @@
                 }
             }
 
-            // Actualizar carruaje del Faraón
-            // El Faraón se acerca a Moisés si está muy por detrás
-            if (pharaohChariot.x < moses.x - 180) {
-                pharaohChariot.x += pharaohChariot.speed;
+            // Update Pharaoh's chariot position
+            // Pharaoh moves with the game speed and also gains slightly on Moses
+            pharaohChariot.x -= (gameSpeed - pharaohChariot.chaseSpeed);
+
+
+            // If Pharaoh catches Moses (collision detection for Pharaoh)
+            if (pharaohChariot.x + pharaohChariot.width > moses.x + 10 &&
+                pharaohChariot.x < moses.x + moses.width - 10 &&
+                pharaohChariot.y + pharaohChariot.height > moses.y + 10) {
+                gameOver();
             }
 
-            // Crear obstáculos y partículas
+            // Create obstacles and particles
             createObstacle();
             createParticles();
 
-            // Actualizar obstáculos
+            // Update obstacles
             obstacles = obstacles.filter(obstacle => {
                 obstacle.x -= gameSpeed;
                 return obstacle.x + obstacle.width > 0;
             });
 
-            // Actualizar partículas
+            // Update particles
             particles = particles.filter(particle => {
                 particle.x -= particle.speed;
-                particle.y += 0.5; // Simula una ligera caída
-                particle.opacity -= 0.01; // Desvanece las partículas
+                particle.y += 0.5;
+                particle.opacity -= 0.01;
                 return particle.x > -10 && particle.opacity > 0;
             });
 
-            // Verificar colisiones
+            // Check collisions with obstacles
             checkCollisions();
         }
 
-        // Función para dibujar el juego
+        // Function to draw the game
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -836,28 +984,25 @@
             drawObstacles();
         }
 
-        // Función de Game Over
+        // Game Over function
         function gameOver() {
             gameRunning = false;
-            let dayText = '';
-            if (currentDay === 1) dayText = 'en el desierto';
-            else if (currentDay === 2) dayText = 'en el segundo día';
-            else if (currentDay >= 3) dayText = 'en el Mar Rojo';
+            gameMusic.pause(); // Pause game music
+            gameMusic.currentTime = 0; // Rewind game music
+            dangerSound.currentTime = 0; // Rewind danger sound
+            dangerSound.play().catch(e => console.log("Error playing danger sound:", e)); // Play danger sound
 
-            document.getElementById('finalScore').textContent = `Llegaste ${dayText} - Distancia: ${score}m`;
+            document.getElementById('gameOverTitle').textContent = "¡El Faraón te alcanzó!";
+            document.getElementById('gameOverMessage').textContent = "Pero Dios liberará a su pueblo";
+            document.getElementById('finalScore').textContent = `Distancia recorrida: ${score}m`;
             document.getElementById('gameOver').style.display = 'block';
-            gameMusic.pause(); // Pausar música en Game Over
-            dangerSound.pause(); // Asegurarse de que el sonido de peligro también se detenga
-            dangerSound.currentTime = 0;
         }
 
-        // Función para iniciar cuenta regresiva
+        // Function to start countdown
         function startCountdown() {
             document.getElementById('startScreen').style.display = 'none';
             const countdownEl = document.getElementById('countdown');
             countdownEl.style.display = 'block';
-
-            gameMusic.play().catch(e => console.log("Error al reproducir música de fondo:", e)); // Reproducir música al iniciar la cuenta regresiva
 
             let count = 3;
             const countdownInterval = setInterval(() => {
@@ -870,10 +1015,8 @@
                         document.getElementById('gameUI').style.display = 'block';
                         gameRunning = true;
                         gameStarted = true;
-
-                        gameMusic.pause(); // Pausar la música de fondo cuando termina la cuenta regresiva
-                        gameMusic.currentTime = 0; // Opcional: Reiniciar la música al principio para la próxima vez
-                        dangerSound.play().catch(e => console.log("Error al reproducir sonido de peligro:", e)); // Reproducir el sonido de peligro
+                        // Start game music when 'GO!' appears
+                        gameMusic.play().catch(e => console.log("Error al reproducir música de persecución:", e));
                     }, 500);
 
                     clearInterval(countdownInterval);
@@ -885,32 +1028,33 @@
             }, 1000);
         }
 
-        // Función para reiniciar el juego
+        // Function to restart the game
         function restartGame() {
             gameRunning = false;
             gameStarted = false;
             score = 0;
             gameSpeed = 4;
             currentDay = 1;
-            dayProgress = 0;
-            inSea = false;
+            currentSegment = 1;
+            inDesert = true; inMountains = false; inSea = false; inPlains = false;
+            isNight = false;
             obstacles = [];
             particles = [];
             moses.y = groundY - moses.height;
             moses.jumping = false;
             moses.velocityY = 0;
-            pharaohChariot.x = -150;
+            pharaohChariot.x = moses.x - 150; // Reset Pharaoh's position
             lastObstacleTime = 0;
             document.getElementById('gameOver').style.display = 'none';
             document.getElementById('gameUI').style.display = 'none';
             document.getElementById('startScreen').style.display = 'block';
-            gameMusic.pause(); // Pausar música al reiniciar
-            gameMusic.currentTime = 0; // Reiniciar la música al principio
-            dangerSound.pause(); // Pausar el sonido de peligro
-            dangerSound.currentTime = 0; // Reiniciar el sonido de peligro
+            gameMusic.pause(); // Pause music when restarting
+            gameMusic.currentTime = 0; // Rewind music to start
+            dangerSound.pause(); // Pause danger sound
+            dangerSound.currentTime = 0; // Rewind danger sound
         }
 
-        // Controles del jugador
+        // Player controls
         document.addEventListener('keydown', (e) => {
             if (!gameRunning || !gameStarted) return;
 
@@ -923,7 +1067,7 @@
             }
         });
 
-        // Control táctil
+        // Touch control
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (!gameRunning || !gameStarted) return;
@@ -934,7 +1078,7 @@
             }
         });
 
-        // Bucle principal del juego
+        // Main game loop
         let lastFrameTime = 0;
         function gameLoop(currentTime) {
             if (!gameStarted) {
@@ -952,30 +1096,30 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Iniciar el juego al cargar la página
+        // Initialize game on page load
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('startBtn').addEventListener('click', startCountdown);
             document.getElementById('restartBtn').addEventListener('click', restartGame);
             requestAnimationFrame(gameLoop);
         });
 
-        // Orientación del mensaje para móviles
+        // Orientation message for mobile
         const orientationMessage = document.getElementById('orientationMessage');
         function checkOrientation() {
-            if (window.innerHeight < 500 && window.orientation === 0 || window.orientation === 180) { // Portrait mode on small screens
-                orientationMessage.style.display = 'flex';
-                document.getElementById('gameContainer').style.display = 'none';
-            } else {
+            if (window.innerWidth > window.innerHeight) { // Landscape
                 orientationMessage.style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-                resizeCanvas(); // Ensure canvas is resized correctly after orientation change
+                resizeCanvas();
+            } else { // Portrait
+                orientationMessage.style.display = 'flex';
+                document.getElementById('gameContainer').style.display = 'none';
             }
         }
 
         // Initial check and add event listener for orientation changes
         checkOrientation();
         window.addEventListener('orientationchange', checkOrientation);
-        window.addEventListener('resize', checkOrientation); // Also check on resize for desktop/tablet
+        window.addEventListener('resize', checkOrientation);
     </script>
 </body>
 
