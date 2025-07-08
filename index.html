@@ -3761,7 +3761,6 @@
 
                     const matchesYear = !selectedYear || sermonYear === selectedYear;
                     const matchesMonth = !selectedMonth || sermonMonth === selectedMonth;
-                    const matchesPreacher = !selectedPreacher || sermon.preacher === selectedPreacher;
                     const matchesArea = !selectedArea || sermon.area === selectedArea;
 
                     // "Smart" search: checks title, preacher, description, area
@@ -3771,7 +3770,7 @@
                         sermon.description.toLowerCase().includes(searchTerm) ||
                         sermon.area.toLowerCase().includes(searchTerm);
 
-                    return matchesYear && matchesMonth && matchesPreacher && matchesArea && matchesSearch;
+                    return matchesYear && matchesMonth && matchesArea && matchesSearch;
                 });
 
                 renderSermons(filtered);
