@@ -2707,9 +2707,8 @@
                             <div class="form-group">
                                 <label for="sermonFile">Cargar Archivo de Predicación:</label>
                                 <input type="file" id="sermonFile" name="sermonFile" class="form-control"
-                                    accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf" required>
-                                <small class="form-text text-muted">Archivos admitidos:.doc, .docx, .xls, .xlsx, .ppt,
-                                    .pptx, .pdf.</small>
+                                    accept=".png,.jpeg.jpg.webp.jiff.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf" >
+                                <small class="form-text text-muted">Archivos admitidos: Imagen - PDF - Diapositivas - Word</small>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 mt-4">Subir Predicación</button>
@@ -2721,6 +2720,7 @@
             </div>
         </div>
     </div>
+
     <style>
         /* --- Variables CSS (Asegúrate de que estas o similares estén definidas globalmente) --- */
         :root {
@@ -3039,6 +3039,40 @@
         }
     </style>
 
+    <!-- Contenedor para predicaciones -->
+    <div id="sermonsContainer" class="row gy-4"></div>
+
+    <!-- Modal para ver predicación completa -->
+    <div class="modal fade" id="sermonModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sermonModalLabel">Detalles de la Predicación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="sermonModalImage" src="" alt="Imagen Predicación" class="img-fluid rounded mb-3">
+                    <h4 id="sermonModalTitle"></h4>
+                    <p class="text-muted" id="sermonModalMeta"></p>
+                    <p><strong>Área:</strong> <span id="sermonModalArea"></span></p>
+                    <p><strong>Objetivo:</strong> <span id="sermonModalObjetivo"></span></p>
+                    <hr>
+                    <p id="sermonModalDescription1"></p>
+                    <p id="sermonModalDescription2"></p>
+                    <p id="sermonModalDescription3"></p>
+                    <p><strong>Conclusión:</strong> <span id="sermonModalConclusion"></span></p>
+                    <p><strong>Audiencia Objetivo:</strong> <span id="sermonModalAudience"></span></p>
+                    <div class="ratio ratio-12x5 mt-2">
+                        <iframe id="sermonModalVideo" src="" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <a id="sermonModalFileDownload" href="#" class="btn btn-outline-primary w-100 mt-3" target="_blank" download style="display:none;">
+                        <i class="fas fa-download"></i> Descargar Archivo de la Predicación
+                      </a>                      
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
 
@@ -3246,16 +3280,26 @@
             }
         ].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort events by date
 
-        let sermonsData = [
+        const sermonsData = [
             {
                 id: "sermon1",
                 title: "El Poder del Perdón",
                 preacher: "Pastor Juan Pérez",
                 date: "2025-05-15",
                 area: "Gracia",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Ejemplo de YouTube
-                description: "Un mensaje inspirador sobre la libertad que encontramos al perdonar a otros y a nosotros mismos, basado en las enseñanzas de Cristo. Descubre cómo el perdón libera tu espíritu y restaura relaciones."
+                imageUrl: "https://picsum.photos/seed/sermon1/400/220",
+                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                objetivo: "Guiar a la congregación a experimentar la libertad que trae el perdón genuino.",
+                description1: "Este mensaje aborda la importancia del perdón desde una perspectiva bíblica, destacando cómo Jesús enseñó a perdonar incluso en circunstancias difíciles.",
+                description2: "Se exploran ejemplos de perdón en las Escrituras y cómo aplicarlos en la vida diaria para sanar relaciones rotas y fortalecer nuestra fe.",
+                description3: "El mensaje también anima a los creyentes a perdonarse a sí mismos, reconociendo que la gracia de Dios cubre todos los pecados.",
+                finalConclusion: "El perdón es una llave espiritual que abre la puerta a la sanidad interior, la reconciliación y una vida más plena en Cristo.",
+                targetAudience: "General",
+                archivoUrl: "https://drive.google.com/uc?export=download&id=ID_DEL_ARCHIVO"
+
             },
+
+
             {
                 id: "sermon2",
                 title: "La Fe en Tiempos de Incertidumbre",
@@ -3724,6 +3768,8 @@
                 });
             }
 
+
+
             function renderSermons(filteredSermons) {
                 sermonsContainer.innerHTML = '';
                 if (filteredSermons.length === 0) {
@@ -3733,17 +3779,22 @@
 
                 filteredSermons.forEach(sermon => {
                     const sermonCard = document.createElement('div');
-                    sermonCard.classList.add('sermon-card');
+
                     sermonCard.innerHTML = `
-                <img src="https://picsum.photos/seed/${sermon.id}/400/220" alt="${sermon.title}">
-                <div class="sermon-card-content">
-                    <h4 class="text-primary-dark">${sermon.title}</h4>
-                    <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> ${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | <i class="fas fa-user"></i> ${sermon.preacher}</p>
-                    <p class="meta text-muted-dark"><i class="fas fa-tag"></i> ${sermon.area}</p>
-                    <p class="text-muted-dark">${sermon.description.substring(0, 100)}...</p>
-                    <a href="${sermon.link}" target="_blank" class="btn btn-primary btn-sm">Escuchar Predicación</a>
-                </div>
-            `;
+                    <div class="card h-100 shadow sermon-card">
+                        <img src="${sermon.imageUrl || 'https://picsum.photos/seed/' + sermon.id + '/400/220'}" class="card-img-top" alt="${sermon.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${sermon.title}</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-calendar-alt"></i> ${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | 
+                                <i class="fas fa-user"></i> ${sermon.preacher}
+                            </p>
+                            <p class="card-text"><i class="fas fa-tag"></i> ${sermon.area}</p>
+                            <p class="card-text"><strong>Objetivo:</strong> ${sermon.objetivo}</p>
+                            <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
+                        </div>
+                    </div>
+                    `;
                     sermonsContainer.appendChild(sermonCard);
                 });
             }
@@ -3765,10 +3816,15 @@
 
                     // "Smart" search: checks title, preacher, description, area
                     const matchesSearch = !searchTerm ||
-                        sermon.title.toLowerCase().includes(searchTerm) ||
-                        sermon.preacher.toLowerCase().includes(searchTerm) ||
-                        sermon.description.toLowerCase().includes(searchTerm) ||
-                        sermon.area.toLowerCase().includes(searchTerm);
+                    sermon.title?.toLowerCase().includes(searchTerm) ||
+                    sermon.preacher?.toLowerCase().includes(searchTerm) ||
+                    sermon.area?.toLowerCase().includes(searchTerm) ||
+                    sermon.description1?.toLowerCase().includes(searchTerm) ||
+                    sermon.description2?.toLowerCase().includes(searchTerm) ||
+                    sermon.description3?.toLowerCase().includes(searchTerm) ||
+                    sermon.objetivo?.toLowerCase().includes(searchTerm) ||
+                    sermon.finalConclusion?.toLowerCase().includes(searchTerm) ||
+                    sermon.targetAudience?.toLowerCase().includes(searchTerm);
 
                     return matchesYear && matchesMonth && matchesArea && matchesSearch;
                 });
@@ -4234,7 +4290,38 @@
                 renderCalendar();
             });
         }
+
+        function showSermonModal(sermon) {
+  document.getElementById('sermonModalTitle').textContent = sermon.title;
+  document.getElementById('sermonModalMeta').textContent = `${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | ${sermon.preacher}`;
+  document.getElementById('sermonModalArea').textContent = sermon.area;
+  document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
+  document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
+  document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
+  document.getElementById('sermonModalDescription3').textContent = sermon.description3 || '';
+  document.getElementById('sermonModalConclusion').textContent = sermon.finalConclusion || '';
+  document.getElementById('sermonModalAudience').textContent = sermon.targetAudience || '';
+  document.getElementById('sermonModalImage').src = sermon.imageUrl || '';
+  document.getElementById('sermonModalVideo').src = sermon.link || '';
+
+  // 👉 Aquí va el manejo del botón de descarga
+  const downloadBtn = document.getElementById('sermonModalFileDownload');
+  if (sermon.archivoUrl) {
+    downloadBtn.style.display = 'block';
+    downloadBtn.href = sermon.archivoUrl;
+  } else {
+    downloadBtn.style.display = 'none';
+  }
+
+  const modal = new bootstrap.Modal(document.getElementById('sermonModal'));
+  modal.show();
+}
+
+
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
 </body>
