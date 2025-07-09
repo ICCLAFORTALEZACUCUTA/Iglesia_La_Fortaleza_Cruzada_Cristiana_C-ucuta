@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jacob vs El Ángel - Batalla Celestial</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    html, body {width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #000;}
+    canvas {display: block; position: absolute; top: 0; left: 0; z-index: 0;}
+
+    .hud {
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 40px; color: white; font-size: 16px; z-index: 5;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    .bar {background: rgba(0,0,0,0.6); border: 2px solid #fff; width: 200px; height: 25px; border-radius: 12px; overflow: hidden;}
+    .bar-fill {height: 100%; transition: width 0.3s ease;}
+    .jacob-hp {background: linear-gradient(45deg, #4CAF50, #81C784);}
+    .angel-hp {background: linear-gradient(45deg, #F44336, #EF5350);}
+
+    .mobile-controls {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; z-index: 5;
+    }
+    .btn {
+      width: 60px; height: 60px; border-radius: 50%; border: 2px solid #fff;
+      background: rgba(255,255,255,0.2); color: white; font-size: 20px;
+      backdrop-filter: blur(10px); cursor: pointer; transition: all 0.2s;
+    }
+    .btn:active {transform: scale(0.95); background: rgba(255,255,255,0.4);}
+
+    #message {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9); color: #fff; padding: 30px; font-size: 24px;
+      display: none; border-radius: 15px; text-align: center; z-index: 10;
+      border: 2px solid #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+
+    .menu {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 20;
+    }
+    .menu h1 {font-size: 48px; margin-bottom: 20px; text-shadow: 3px 3px 6px rgba(0,0,0,0.5);}
+    .menu p {margin: 10px; max-width: 600px; text-align: center; font-size: 18px;}
+    .menu button {
+      margin: 10px; padding: 15px 30px; font-size: 18px; 
+      background: linear-gradient(45deg, #FF6B6B, #4ECDC4); 
+      color: white; border: none; border-radius: 25px; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .menu button:hover {transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
+
+    #pauseBtn {
+      position: absolute; top: 10px; right: 10px; padding: 10px; 
+      background: rgba(0,0,0,0.6); color: white; border: 2px solid #fff; 
+      border-radius: 8px; z-index: 5; cursor: pointer;
+    }
+
+    .combo-indicator {
+      position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+      color: #FFD700; font-size: 24px; font-weight: bold; z-index: 5;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8); opacity: 0;
+      transition: opacity 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <div class="hud">
+    <div>Jacob<div class="bar"><div id="jacobHp" class="bar-fill jacob-hp" style="width: 100%"></div></div></div>
+    <div>Ángel<div class="bar"><div id="angelHp" class="bar-fill angel-hp" style="width: 100%"></div></div></div>
+  </div>
+
+  <div id="comboIndicator" class="combo-indicator"></div>
+
+  <button id="pauseBtn" onclick="togglePause()">⏸️</button>
+  <div id="message"></div>
+
+  <div class="mobile-controls">
+    <button class="btn" onclick="input('left')">⬅️</button>
+    <button class="btn" onclick="input('right')">➡️</button>
+    <button class="btn" onclick="input('jump')">⤴️</button>
+    <button class="btn" onclick="input('punch')">👊</button>
+    <button class="btn" onclick="input('stone')">🪨</button>
+    <button class="btn" onclick="input('special')">⚡</button>
+  </div>
+
+  <div id="menu" class="menu">
+    <h1>⚔️ Jacob vs El Ángel ⚔️</h1>
+    <p>🕹️ PC: Flechas para moverse, ↑ saltar, ESPACIO golpear, R piedra, S especial</p>
+    <p>📱 Móvil: Usa los botones para moverte, atacar y lanzar poderes</p>
+    <p>Jacob lucha contra el ángel en una batalla épica. El ángel descenderá del cielo con poderes celestiales: rayos, viento, fuego del cielo. Jacob luchará con sus puños y piedras.</p>
+    <button onclick="startIntro()">🎮 Comenzar Batalla</button>
+    <button onclick="showCredits()">ℹ️ Créditos</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Personajes
+    const jacob = { 
+      x: 100, y: canvas.height - 150, vx: 0, vy: 0, 
+      width: 60, height: 100, hp: 100, maxHp: 100, 
+      jumping: false, attacking: false, direction: 1,
+      stones: 5, combo: 0
+    };
+    
+    const angel = { 
+      x: canvas.width / 2 - 50, y: -120, vy: 1.5, 
+      width: 80, height: 120, hp: 250, maxHp: 250, 
+      descendido: false, attacking: false, direction: -1,
+      nextAttack: 0, attackPattern: 0
+    };
+
+    // Sistemas del juego
+    const gravity = 0.6;
+    const groundLevel = canvas.height - 50;
+    let inputs = { left: false, right: false, jump: false, punch: false, stone: false, special: false };
+    let paused = false;
+    let gameTime = 0;
+    
+    // Cooldowns
+    let punchCooldown = 0, stoneCooldown = 0, specialCooldown = 0;
+    let specialActive = false, specialDuration = 0;
+
+    // Partículas y efectos
+    let particles = [];
+    let projectiles = [];
+    let fireballs = [];
+    let lightningBolts = [];
+    let clouds = [];
+    let birds = [];
+    let stars = [];
+
+    // Animación del fondo
+    let bgOffset = 0;
+    let windStrength = 0;
+    let windDirection = 1;
+
+    // Inicializar elementos del fondo
+    function initBackground() {
+      // Nubes
+      for (let i = 0; i < 8; i++) {
+        clouds.push({
+          x: Math.random() * canvas.width * 2,
+          y: Math.random() * 200 + 50,
+          size: Math.random() * 100 + 50,
+          speed: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.4 + 0.3
+        });
+      }
+
+      // Pájaros
+      for (let i = 0; i < 6; i++) {
+        birds.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * 150 + 100,
+          vx: Math.random() * 2 + 1,
+          vy: Math.sin(Math.random() * Math.PI) * 0.5,
+          wingPhase: Math.random() * Math.PI * 2,
+          size: Math.random() * 15 + 10
+        });
+      }
+
+      // Estrellas
+      for (let i = 0; i < 100; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.6,
+          size: Math.random() * 2 + 1,
+          twinkle: Math.random() * Math.PI * 2,
+          speed: Math.random() * 0.02 + 0.01
+        });
+      }
+    }
+
+    // Funciones de entrada
+    function input(action) {
+      if (paused || !angel.descendido) return;
+      
+      if (action === 'left') inputs.left = true;
+      if (action === 'right') inputs.right = true;
+      if (action === 'jump' && !jacob.jumping) { 
+        jacob.vy = -15; 
+        jacob.jumping = true;
+        createParticles(jacob.x + jacob.width/2, jacob.y + jacob.height, 5, '#FFA500');
+      }
+      if (action === 'punch' && punchCooldown <= 0) {
+        jacob.attacking = true;
+        if (Math.abs(jacob.x - angel.x) < 100 && Math.abs(jacob.y - angel.y) < 80) {
+          dealDamage(angel, 12);
+          jacob.combo++;
+          showCombo();
+          createParticles(angel.x + angel.width/2, angel.y + angel.height/2, 10, '#FF4444');
+        }
+        punchCooldown = 25;
+        setTimeout(() => jacob.attacking = false, 200);
+      }
+      if (action === 'stone' && stoneCooldown <= 0 && jacob.stones > 0) {
+        throwStone();
+        jacob.stones--;
+        stoneCooldown = 40;
+      }
+      if (action === 'special' && specialCooldown <= 0) {
+        activateSpecial();
+        specialCooldown = 300;
+      }
+    }
+
+    // Eventos del teclado
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') inputs.left = true;
+      if (e.key === 'ArrowRight') inputs.right = true;
+      if (e.key === 'ArrowUp') input('jump');
+      if (e.key === ' ') { e.preventDefault(); input('punch'); }
+      if (e.key.toLowerCase() === 'r') input('stone');
+      if (e.key.toLowerCase() === 's') input('special');
+    });
+
+    document.addEventListener('keyup', e => {
+      if (e.key === 'ArrowLeft') inputs.left = false;
+      if (e.key === 'ArrowRight') inputs.right = false;
+    });
+
+    // Funciones de combate
+    function throwStone() {
+      const direction = jacob.direction;
+      projectiles.push({
+        x: jacob.x + (direction > 0 ? jacob.width : 0),
+        y: jacob.y + 30,
+        vx: direction * 8,
+        vy: -3,
+        type: 'stone',
+        damage: 8,
+        life: 100
+      });
+    }
+
+    function activateSpecial() {
+      specialActive = true;
+      specialDuration = 120;
+      createParticles(jacob.x + jacob.width/2, jacob.y + jacob.height/2, 20, '#FFD700');
+      
+      // Curación parcial
+      jacob.hp = Math.min(jacob.maxHp, jacob.hp + 20);
+      updateHpBar('jacob', jacob.hp, jacob.maxHp);
+      
+      // Restaurar piedras
+      jacob.stones = 5;
+    }
+
+    function dealDamage(target, damage) {
+      target.hp -= damage;
+      if (target === angel) {
+        updateHpBar('angel', angel.hp, angel.maxHp);
+        if (angel.hp <= 0) {
+          endGame('✨ ¡Jacob venció al ángel y recibió la bendición divina!');
+        }
+      } else {
+        updateHpBar('jacob', jacob.hp, jacob.maxHp);
+        if (jacob.hp <= 0) {
+          endGame('☁️ El ángel prevaleció, pero Jacob luchó con honor.');
+        }
+      }
+    }
+
+    function updateHpBar(character, hp, maxHp) {
+      const percentage = Math.max(0, (hp / maxHp) * 100);
+      document.getElementById(character + 'Hp').style.width = percentage + '%';
+    }
+
+    function showCombo() {
+      const indicator = document.getElementById('comboIndicator');
+      indicator.textContent = `COMBO x${jacob.combo}`;
+      indicator.style.opacity = '1';
+      setTimeout(() => indicator.style.opacity = '0', 1000);
+    }
+
+    // IA del ángel
+    function updateAngel() {
+      if (!angel.descendido) return;
+
+      // Movimiento básico hacia Jacob
+      const distance = Math.abs(jacob.x - angel.x);
+      if (distance > 60) {
+        angel.direction = jacob.x > angel.x ? 1 : -1;
+        angel.x += angel.direction * 2;
+      }
+
+      // Patrones de ataque
+      angel.nextAttack--;
+      if (angel.nextAttack <= 0) {
+        executeAngelAttack();
+        angel.nextAttack = 120 + Math.random() * 60;
+      }
+
+      // Ataque cuerpo a cuerpo
+      if (distance < 80 && Math.random() < 0.02) {
+        dealDamage(jacob, 15);
+        createParticles(jacob.x + jacob.width/2, jacob.y + jacob.height/2, 8, '#FF6666');
+      }
+    }
+
+    function executeAngelAttack() {
+      const attack = Math.floor(Math.random() * 4);
+      
+      switch(attack) {
+        case 0: // Rayo
+          createLightning();
+          break;
+        case 1: // Viento
+          createWind();
+          break;
+        case 2: // Fuego del cielo
+          createFireRain();
+          break;
+        case 3: // Bolas de fuego
+          createFireballs();
+          break;
+      }
+    }
+
+    function createLightning() {
+      lightningBolts.push({
+        x: jacob.x + jacob.width/2,
+        y: 0,
+        width: 20,
+        height: canvas.height,
+        life: 30,
+        damage: 20,
+        warned: false
+      });
+    }
+
+    function createWind() {
+      windStrength = 8;
+      windDirection = jacob.x > angel.x ? 1 : -1;
+      setTimeout(() => windStrength = 0, 2000);
+    }
+
+    function createFireRain() {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          fireballs.push({
+            x: Math.random() * canvas.width,
+            y: -50,
+            vx: (Math.random() - 0.5) * 4,
+            vy: Math.random() * 3 + 2,
+            size: Math.random() * 20 + 15,
+            damage: 12,
+            life: 200
+          });
+        }, i * 200);
+      }
+    }
+
+    function createFireballs() {
+      for (let i = 0; i < 3; i++) {
+        const angle = (Math.PI / 4) * (i - 1);
+        projectiles.push({
+          x: angel.x + angel.width/2,
+          y: angel.y + angel.height/2,
+          vx: Math.cos(angle) * 6 * angel.direction,
+          vy: Math.sin(angle) * 6,
+          type: 'fireball',
+          damage: 15,
+          life: 120,
+          size: 25
+        });
+      }
+    }
+
+    // Sistema de partículas
+    function createParticles(x, y, count, color) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x + (Math.random() - 0.5) * 20,
+          y: y + (Math.random() - 0.5) * 20,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          color: color,
+          life: 60,
+          maxLife: 60,
+          size: Math.random() * 4 + 2
+        });
+      }
+    }
+
+    // Función de actualización principal
+    function update() {
+      if (paused) return;
+
+      gameTime++;
+
+      // Animación del descenso del ángel
+      if (!angel.descendido) {
+        angel.y += angel.vy;
+        if (angel.y >= groundLevel - angel.height) {
+          angel.y = groundLevel - angel.height;
+          angel.descendido = true;
+        }
+        return;
+      }
+
+      // Movimiento de Jacob
+      if (inputs.left) {
+        jacob.vx = -6;
+        jacob.direction = -1;
+      } else if (inputs.right) {
+        jacob.vx = 6;
+        jacob.direction = 1;
+      } else {
+        jacob.vx = 0;
+      }
+
+      // Efecto del viento
+      if (windStrength > 0) {
+        jacob.vx += windDirection * windStrength * 0.3;
+        windStrength -= 0.1;
+      }
+
+      // Física de Jacob
+      jacob.x += jacob.vx;
+      jacob.y += jacob.vy;
+      jacob.vy += gravity;
+
+      // Límites y colisiones con el suelo
+      if (jacob.y >= groundLevel - jacob.height) {
+        jacob.y = groundLevel - jacob.height;
+        jacob.vy = 0;
+        jacob.jumping = false;
+        jacob.combo = 0; // Reset combo al tocar el suelo
+      }
+
+      jacob.x = Math.max(0, Math.min(canvas.width - jacob.width, jacob.x));
+
+      // Actualizar ángel
+      updateAngel();
+
+      // Actualizar proyectiles
+      updateProjectiles();
+
+      // Actualizar efectos
+      updateEffects();
+
+      // Decrementar cooldowns
+      if (punchCooldown > 0) punchCooldown--;
+      if (stoneCooldown > 0) stoneCooldown--;
+      if (specialCooldown > 0) specialCooldown--;
+      if (specialDuration > 0) specialDuration--;
+      if (specialDuration <= 0) specialActive = false;
+
+      // Regenerar piedras lentamente
+      if (gameTime % 180 === 0 && jacob.stones < 5) {
+        jacob.stones++;
+      }
+    }
+
+    function updateProjectiles() {
+      // Proyectiles normales
+      projectiles = projectiles.filter(proj => {
+        proj.x += proj.vx;
+        proj.y += proj.vy;
+        proj.vy += 0.3; // Gravedad para proyectiles
+        proj.life--;
+
+        // Colisiones
+        if (proj.type === 'stone') {
+          if (Math.abs(proj.x - angel.x) < 50 && Math.abs(proj.y - angel.y) < 60) {
+            dealDamage(angel, proj.damage);
+            createParticles(proj.x, proj.y, 8, '#8B4513');
+            return false;
+          }
+        } else if (proj.type === 'fireball') {
+          if (Math.abs(proj.x - jacob.x) < 40 && Math.abs(proj.y - jacob.y) < 50) {
+            dealDamage(jacob, proj.damage);
+            createParticles(proj.x, proj.y, 12, '#FF4500');
+            return false;
+          }
+        }
+
+        return proj.life > 0 && proj.x > -50 && proj.x < canvas.width + 50;
+      });
+
+      // Bolas de fuego del cielo
+      fireballs = fireballs.filter(fire => {
+        fire.x += fire.vx;
+        fire.y += fire.vy;
+        fire.life--;
+
+        if (Math.abs(fire.x - jacob.x) < 40 && Math.abs(fire.y - jacob.y) < 50) {
+          dealDamage(jacob, fire.damage);
+          createParticles(fire.x, fire.y, 15, '#FF4500');
+          return false;
+        }
+
+        return fire.life > 0 && fire.y < canvas.height + 50;
+      });
+
+      // Rayos
+      lightningBolts = lightningBolts.filter(bolt => {
+        bolt.life--;
+        
+        if (bolt.life === 20 && !bolt.warned) {
+          // Advertencia visual
+          bolt.warned = true;
+        }
+        
+        if (bolt.life === 10) {
+          // Daño si Jacob está en el área
+          if (Math.abs(bolt.x - jacob.x) < 40) {
+            dealDamage(jacob, bolt.damage);
+            createParticles(jacob.x + jacob.width/2, jacob.y + jacob.height/2, 20, '#FFFF00');
+          }
+        }
+
+        return bolt.life > 0;
+      });
+    }
+
+    function updateEffects() {
+      // Actualizar partículas
+      particles = particles.filter(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+        p.life--;
+        return p.life > 0;
+      });
+
+      // Actualizar elementos del fondo
+      updateBackground();
+    }
+
+    function updateBackground() {
+      bgOffset += 0.5;
+
+      // Actualizar nubes
+      clouds.forEach(cloud => {
+        cloud.x -= cloud.speed;
+        if (cloud.x < -cloud.size) {
+          cloud.x = canvas.width + cloud.size;
+        }
+      });
+
+      // Actualizar pájaros
+      birds.forEach(bird => {
+        bird.x += bird.vx;
+        bird.y += bird.vy + Math.sin(bird.wingPhase) * 0.3;
+        bird.wingPhase += 0.2;
+        
+        if (bird.x > canvas.width + 50) {
+          bird.x = -50;
+          bird.y = Math.random() * 150 + 100;
+        }
+      });
+
+      // Actualizar estrellas
+      stars.forEach(star => {
+        star.twinkle += star.speed;
+      });
+    }
+
+    // Función de dibujo principal
+    function draw() {
+      // Limpiar canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Dibujar fondo
+      drawBackground();
+
+      // Dibujar efectos de fondo
+      drawEffects();
+
+      // Dibujar personajes
+      drawCharacters();
+
+      // Dibujar proyectiles
+      drawProjectiles();
+
+      // Dibujar partículas
+      drawParticles();
+
+      // Dibujar UI del juego
+      drawGameUI();
+    }
+
+    function drawBackground() {
+      // Gradiente del cielo
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#1a1a2e');
+      gradient.addColorStop(0.3, '#16213e');
+      gradient.addColorStop(0.6, '#0f3460');
+      gradient.addColorStop(1, '#533483');
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Estrellas
+      stars.forEach(star => {
+        const opacity = 0.5 + Math.sin(star.twinkle) * 0.3;
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // Nubes
+      clouds.forEach(cloud => {
+        ctx.globalAlpha = cloud.opacity;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2);
+        ctx.arc(cloud.x + cloud.size * 0.6, cloud.y, cloud.size * 0.8, 0, Math.PI * 2);
+        ctx.arc(cloud.x - cloud.size * 0.6, cloud.y, cloud.size * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // Pájaros
+      birds.forEach(bird => {
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const wingOffset = Math.sin(bird.wingPhase) * 5;
+        ctx.moveTo(bird.x - bird.size/2, bird.y + wingOffset);
+        ctx.lineTo(bird.x, bird.y);
+        ctx.lineTo(bird.x + bird.size/2, bird.y + wingOffset);
+        ctx.stroke();
+      });
+
+      // Suelo
+      ctx.fillStyle = '#2d4a22';
+      ctx.fillRect(0, groundLevel, canvas.width, canvas.height - groundLevel);
+      
+      // Hierba
+      ctx.fillStyle = '#4a7c59';
+      ctx.fillRect(0, groundLevel, canvas.width, 10);
+    }
+
+    function drawEffects() {
+      // Rayos
+      lightningBolts.forEach(bolt => {
+        if (bolt.life > 20) {
+          // Advertencia
+          ctx.strokeStyle = '#FFFF00';
+          ctx.lineWidth = 3;
+          ctx.globalAlpha = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(bolt.x, 0);
+          ctx.lineTo(bolt.x, canvas.height);
+          ctx.stroke();
+        } else {
+          // Rayo real
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.lineWidth = 8;
+          ctx.globalAlpha = 0.9;
+          ctx.beginPath();
+          ctx.moveTo(bolt.x, 0);
+          ctx.lineTo(bolt.x + (Math.random() - 0.5) * 40, canvas.height/3);
+          ctx.lineTo(bolt.x + (Math.random() - 0.5) * 40, canvas.height*2/3);
+          ctx.lineTo(bolt.x, canvas.height);
+          ctx.stroke();
+        }
+      });
+      ctx.globalAlpha = 1;
+
+      // Viento
+      if (windStrength > 0) {
+        ctx.strokeStyle = '#87CEEB';
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.3;
+        for (let i = 0; i < 20; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + windDirection * 30, y);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function drawCharacters() {
+      // Jacob
+      ctx.fillStyle = specialActive ? '#FFD700' : '#8B4513';
+      if (specialActive) {
+        ctx.shadowColor = '#FFD700';
+        ctx.shadowBlur = 20;
+      }
+      
+      ctx.fillRect(jacob.x, jacob.y, jacob.width, jacob.height);
+      
+      // Cara de Jacob
+      ctx.fillStyle = '#DEB887';
+      ctx.fillRect(jacob.x + 15, jacob.y + 10, 30, 25);
+      
+      // Ojos
+      ctx.fillStyle = '#000';
+      ctx.fillRect(jacob.x + 20, jacob.y + 18, 4, 4);
+      ctx.fillRect(jacob.x + 36, jacob.y + 18, 4, 4);
+      
+      ctx.shadowBlur = 0;
+
+      // Ángel
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(angel.x, angel.y, angel.width, angel.height);
+      
+      // Alas del ángel
+      ctx.fillStyle = '#F0F0F0';
+      const wingFlap = Math.sin(gameTime * 0.2) * 5;
+      ctx.fillRect(angel.x - 30, angel.y + 20 + wingFlap, 25, 60);
+      ctx.fillRect(angel.x + angel.width + 5, angel.y + 20 - wingFlap, 25, 60);
+      
+      // Halo
+      ctx.strokeStyle = '#FFD700';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(angel.x + angel.width/2, angel.y - 10, 25, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Cara del ángel
+      ctx.fillStyle = '#F5F5DC';
+      ctx.fillRect(angel.x + 20, angel.y + 15, 40, 30);
+      
+      // Ojos del ángel
+      ctx.fillStyle = '#87CEEB';
+      ctx.fillRect(angel.x + 28, angel.y + 23, 6, 6);
+      ctx.fillRect(angel.x + 46, angel.y + 23, 6, 6);
+    }
+
+    function drawProjectiles() {
+      // Piedras
+      projectiles.forEach(proj => {
+        if (proj.type === 'stone') {
+          ctx.fillStyle = '#8B4513';
+          ctx.beginPath();
+          ctx.arc(proj.x, proj.y, 8, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (proj.type === 'fireball') {
+          // Bolas de fuego
+          ctx.fillStyle = '#FF4500';
+          ctx.shadowColor = '#FF4500';
+          ctx.shadowBlur = 15;
+          ctx.beginPath();
+          ctx.arc(proj.x, proj.y, proj.size/2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      });
+
+      // Fuego del cielo
+      fireballs.forEach(fire => {
+        ctx.fillStyle = '#FF6347';
+        ctx.shadowColor = '#FF4500';
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.arc(fire.x, fire.y, fire.size/2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Cola de fuego
+        ctx.fillStyle = '#FF8C00';
+        ctx.beginPath();
+        ctx.arc(fire.x, fire.y - fire.size/2, fire.size/4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    function drawParticles() {
+      particles.forEach(p => {
+        const alpha = p.life / p.maxLife;
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function drawGameUI() {
+      // Contador de piedras
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '20px Arial';
+      ctx.fillText(`Piedras: ${jacob.stones}`, 20, canvas.height - 80);
+      
+      // Cooldown de especial
+      if (specialCooldown > 0) {
+        ctx.fillStyle = '#FFFF00';
+        ctx.fillText(`Especial: ${Math.ceil(specialCooldown/60)}s`, 20, canvas.height - 50);
+      } else {
+        ctx.fillStyle = '#00FF00';
+        ctx.fillText('Especial: ¡LISTO!', 20, canvas.height - 50);
+      }
+
+      // Indicador de poder especial activo 
+      if (specialActive) {
+        ctx.fillStyle = '#FFD700';
+        ctx.font = '24px Arial';
+        ctx.fillText('¡PODER DIVINO ACTIVO!', canvas.width/2 - 120, 150);
+      }
+    }
+
+    function endGame(msg) {
+      document.getElementById('message').innerHTML = msg + '<br><br><button onclick="location.reload()">Jugar de Nuevo</button>';
+      document.getElementById('message').style.display = 'block';
+      cancelAnimationFrame(animId);
+    }
+
+    function togglePause() {
+      paused = !paused;
+      document.getElementById('pauseBtn').innerText = paused ? '▶️' : '⏸️';
+    }
+
+    function showCredits() {
+      alert('🎮 Desarrollado con pasión\n⚔️ Inspirado en Génesis 32:22-32\n🎨 Batalla épica mejorada\n✨ Efectos especiales y animaciones\n🌟 Combate estilo Mortal Kombat');
+    }
+
+    function startIntro() {
+      document.getElementById('menu').style.display = 'none';
+      initBackground();
+      loop();
+    }
+
+    let animId;
+    function loop() {
+      update();
+      draw();
+      animId = requestAnimationFrame(loop);
+    }
+
+    // Responsive design
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // Reposicionar elementos si es necesario
+      if (jacob.x > canvas.width - jacob.width) {
+        jacob.x = canvas.width - jacob.width;
+      }
+      if (angel.x > canvas.width - angel.width) {
+        angel.x = canvas.width - angel.width;
+      }
+    });
+
+    // Prevenir scroll en móvil
+    document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+  </script>
+</body>
+</html>
