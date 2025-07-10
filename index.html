@@ -2337,7 +2337,8 @@
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d279.4718491828743!2d-72.55519290457653!3d7.902507190430007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e664f928b7cc66f%3A0x4921eaa2d021692!2sCDI%20GUERREROS%20C.A.P.I!5e1!3m2!1ses!2sco!4v1751401349360!5m2!1ses!2sco"
                                     width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
                             </div>
                         </div>
                     </div>
@@ -2489,81 +2490,12 @@
         </div>
     </div>
 
-    <div id="eventModal" class="modal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalLabel">Acceso para Crear Eventos</h5>
-                    <button type="button" class="btn-close" onclick="hideModal('eventModal');"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="eventLoginFormContainer">
-                        <p class="text-muted-dark mb-4 text-center">Inicia sesión para crear eventos.</p>
-                        <form id="eventLoginForm">
-                            <div class="form-group">
-                                <label for="eventUsername">Usuario:</label>
-                                <input type="text" id="eventUsername" name="username" class="form-control" required
-                                    autocomplete="username">
-                            </div>
-                            <div class="form-group">
-                                <label for="eventPassword">Contraseña:</label>
-                                <input type="password" id="eventPassword" name="password" class="form-control" required
-                                    autocomplete="current-password">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-                            <p id="eventLoginMessage" class="alert mt-3 text-center" style="display:none;"></p>
-                        </form>
-                    </div>
-
-                    <div id="eventCreationFormContainer" style="display:none;">
-                        <h4 class="text-primary-dark text-center mb-4">Crear Nuevo Evento</h4>
-                        <form id="createEventForm">
-                            <div class="form-group">
-                                <label for="eventTitle">Título del Evento:</label>
-                                <input type="text" id="eventTitle" name="eventTitle" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventDate">Fecha del Evento (Inicio):</label>
-                                <input type="date" id="eventDate" name="eventDate" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventEndDate">Fecha del Evento (Fin - Opcional):</label>
-                                <input type="date" id="eventEndDate" name="eventEndDate" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="eventLocation">Ubicación:</label>
-                                <input type="text" id="eventLocation" name="eventLocation" class="form-control"
-                                    placeholder="Ej: Salón Principal" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventCardDescription">Descripción para la Tarjeta (corta):</label>
-                                <textarea id="eventCardDescription" name="eventCardDescription" class="form-control"
-                                    rows="2" required></textarea>
-                                <small class="form-text text-muted">Esta descripción aparecerá en la tarjeta del
-                                    evento.</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventGeneralDescription">Descripción General (detallada):</label>
-                                <textarea id="eventGeneralDescription" name="eventGeneralDescription"
-                                    class="form-control" rows="4" required></textarea>
-                                <small class="form-text text-muted">Esta descripción se mostrará al presionar "Más Info"
-                                    del evento.</small>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100 mt-4">Crear Evento</button>
-                            <p id="eventMessage" class="alert mt-3 text-center" style="display:none;"></p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="sermonAuthModal" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="sermonAuthModalLabel">Acceso para Subir Predicaciones</h5>
-                    <button type="button" class="btn-close" onclick="hideModal('sermonAuthModal');"></button>
+                    <button type="button" class="btn-close" onclick="hideModal('sermonAuthModal');">x</button>
                 </div>
                 <div class="modal-body">
                     <div id="loginFormContainer">
@@ -2625,12 +2557,13 @@
                                 <label>Versículo(s) Clave:</label>
                                 <div id="keyVerseInputs">
                                     <div class="input-group mb-3">
-                                        <input type="text" name="keyVerse[]" class="form-control"
+                                        <input type="text" name="keyVerse" class="form-control"
                                             placeholder="Ej: Juan 3:16" required>
-                                        <button class="btn btn-outline-secondary" type="button" id="addKeyVerseBtn">
-                                            <i class="fas fa-plus"></i> </button>
                                     </div>
                                 </div>
+                                <button class="btn btn-outline-secondary btn-sm mb-2" type="button" id="addKeyVerseBtn">
+                                    <i class="fas fa-plus"></i> Agregar Versículo
+                                </button>
                                 <small class="form-text text-muted">Introduce uno o varios versículos clave.</small>
                             </div>
 
@@ -2707,8 +2640,9 @@
                             <div class="form-group">
                                 <label for="sermonFile">Cargar Archivo de Predicación:</label>
                                 <input type="file" id="sermonFile" name="sermonFile" class="form-control"
-                                    accept=".png,.jpeg.jpg.webp.jiff.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf" >
-                                <small class="form-text text-muted">Archivos admitidos: Imagen - PDF - Diapositivas - Word</small>
+                                    accept=".png,.jpeg.jpg.webp.jiff.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf">
+                                <small class="form-text text-muted">Archivos admitidos: Imagen - PDF - Diapositivas -
+                                    Word</small>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 mt-4">Subir Predicación</button>
@@ -2724,39 +2658,83 @@
     <style>
         /* --- Variables CSS (Asegúrate de que estas o similares estén definidas globalmente) --- */
         :root {
-            --primary-color: #007bff;
-            /* Azul de ejemplo */
-            --primary-rgb: 0, 123, 255;
+            --primary-color: #4A90E2;
+            /* Un azul más vibrante y moderno */
+            --primary-rgb: 74, 144, 226;
             --secondary-color: #6c757d;
-            /* Gris de ejemplo */
-            --text-color: #343a40;
-            /* Negro casi puro para texto */
-            --light-text-color: #6c757d;
+            --text-color: #333333;
+            /* Un negro más suave */
+            --light-text-color: #777777;
             /* Gris para texto menos prominente */
-            --border-color: #dee2e6;
-            /* Color de borde ligero */
-            --background-light: #f8f9fa;
-            /* Fondo muy claro */
-            --primary-dark-text: #212529;
-            /* Un texto más oscuro para títulos específicos */
+            --border-color: #e0e0e0;
+            /* Color de borde más suave */
+            --background-light: #f5f7fa;
+            /* Fondo muy claro, ligeramente azulado */
+            --primary-dark-text: #2c3e50;
+            /* Un texto más oscuro para títulos específicos, casi negro azulado */
+            --modal-bg-color: rgba(255, 255, 255, 0.98);
+            /* Fondo del modal casi blanco, con ligera transparencia */
+            --modal-backdrop-color: rgba(0, 0, 0, 0.6);
+            /* Fondo oscuro para el overlay del modal */
         }
 
         /* --- Estilos Generales para el Modal de Predicaciones --- */
 
         /* Estilo para el contenedor del modal */
+        #sermonAuthModal {
+            background-color: var(--modal-backdrop-color);
+            /* Fondo oscuro semi-transparente para el overlay */
+            display: flex;
+            /* Usa flexbox para centrar el modal */
+            align-items: center;
+            /* Centrado vertical */
+            justify-content: center;
+            /* Centrado horizontal */
+            position: fixed;
+            /* Fijo en el viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1050;
+            /* Asegura que esté por encima de otros elementos */
+            overflow: auto;
+            /* Permite desplazamiento si el contenido es muy largo */
+        }
+
         #sermonAuthModal .modal-dialog {
             max-width: 550px;
-            /* Ancho máximo para el modal en pantallas grandes */
+            width: 90%;
+            /* Ajuste para que ocupe un buen porcentaje del ancho */
+            margin: 1.75rem auto;
+            /* Margen para centrar en pantallas grandes */
         }
 
         /* Estilo del contenido del modal para darle "elevación" y suavidad */
         #sermonAuthModal .modal-content {
+            background-color: var(--modal-bg-color);
+            /* Usamos la nueva variable para el fondo del modal */
             border-radius: 1rem;
-            /* Bordes más redondeados para un aspecto moderno */
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            /* Sombra sutil para profundidad */
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+            /* Sombra más pronunciada y moderna */
             overflow: hidden;
-            /* Asegura que los bordes redondeados se apliquen bien */
+            border: none;
+            /* Quitamos el borde predeterminado */
+            animation: fadeInScale 0.3s ease-out forwards;
+            /* Animación de entrada */
+        }
+
+        /* Animación para que el modal aparezca suavemente */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         /* Ajusta el padding general dentro del cuerpo del modal para más "aire" */
@@ -2768,178 +2746,183 @@
         #sermonAuthModal .modal-header {
             border-bottom: 1px solid var(--border-color);
             padding: 1.5rem 2.5rem;
-            /* Ajusta el padding de la cabecera */
             background-color: var(--background-light);
             /* Fondo ligeramente diferente para la cabecera */
+            border-top-left-radius: 1rem;
+            /* Bordes redondeados en la cabecera */
+            border-top-right-radius: 1rem;
         }
 
         #sermonAuthModal .modal-title {
             color: var(--primary-dark-text);
-            /* Color más oscuro para el título */
             font-weight: 700;
-            /* Título más negrita */
+            font-size: 1.5rem;
+            /* Título más grande */
+        }
+
+        /* Botón de cerrar del modal - Visible en negro por defecto */
+        #sermonAuthModal .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #000000;
+            /* Negro */
+            opacity: 0.7;
+            /* Puedes ajustar la opacidad si lo deseas */
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            /* Añadimos transición para el transform */
+            padding: 0;
+            margin: -0.5rem -0.5rem 0 0;
+        }
+
+        #sermonAuthModal .btn-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+            /* Mantenemos el efecto de rotación al pasar el ratón */
+        }
+
+        #sermonAuthModal .btn-close:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.4);
         }
 
         /* Mejora el espaciado entre cada grupo de formulario (etiqueta + input/select/textarea) */
         #sermonAuthModal .form-group {
-            margin-bottom: 1.5rem;
-            /* Espacio consistente entre cada campo */
+            margin-bottom: 1.75rem;
+            /* Espacio consistente entre cada campo, un poco más */
         }
 
         /* Estilos para las etiquetas de los campos */
         #sermonAuthModal .form-group label {
             display: block;
-            /* Asegura que la etiqueta esté en su propia línea */
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.75rem;
             /* Espacio entre la etiqueta y el campo de entrada */
             font-weight: 600;
-            /* Hace la etiqueta más destacada */
             color: var(--text-color);
-            /* Usa el color de texto definido en tus variables CSS */
-            font-size: 0.95rem;
-            /* Tamaño de fuente ligeramente más pequeño para etiquetas */
+            font-size: 1rem;
+            /* Tamaño de fuente estándar para etiquetas */
         }
 
         /* Estilos generales para todos los campos de entrada (inputs, select, textarea) */
         #sermonAuthModal .form-control,
         #sermonAuthModal .form-select {
             width: 100%;
-            /* Asegura que ocupen todo el ancho disponible */
-            padding: 0.8rem 1rem;
+            padding: 0.9rem 1.1rem;
             /* Padding interno para una mejor altura y espacio del texto */
             border: 1px solid var(--border-color);
-            /* Un borde sutil para los campos */
-            border-radius: 0.3rem;
-            /* Bordes ligeramente redondeados */
+            border-radius: 0.5rem;
+            /* Bordes más redondeados */
             box-sizing: border-box;
-            /* Asegura que el padding y el borde no aumenten el ancho total */
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            /* Transición suave al enfocar */
             font-size: 1rem;
-            /* Tamaño de fuente estándar para campos */
             color: var(--text-color);
-            /* Color de texto en los campos */
+            background-color: #ffffff;
+            /* Fondo blanco para los inputs */
         }
 
         /* Estilos al enfocar los campos para una mejor interacción (dinámico) */
         #sermonAuthModal .form-control:focus,
         #sermonAuthModal .form-select:focus {
             border-color: var(--primary-color);
-            /* Cambia el color del borde al color principal */
             outline: 0;
-            /* Elimina el contorno predeterminado del navegador */
-            box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
-            /* Añade una sombra sutil de enfoque */
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.3);
+            /* Sombra de enfoque más suave */
         }
 
         /* Estilos para el texto de marcador de posición (placeholder) */
         #sermonAuthModal .form-control::placeholder {
-            color: #adb5bd;
-            /* Un gris claro para los placeholders */
+            color: #b0b0b0;
+            /* Un gris más claro para los placeholders */
             opacity: 1;
-            /* Asegura que sea visible en todos los navegadores */
         }
 
         /* Estilos para los títulos de sección (Contenido Clave, Detalles, Recursos) */
         #sermonAuthModal h5.text-primary-dark {
-            margin-top: 2rem;
-            /* Espacio superior para separar las secciones */
+            margin-top: 2.5rem;
+            /* Espacio superior para separar las secciones, un poco más */
             margin-bottom: 1.5rem;
-            /* Espacio inferior para el título de sección */
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             /* Tamaño de fuente para los títulos de sección */
             color: var(--primary-dark-text);
-            /* Color oscuro para los títulos */
             border-bottom: 1px solid rgba(var(--border-color, 222, 226, 230), 0.7);
-            /* Línea sutil como separador */
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.75rem;
             /* Espacio entre el título y la línea */
             font-weight: 700;
-            /* Títulos de sección más negrita */
         }
 
         /* Ajusta el margen superior del botón de enviar en los formularios */
         #sermonAuthModal .btn.w-100 {
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             /* Más espacio entre el último campo y el botón */
-            padding: 0.8rem 1.5rem;
+            padding: 0.9rem 1.5rem;
             /* Mayor padding para el botón */
             font-size: 1.1rem;
-            /* Tamaño de fuente para el botón */
             font-weight: 600;
-            /* Negrita para el botón */
-            border-radius: 0.5rem;
+            border-radius: 0.6rem;
             /* Bordes más redondeados para el botón */
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
             transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        #sermonAuthModal .btn.w-100:hover {
+            background-color: #3a7bd5;
+            /* Un tono más oscuro de azul al pasar el ratón */
+            border-color: #3a7bd5;
+            box-shadow: 0 0.2rem 0.5rem rgba(var(--primary-rgb), 0.4);
+            /* Sombra sutil al pasar el ratón */
         }
 
         /* Mejora la visibilidad del párrafo de descripción y el título en los contenedores de formularios */
         #sermonAuthModal #loginFormContainer p.text-muted-dark,
         #sermonAuthModal #uploadFormContainer h4 {
             margin-bottom: 2rem;
-            /* Aumenta el margen inferior para estos textos */
             color: var(--light-text-color);
-            /* Color para texto muted */
+            line-height: 1.6;
+            /* Mejora la legibilidad */
         }
 
         #sermonAuthModal #uploadFormContainer h4 {
             color: var(--primary-dark-text);
             font-weight: 700;
+            font-size: 1.7rem;
+            /* Título del formulario de subida más grande */
         }
-
 
         /* Asegura que los mensajes de alerta (éxito/error) se vean bien */
         #sermonAuthModal .alert {
             padding: 0.75rem 1.25rem;
             margin-top: 1.5rem;
-            /* Ajusta el margen superior de los mensajes de alerta */
             border: 1px solid transparent;
-            border-radius: 0.25rem;
+            border-radius: 0.5rem;
+            /* Bordes más redondeados para las alertas */
             text-align: center;
             font-size: 0.95rem;
-            /* Un poco más pequeño si lo prefieres */
             font-weight: 500;
-            /* Ligeramente más negrita */
         }
 
         /* Colores específicos para alertas de éxito y error */
         #sermonAuthModal #loginMessage.alert-success,
         #sermonAuthModal #uploadMessage.alert-success {
-            color: #0f5132;
-            background-color: #d1e7dd;
-            border-color: #badbcc;
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
         }
 
         #sermonAuthModal #loginMessage.alert-danger,
         #sermonAuthModal #uploadMessage.alert-danger {
-            color: #842029;
+            color: #721c24;
             background-color: #f8d7da;
-            border-color: #f5c2c7;
+            border-color: #f5c6cb;
         }
 
         /* Estilos para el texto pequeño de ayuda */
         #sermonAuthModal .form-text {
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             /* Hace el texto de ayuda más sutil */
             color: var(--light-text-color);
-            /* Color más claro */
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
             /* Ajuste pequeño del margen superior */
-        }
-
-        /* Estilos para los campos de radio (URL de Imagen / Cargar Imagen) */
-        #sermonAuthModal .form-check-inline {
-            margin-right: 1.5rem;
-            /* Espacio entre las opciones de radio */
-        }
-
-        #sermonAuthModal .form-check-label {
-            margin-bottom: 0;
-            /* Elimina margen inferior extra para etiquetas de radio/checkbox */
-            font-weight: normal;
-            /* Asegura que no sea negrita como otras etiquetas */
-            cursor: pointer;
-            /* Indica que es clickeable */
         }
 
         /* Estilo para los botones dentro de input-group (para los iconos de Font Awesome) */
@@ -2947,24 +2930,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem 0.75rem;
+            padding: 0.6rem 0.9rem;
             /* Padding para los botones de + y - */
-            border-radius: 0 0.3rem 0.3rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
             /* Bordes redondeados solo a la derecha */
+            font-size: 0.9rem;
         }
 
         .input-group .btn-outline-secondary {
             border-color: var(--border-color);
-            /* Asegura el color del borde */
             color: var(--secondary-color);
-            /* Color del icono */
         }
 
         .input-group .btn-outline-danger {
             border-color: #dc3545;
-            /* Color del borde de botón de peligro */
             color: #dc3545;
-            /* Color del icono de peligro */
         }
 
         /* --- RESPONSIVIDAD --- */
@@ -2973,59 +2953,62 @@
         @media (max-width: 576px) {
             #sermonAuthModal .modal-dialog {
                 margin: 0;
-                /* Elimina el margen lateral del modal para que ocupe todo el ancho */
                 max-width: 100vw;
-                /* Asegura que ocupe todo el ancho del viewport */
                 height: 100vh;
-                /* Ocupa toda la altura del viewport */
             }
 
             #sermonAuthModal .modal-content {
                 height: 100%;
-                /* El contenido del modal ocupa toda la altura */
                 border-radius: 0;
-                /* Elimina los bordes redondeados para un aspecto de pantalla completa */
                 box-shadow: none;
-                /* Elimina la sombra */
             }
 
             #sermonAuthModal .modal-body {
                 padding: 1.5rem;
-                /* Reduce el padding del cuerpo del modal en pantallas muy pequeñas */
                 overflow-y: auto;
-                /* Permite desplazamiento si el contenido es muy largo */
             }
 
             #sermonAuthModal .modal-header {
                 padding: 1rem 1.5rem;
-                /* Reduce el padding de la cabecera */
+                border-radius: 0;
+                /* Elimina redondeo en cabecera para pantalla completa */
             }
 
             #sermonAuthModal h4.text-center,
             #sermonAuthModal p.text-muted-dark {
                 margin-bottom: 1.5rem !important;
-                /* Ajusta el margen inferior */
             }
 
             #sermonAuthModal h5.text-primary-dark {
                 margin-top: 1.5rem;
-                /* Reduce el margen superior de los títulos de sección */
                 margin-bottom: 1rem;
-                /* Reduce el margen inferior de los títulos de sección */
+                font-size: 1.2rem;
+                /* Reduce el tamaño de los títulos de sección */
             }
 
             #sermonAuthModal .btn.w-100 {
                 margin-top: 1.5rem;
-                /* Ajusta el margen del botón */
                 font-size: 1rem;
-                /* Ajusta el tamaño de fuente del botón */
+                padding: 0.8rem 1.2rem;
+            }
+
+            #sermonAuthModal .form-group label {
+                font-size: 0.95rem;
+                /* Ajusta el tamaño de la etiqueta */
+                margin-bottom: 0.5rem;
+            }
+
+            #sermonAuthModal .form-control,
+            #sermonAuthModal .form-select {
+                padding: 0.75rem 1rem;
+                /* Reduce el padding de los inputs */
             }
         }
 
         /* Media query para asegurar un buen espaciado en pantallas de tabletas y más grandes */
         @media (min-width: 768px) {
             #sermonAuthModal .modal-dialog {
-                max-width: 600px;
+                max-width: 650px;
                 /* Un poco más de ancho en tabletas */
             }
         }
@@ -3033,7 +3016,7 @@
         /* Media query para pantallas muy grandes, manteniendo el modal en un tamaño razonable */
         @media (min-width: 1200px) {
             #sermonAuthModal .modal-dialog {
-                max-width: 700px;
+                max-width: 750px;
                 /* Ancho máximo en monitores grandes para legibilidad */
             }
         }
@@ -3052,9 +3035,15 @@
                 </div>
                 <div class="modal-body">
                     <img id="sermonModalImage" src="" alt="Imagen Predicación" class="img-fluid rounded mb-3">
-                    <h4 id="sermonModalTitle"></h4>
+                    <h2 id="sermonModalTitle"></h2>
                     <p class="text-muted" id="sermonModalMeta"></p>
+                    <p><strong>Fecha:</strong> <span id="sermonModalDate"></span></p>
+                    <p><strong>Predicador:</strong> <span id="sermonModalPreacher"></span></p>
                     <p><strong>Área:</strong> <span id="sermonModalArea"></span></p>
+                    <p id="sermonModalKeyVerses" class="mb-3">
+                        <strong>Versículos Clave:</strong>
+                    <ul id="sermonModalKeyVerseList" class="mb-0"></ul>
+                    </p>
                     <p><strong>Objetivo:</strong> <span id="sermonModalObjetivo"></span></p>
                     <hr>
                     <p id="sermonModalDescription1"></p>
@@ -3062,12 +3051,13 @@
                     <p id="sermonModalDescription3"></p>
                     <p><strong>Conclusión:</strong> <span id="sermonModalConclusion"></span></p>
                     <p><strong>Audiencia Objetivo:</strong> <span id="sermonModalAudience"></span></p>
-                    <div class="ratio ratio-12x5 mt-2">
+                    <div class="ratio ratio-16x9 mt-3" style="display: none;">
                         <iframe id="sermonModalVideo" src="" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <a id="sermonModalFileDownload" href="#" class="btn btn-outline-primary w-100 mt-3" target="_blank" download style="display:none;">
+                    <a id="sermonModalFileDownload" href="#" class="btn btn-outline-primary w-100 mt-3" target="_blank"
+                        download style="display:none;">
                         <i class="fas fa-download"></i> Descargar Archivo de la Predicación
-                      </a>                      
+                    </a>
                 </div>
             </div>
         </div>
@@ -3093,6 +3083,34 @@
             el.style.animationDelay = `${index * 0.2}s`;
             el.classList.add("animate-fade");
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const keyVerseInputs = document.getElementById('keyVerseInputs');
+            const addKeyVerseBtn = document.getElementById('addKeyVerseBtn');
+
+            addKeyVerseBtn.addEventListener('click', () => {
+                const newInputGroup = document.createElement('div');
+                newInputGroup.className = 'input-group mb-3';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'keyVerse[]';
+                input.className = 'form-control';
+                input.placeholder = 'Ej: Juan 3:16';
+                input.required = true;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-outline-danger';
+                removeBtn.type = 'button';
+                removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                removeBtn.onclick = () => newInputGroup.remove();
+
+                newInputGroup.appendChild(input);
+                newInputGroup.appendChild(removeBtn);
+                keyVerseInputs.appendChild(newInputGroup);
+            });
+        });
+
 
         const animateCounter = (el) => {
             const target = +el.getAttribute("data-target");
@@ -3277,6 +3295,18 @@
                 links: [
                     { text: "Inscripción", url: "#", type: "primary" }
                 ]
+            },
+            {
+                id: "retiroJovenes",
+                name: "Retiro de Alabanza: Conectados",
+                photo: "https://picsum.photos/id/115/800/500",
+                date: "2025-12-30",
+                endDate: "2025-12-31",
+                location: "Campamento Cristiano 'La Esperanza'",
+                description: "Un fin de semana lleno de actividades, enseñanzas dinámicas y momentos de adoración para nuestros jóvenes. 'Conectados' es un tiempo para fortalecer su relación con Dios y con otros jóvenes. ¡Inscríbete ya, los cupos son limitados!",
+                links: [
+                    { text: "Inscripción", url: "#", type: "primary" }
+                ]
             }
         ].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort events by date
 
@@ -3284,11 +3314,12 @@
             {
                 id: "sermon1",
                 title: "El Poder del Perdón",
-                preacher: "Pastor Juan Pérez",
+                preacher: "Joel Pineda",
                 date: "2025-05-15",
                 area: "Gracia",
-                imageUrl: "https://picsum.photos/seed/sermon1/400/220",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                imageUrl: "https://archivo.prensa-latina.cu/wp-content/uploads/2023/04/Real-Madrid.jpg",
+                link: "https://www.youtube.com/embed/vjrgrvr3B4c",
+                keyVerse: ["Juan 3:16", "Mateo 5:9"],
                 objetivo: "Guiar a la congregación a experimentar la libertad que trae el perdón genuino.",
                 description1: "Este mensaje aborda la importancia del perdón desde una perspectiva bíblica, destacando cómo Jesús enseñó a perdonar incluso en circunstancias difíciles.",
                 description2: "Se exploran ejemplos de perdón en las Escrituras y cómo aplicarlos en la vida diaria para sanar relaciones rotas y fortalecer nuestra fe.",
@@ -3816,15 +3847,15 @@
 
                     // "Smart" search: checks title, preacher, description, area
                     const matchesSearch = !searchTerm ||
-                    sermon.title?.toLowerCase().includes(searchTerm) ||
-                    sermon.preacher?.toLowerCase().includes(searchTerm) ||
-                    sermon.area?.toLowerCase().includes(searchTerm) ||
-                    sermon.description1?.toLowerCase().includes(searchTerm) ||
-                    sermon.description2?.toLowerCase().includes(searchTerm) ||
-                    sermon.description3?.toLowerCase().includes(searchTerm) ||
-                    sermon.objetivo?.toLowerCase().includes(searchTerm) ||
-                    sermon.finalConclusion?.toLowerCase().includes(searchTerm) ||
-                    sermon.targetAudience?.toLowerCase().includes(searchTerm);
+                        sermon.title?.toLowerCase().includes(searchTerm) ||
+                        sermon.preacher?.toLowerCase().includes(searchTerm) ||
+                        sermon.area?.toLowerCase().includes(searchTerm) ||
+                        sermon.description1?.toLowerCase().includes(searchTerm) ||
+                        sermon.description2?.toLowerCase().includes(searchTerm) ||
+                        sermon.description3?.toLowerCase().includes(searchTerm) ||
+                        sermon.objetivo?.toLowerCase().includes(searchTerm) ||
+                        sermon.finalConclusion?.toLowerCase().includes(searchTerm) ||
+                        sermon.targetAudience?.toLowerCase().includes(searchTerm);
 
                     return matchesYear && matchesMonth && matchesArea && matchesSearch;
                 });
@@ -4004,7 +4035,7 @@
                             uploadFormContainer.style.display = 'block';
                             // Optional: Pre-fill preacher field if user is a known preacher
                             if (username === 'admin' || username === 'editor') {
-                                uploadSermonForm.sermonPreacher.value = (username === 'admin') ? 'Pastor Juan Pérez' : 'Pastora María Gómez';
+                                uploadSermonForm.sermonPreacher.value = (username === 'admin') ? '' : '';
                             }
                             uploadMessage.style.display = 'none'; // Ensure upload message is hidden
                         }, 1000); // Simulate login delay
@@ -4292,37 +4323,63 @@
         }
 
         function showSermonModal(sermon) {
-  document.getElementById('sermonModalTitle').textContent = sermon.title;
-  document.getElementById('sermonModalMeta').textContent = `${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | ${sermon.preacher}`;
-  document.getElementById('sermonModalArea').textContent = sermon.area;
-  document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
-  document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
-  document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
-  document.getElementById('sermonModalDescription3').textContent = sermon.description3 || '';
-  document.getElementById('sermonModalConclusion').textContent = sermon.finalConclusion || '';
-  document.getElementById('sermonModalAudience').textContent = sermon.targetAudience || '';
-  document.getElementById('sermonModalImage').src = sermon.imageUrl || '';
-  document.getElementById('sermonModalVideo').src = sermon.link || '';
+            document.getElementById('sermonModalTitle').textContent = sermon.title || 'Sin título';
+            document.getElementById('sermonModalDate').textContent = new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('sermonModalPreacher').textContent = sermon.preacher || 'Desconocido';
+            document.getElementById('sermonModalArea').textContent = sermon.area || 'No definida';
+            document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
+            document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
+            document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
+            document.getElementById('sermonModalDescription3').textContent = sermon.description3 || '';
+            document.getElementById('sermonModalConclusion').textContent = sermon.finalConclusion || '';
+            document.getElementById('sermonModalAudience').textContent = sermon.targetAudience || '';
+            document.getElementById('sermonModalImage').src = sermon.imageUrl || '';
 
-  // 👉 Aquí va el manejo del botón de descarga
-  const downloadBtn = document.getElementById('sermonModalFileDownload');
-  if (sermon.archivoUrl) {
-    downloadBtn.style.display = 'block';
-    downloadBtn.href = sermon.archivoUrl;
-  } else {
-    downloadBtn.style.display = 'none';
-  }
+            // ✅ Versículos clave correctamente
+            const keyVerseList = document.getElementById('sermonModalKeyVerseList');
+            const keyVerseSection = document.getElementById('sermonModalKeyVerses');
+            keyVerseList.innerHTML = '';
 
-  const modal = new bootstrap.Modal(document.getElementById('sermonModal'));
-  modal.show();
-}
+            if (sermon.keyVerse && sermon.keyVerse.length > 0) {
+                sermon.keyVerse.forEach(verse => {
+                    const li = document.createElement('li');
+                    li.textContent = verse;
+                    keyVerseList.appendChild(li);
+                });
+                keyVerseSection.style.display = 'block';
+            } else {
+                keyVerseSection.style.display = 'none';
+            }
 
+            // ✅ Video embebido
+            const videoIframe = document.getElementById('sermonModalVideo');
+            const videoContainer = videoIframe.parentElement;
+
+            if (sermon.link) {
+                videoIframe.src = sermon.link;
+                videoContainer.style.display = 'block';
+            } else {
+                videoIframe.src = '';
+                videoContainer.style.display = 'none';
+            }
+
+            // ✅ Descargar archivo
+            const downloadBtn = document.getElementById('sermonModalFileDownload');
+            if (sermon.archivoUrl) {
+                downloadBtn.style.display = 'block';
+                downloadBtn.href = sermon.archivoUrl;
+            } else {
+                downloadBtn.style.display = 'none';
+            }
+
+            // ✅ Mostrar modal
+            const modal = new bootstrap.Modal(document.getElementById('sermonModal'));
+            modal.show();
+        }
 
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 
