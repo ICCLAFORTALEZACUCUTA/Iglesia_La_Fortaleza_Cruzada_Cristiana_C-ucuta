@@ -4728,36 +4728,37 @@
                 });
             }
 
-
-            // --- Predicaciones Filtering and Display Logic ---
-            const sermonsContainer = document.getElementById('sermonsContainer');
-            const filterYear = document.getElementById('filterYear');
-            const filterMonth = document.getElementById('filterMonth');
-            const filterArea = document.getElementById('filterArea');
-            const searchSermon = document.getElementById('searchSermon');
-            const resetFiltersBtn = document.getElementById('resetFilters');
+            async function fetchSermonsFromBackend() {
+                try {
+                    const response = await fetch("https://script.google.com/macros/s/AKfycbyZGpYqCc4oI7f37W6neSxSqfD6RPQ9nGpB4Cbd2cywOJUDLtvO6xUpdcN-DNFSCGJP/exec");
+                    const data = await response.json();
+                    sermonsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    populateFilterOptions();
+                    renderSermons(sermonsData);
+                } catch (error) {
+                    console.error("Error al cargar predicaciones:", error);
+                }
+            }
 
             function populateFilterOptions() {
                 const years = new Set();
-                const preachers = new Set();
                 const areas = new Set();
 
                 sermonsData.forEach(sermon => {
-                    years.add(new Date(sermon.date).getFullYear());
-                    preachers.add(sermon.preacher);
-                    areas.add(sermon.area);
+                    if (sermon.date) years.add(new Date(sermon.date).getFullYear());
+                    if (sermon.area) areas.add(sermon.area);
                 });
 
-                // Populate Years
+                // AÑO
                 filterYear.innerHTML = '<option value="">Año</option>';
-                Array.from(years).sort().forEach(year => {
+                Array.from(years).sort((a, b) => b - a).forEach(year => {
                     const option = document.createElement('option');
                     option.value = year;
                     option.textContent = year;
                     filterYear.appendChild(option);
                 });
 
-                // Populate Areas
+                // ÁREA
                 filterArea.innerHTML = '<option value="">Área</option>';
                 Array.from(areas).sort().forEach(area => {
                     const option = document.createElement('option');
@@ -4767,63 +4768,32 @@
                 });
             }
 
-
-
-            function renderSermons(filteredSermons) {
-                sermonsContainer.innerHTML = '';
-                if (filteredSermons.length === 0) {
-                    sermonsContainer.innerHTML = '<p class="text-muted-dark text-center">No se encontraron predicaciones con los filtros seleccionados.</p>';
-                    return;
-                }
-
-                filteredSermons.forEach(sermon => {
-                    const sermonCard = document.createElement('div');
-
-                    sermonCard.innerHTML = `
-                    <div class="card h-100 shadow sermon-card">
-                        <img src="${sermon.imageUrl || 'https://picsum.photos/seed/' + sermon.id + '/400/220'}" class="card-img-top" alt="${sermon.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">${sermon.title}</h5>
-                            <p class="card-text text-muted">
-                                <i class="fas fa-calendar-alt"></i> ${new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} | 
-                                <i class="fas fa-user"></i> ${sermon.preacher}
-                            </p>
-                            <p class="card-text"><i class="fas fa-tag"></i> ${sermon.area}</p>
-                            <p class="card-text"><strong>Objetivo:</strong> ${sermon.objetivo}</p>
-                            <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
-                        </div>
-                    </div>
-                    `;
-                    sermonsContainer.appendChild(sermonCard);
-                });
-            }
-
             function applySermonFilters() {
                 const selectedYear = filterYear.value;
-                const selectedMonth = filterMonth.value; // 1-12
+                const selectedMonth = filterMonth.value;
                 const selectedArea = filterArea.value;
                 const searchTerm = searchSermon.value.toLowerCase();
 
                 const filtered = sermonsData.filter(sermon => {
-                    const sermonDate = new Date(sermon.date);
-                    const sermonYear = sermonDate.getFullYear().toString();
-                    const sermonMonth = (sermonDate.getMonth() + 1).toString(); // 1-indexed month
+                    const date = new Date(sermon.date);
+                    const year = date.getFullYear().toString();
+                    const month = (date.getMonth() + 1).toString();
 
-                    const matchesYear = !selectedYear || sermonYear === selectedYear;
-                    const matchesMonth = !selectedMonth || sermonMonth === selectedMonth;
+                    const matchesYear = !selectedYear || year === selectedYear;
+                    const matchesMonth = !selectedMonth || month === selectedMonth;
                     const matchesArea = !selectedArea || sermon.area === selectedArea;
 
-                    // "Smart" search: checks title, preacher, description, area
-                    const matchesSearch = !searchTerm ||
-                        sermon.title?.toLowerCase().includes(searchTerm) ||
-                        sermon.preacher?.toLowerCase().includes(searchTerm) ||
-                        sermon.area?.toLowerCase().includes(searchTerm) ||
-                        sermon.description1?.toLowerCase().includes(searchTerm) ||
-                        sermon.description2?.toLowerCase().includes(searchTerm) ||
-                        sermon.description3?.toLowerCase().includes(searchTerm) ||
-                        sermon.objetivo?.toLowerCase().includes(searchTerm) ||
-                        sermon.finalConclusion?.toLowerCase().includes(searchTerm) ||
-                        sermon.targetAudience?.toLowerCase().includes(searchTerm);
+                    const matchesSearch = !searchTerm || [
+                        sermon.title,
+                        sermon.preacher,
+                        sermon.area,
+                        sermon.description1,
+                        sermon.description2,
+                        sermon.description3,
+                        sermon.objetivo,
+                        sermon.finalConclusion,
+                        sermon.targetAudience
+                    ].some(field => field?.toLowerCase().includes(searchTerm));
 
                     return matchesYear && matchesMonth && matchesArea && matchesSearch;
                 });
@@ -4831,7 +4801,35 @@
                 renderSermons(filtered);
             }
 
-            // Attach listeners to filters
+            function renderSermons(filteredSermons) {
+                sermonsContainer.innerHTML = '';
+                if (filteredSermons.length === 0) {
+                    sermonsContainer.innerHTML = '<p class="text-muted text-center">No se encontraron predicaciones.</p>';
+                    return;
+                }
+
+                filteredSermons.forEach(sermon => {
+                    const card = document.createElement('div');
+                    card.classList.add("col-md-6", "col-lg-4", "mb-4");
+
+                    card.innerHTML = `
+        <div class="card h-100 shadow sermon-card">
+            <img src="${sermon.imageUrl || 'https://via.placeholder.com/400x220?text=Predicacion'}" class="card-img-top" alt="${sermon.title}">
+            <div class="card-body">
+                <h5 class="card-title">${sermon.title}</h5>
+                <p class="card-text text-muted">
+                    <i class="fas fa-calendar-alt"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}<br>
+                    <i class="fas fa-user"></i> ${sermon.preacher}
+                </p>
+                <p class="card-text"><strong>Área:</strong> ${sermon.area}</p>
+                <p class="card-text"><strong>Objetivo:</strong> ${sermon.objetivo || ''}</p>
+                <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
+            </div>
+        </div>`;
+                    sermonsContainer.appendChild(card);
+                });
+            }
+
             filterYear.addEventListener('change', applySermonFilters);
             filterMonth.addEventListener('change', applySermonFilters);
             filterArea.addEventListener('change', applySermonFilters);
@@ -4844,9 +4842,10 @@
                 applySermonFilters();
             });
 
-            // Initial render and populate filters
-            populateFilterOptions();
-            renderSermons(sermonsData);
+
+
+
+
 
             // --- Event Creation Login/Form Logic ---
             const addEventBtn = document.getElementById('addEventBtn'); // Ya existe
@@ -5370,17 +5369,8 @@
             }
         });
 
-        async function fetchSermonsFromBackend() {
-            try {
-                const response = await fetch("https://script.google.com/macros/s/AKfycbyZGpYqCc4oI7f37W6neSxSqfD6RPQ9nGpB4Cbd2cywOJUDLtvO6xUpdcN-DNFSCGJP/exec");
-                const data = await response.json();
-                sermonsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-                populateFilterOptions();
-                renderSermons(sermonsData);
-            } catch (error) {
-                console.error("Error al cargar predicaciones:", error);
-            }
-        }
+        fetchSermonsFromBackend();
+
 
     </script>
 
