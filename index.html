@@ -1190,38 +1190,6 @@
             font-weight: bold;
         }
 
-
-        /* Creencias Section Specifics */
-        #creencias .belief-list {
-            list-style: none;
-            padding-left: 0;
-            text-align: left;
-            /* Align text within the list */
-        }
-
-        #creencias .belief-list li {
-            margin-bottom: 2rem;
-            /* More space between belief points */
-            padding-left: 0;
-            /* Remove default list padding */
-        }
-
-        #creencias .belief-list li h4 {
-            margin-bottom: 0.5rem;
-            position: relative;
-            padding-left: 30px;
-            /* Space for a custom bullet */
-            color: var(--primary-color);
-            /* Ensure heading color is prominent */
-        }
-
-        #creencias .belief-list li p {
-            margin-bottom: 0;
-            /* No extra margin for paragraphs within list items */
-            color: var(--text-muted-dark);
-        }
-
-
         /* Full Calendar Modal Specifics */
         .calendar-nav {
             display: flex;
@@ -2173,116 +2141,1146 @@
             </div>
         </section>
 
-        <section id="creencias" class="section">
-            <div class="container">
-                <h2>Nuestras Creencias Fundamentales</h2>
-                <p class="text-muted-dark mb-5">Explora los pilares de nuestra fe y los principios que guían nuestra
-                    vida.</p>
+        <section id="creencias" class="section py-5 position-relative overflow-hidden">
+            <div class="container position-relative z-index-1">
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Nuestras Creencias
+                    Fundamentales</h2>
+                <p class="section-subtitle text-center mb-5 animate__animated animate__fadeInUp animate__delay-0-2s">
+                    Explora los pilares de nuestra fe y los principios que guían nuestra vida.
+                </p>
 
-                <div class="glass-card mb-4 text-left">
-                    <h3 class="text-dark">Artículos de Fe</h3>
-                    <p class="text-muted-dark">Nuestra iglesia se adhiere a los siguientes principios bíblicos que
-                        consideramos fundamentales para la fe cristiana. Estos artículos representan las verdades
-                        centrales que sostenemos y que guían nuestra doctrina y nuestra práctica como iglesia:</p>
-                    <ul class="belief-list">
-                        <li>
-                            <h4 class="text-primary-dark">La Inspiración Divina de la Biblia:</h4>
-                            <p class="text-muted-dark">Creemos que la Biblia, compuesta por el Antiguo y Nuevo
+                <div class="belief-grid">
+                    <div class="glass-card intro-card animate__animated animate__fadeInUp animate__delay-0-4s">
+                        <i class="fas fa-cross belief-icon-intro"></i>
+                        <h3 class="card-title">Artículos de Fe</h3>
+                        <p class="card-text">Nuestra iglesia se adhiere a los siguientes principios bíblicos que
+                            consideramos fundamentales para la fe cristiana. Estos artículos representan las verdades
+                            centrales que sostenemos y que guían nuestra doctrina y nuestra práctica como iglesia:</p>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-0-5s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-book-bible belief-icon"></i>
+                                <h4 class="belief-title">La Inspiración Divina de la Biblia</h4>
+                            </div>
+                            <p class="belief-description">Creemos que la Biblia, compuesta por el Antiguo y Nuevo
                                 Testamento, es la Palabra de Dios inspirada verbalmente y plenamente, infalible en sus
                                 manuscritos originales, y es la autoridad suprema y final en todo asunto de fe y
                                 conducta. Es la revelación escrita de Dios para la humanidad.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Naturaleza de Dios (La Trinidad):</h4>
-                            <p class="text-muted-dark">Creemos en un solo Dios verdadero y vivo, infinito, eterno y
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Timoteo 3:16-17
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Timoteo%203:16-17&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Pedro 1:20-21
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Pedro%201:20-21&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Juan 17:17
+                                    <a href="https://www.biblegateway.com/passage/?search=Juan%2017:17&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-0-6s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-church belief-icon"></i>
+                                <h4 class="belief-title">La Naturaleza de Dios (La Trinidad)</h4>
+                            </div>
+                            <p class="belief-description">Creemos en un solo Dios verdadero y vivo, infinito, eterno y
                                 perfecto en santidad, sabiduría, poder y amor. Él es el Creador y Sustentador de todas
                                 las cosas. Este único Dios existe eternamente en tres personas co-iguales: Padre, Hijo
                                 (Jesucristo) y Espíritu Santo. Son un solo Dios, pero distintas personas.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">Jesucristo: Dios con Nosotros (Emanuel):</h4>
-                            <p class="text-muted-dark">Creemos en la deidad absoluta de nuestro Señor Jesucristo, en su
-                                nacimiento virginal, en su vida sin pecado, en sus milagros divinos, en su muerte
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Deuteronomio 6:4
+                                    <a href="https://www.biblegateway.com/passage/?search=Deuteronomio%206:4&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 28:19
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%2028:19&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Corintios 13:14
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Corintios%2013:14&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Génesis 1:26
+                                    <a href="https://www.biblegateway.com/passage/?search=G%C3%A9nesis%201:26&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-0-7s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-cross belief-icon"></i>
+                                <h4 class="belief-title">Jesucristo: Dios con Nosotros (Emanuel)</h4>
+                            </div>
+                            <p class="belief-description">Creemos en la deidad absoluta de nuestro Señor Jesucristo, en
+                                su nacimiento virginal, en su vida sin pecado, en sus milagros divinos, en su muerte
                                 sustitutoria y expiatoria en la cruz por nuestros pecados, en su resurrección corporal
                                 de entre los muertos, en su ascensión a la diestra del Padre, donde intercede por
                                 nosotros, y en su regreso personal y visible en poder y gloria.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Creación del Hombre y el Pecado:</h4>
-                            <p class="text-muted-dark">Creemos que el hombre fue creado directamente por Dios a su
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Juan 1:1-3, 14
+                                    <a href="https://www.biblegateway.com/passage/?search=Juan%201:1-3,14&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Isaías 7:14; Mateo 1:23
+                                    <a href="https://www.biblegateway.com/passage/?search=Isa%C3%ADas%207:14;Mateo%201:23&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 5:8
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%205:8&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 1:11
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%201:11&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-0-8s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-user-injured belief-icon"></i>
+                                <h4 class="belief-title">La Creación del Hombre y el Pecado</h4>
+                            </div>
+                            <p class="belief-description">Creemos que el hombre fue creado directamente por Dios a su
                                 imagen y semejanza, en un estado de inocencia, pero por la desobediencia de Adán, toda
                                 la humanidad cayó en pecado. Como resultado, todos los seres humanos nacen con una
                                 naturaleza pecaminosa, están separados de Dios y son incapaces, por sí mismos, de
                                 alcanzar la salvación. El pecado es una transgresión de la ley de Dios y trae consigo la
                                 muerte espiritual y física.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Gracia de Dios y la Salvación:</h4>
-                            <p class="text-muted-dark">Creemos que la salvación del hombre es un regalo de Dios,
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Génesis 1:27; 3:6-7
+                                    <a href="https://www.biblegateway.com/passage/?search=G%C3%A9nesis%201:27;3:6-7&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 3:23; 5:12
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%203:23;5:12&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Isaías 59:2
+                                    <a href="https://www.biblegateway.com/passage/?search=Isa%C3%ADas%2059:2&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-0-9s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-hand-holding-heart belief-icon"></i>
+                                <h4 class="belief-title">La Gracia de Dios y la Salvación</h4>
+                            </div>
+                            <p class="belief-description">Creemos que la salvación del hombre es un regalo de Dios,
                                 obtenida solo por gracia a través de la fe en Jesucristo. La redención se logra a través
                                 del derramamiento de la sangre de Jesucristo en la cruz, quien murió por nuestros
                                 pecados, fue sepultado y resucitó al tercer día conforme a las Escrituras. Creemos que
                                 el arrepentimiento del pecado y la fe en Cristo son las únicas condiciones para la
                                 salvación. El que cree en Jesús tiene vida eterna.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">El Bautismo en Agua:</h4>
-                            <p class="text-muted-dark">Creemos en el bautismo en agua por inmersión total para aquellos
-                                que han creído en Jesucristo y se han arrepentido de sus pecados. Es un acto público de
-                                obediencia, un símbolo de la muerte, sepultura y resurrección con Cristo, y una
-                                declaración de fe en Su obra redentora.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Cena del Señor:</h4>
-                            <p class="text-muted-dark">Creemos en la celebración de la Cena del Señor (Comunión) como un
-                                mandato de Jesucristo para sus seguidores. Es una conmemoración de Su sacrificio en la
-                                cruz y Su sangre derramada, así como una anticipación de Su segunda venida. Participar
-                                de ella es un privilegio para los creyentes bautizados.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">El Bautismo en el Espíritu Santo:</h4>
-                            <p class="text-muted-dark">Creemos en el bautismo en el Espíritu Santo como una experiencia
-                                subsiguiente a la salvación para aquellos que creen, con la evidencia inicial de hablar
-                                en otras lenguas según el Espíritu les da que hablen. Esta experiencia empodera a los
-                                creyentes para testificar y servir, y les permite vivir una vida más profunda y efectiva
-                                en Cristo.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Sanidad Divina:</h4>
-                            <p class="text-muted-dark">Creemos en la sanidad divina, la cual es provista para los
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Efesios 2:8-9
+                                    <a href="https://www.biblegateway.com/passage/?search=Efesios%202:8-9&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 10:9-10
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%2010:9-10&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Juan 3:16
+                                    <a href="https://www.biblegateway.com/passage/?search=Juan%203:16&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 4:12
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%204:12&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-0s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-bath belief-icon"></i>
+                                <h4 class="belief-title">El Bautismo en Agua</h4>
+                            </div>
+                            <p class="belief-description">Creemos en el bautismo en agua por inmersión total para
+                                aquellos que han creído en Jesucristo y se han arrepentido de sus pecados. Es un acto
+                                público de obediencia, un símbolo de la muerte, sepultura y resurrección con Cristo, y
+                                una declaración de fe en Su obra redentora.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 28:19
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%2028:19&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 6:3-4
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%206:3-4&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 2:38
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%202:38&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-1s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-bread-slice belief-icon"></i>
+                                <h4 class="belief-title">La Cena del Señor</h4>
+                            </div>
+                            <p class="belief-description">Creemos en la celebración de la Cena del Señor (Comunión) como
+                                un mandato de Jesucristo para sus seguidores. Es una conmemoración de Su sacrificio en
+                                la cruz y Su sangre derramada, así como una anticipación de Su segunda venida.
+                                Participar de ella es un privilegio para los creyentes bautizados.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 1 Corintios 11:23-26
+                                    <a href="https://www.biblegateway.com/passage/?search=1%20Corintios%2011:23-26&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Lucas 22:19-20
+                                    <a href="https://www.biblegateway.com/passage/?search=Lucas%2022:19-20&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-2s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-dove belief-icon"></i>
+                                <h4 class="belief-title">El Bautismo en el Espíritu Santo</h4>
+                            </div>
+                            <p class="belief-description">Creemos en el bautismo en el Espíritu Santo como una
+                                experiencia subsiguiente a la salvación para aquellos que creen, con la evidencia
+                                inicial de hablar en otras lenguas según el Espíritu les da que hablen. Esta experiencia
+                                empodera a los creyentes para testificar y servir, y les permite vivir una vida más
+                                profunda y efectiva en Cristo.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 1:8; 2:4
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%201:8;2:4&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Marcos 16:17
+                                    <a href="https://www.biblegateway.com/passage/?search=Marcos%2016:17&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Gálatas 5:22-23 (Fruto del Espíritu)
+                                    <a href="https://www.biblegateway.com/passage/?search=G%C3%A1latas%205:22-23&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-3s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-hand-holding-medical belief-icon"></i>
+                                <h4 class="belief-title">La Sanidad Divina</h4>
+                            </div>
+                            <p class="belief-description">Creemos en la sanidad divina, la cual es provista para los
                                 creyentes a través de la expiación de Jesucristo en la cruz. Dios todavía sana hoy, y
                                 oramos con fe por la sanidad de los enfermos, creyendo en Su poder para restaurar el
                                 cuerpo, el alma y el espíritu.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Segunda Venida de Cristo:</h4>
-                            <p class="text-muted-dark">Creemos en el regreso personal y visible de nuestro Señor
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Isaías 53:4-5
+                                    <a href="https://www.biblegateway.com/passage/?search=Isa%C3%ADas%2053:4-5&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Santiago 5:14-16
+                                    <a href="https://www.biblegateway.com/passage/?search=Santiago%205:14-16&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 8:16-17
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%208:16-17&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-4s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-cloud-sun belief-icon"></i>
+                                <h4 class="belief-title">La Segunda Venida de Cristo</h4>
+                            </div>
+                            <p class="belief-description">Creemos en el regreso personal y visible de nuestro Señor
                                 Jesucristo a la Tierra. Este evento glorioso marcará la consumación de la historia de la
                                 redención y el establecimiento de Su reino eterno.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">El Juicio Final y la Vida Eterna:</h4>
-                            <p class="text-muted-dark">Creemos en la resurrección de los salvos para vida eterna con
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Juan 14:1-3
+                                    <a href="https://www.biblegateway.com/passage/?search=Juan%2014:1-3&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 1:11
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%201:11&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Apocalipsis 1:7
+                                    <a href="https://www.biblegateway.com/passage/?search=Apocalipsis%201:7&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-5s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-gavel belief-icon"></i>
+                                <h4 class="belief-title">El Juicio Final y la Vida Eterna</h4>
+                            </div>
+                            <p class="belief-description">Creemos en la resurrección de los salvos para vida eterna con
                                 Dios en el cielo, y la resurrección de los no salvos para juicio eterno y castigo en el
                                 infierno. Creemos en un cielo nuevo y una tierra nueva donde morará la justicia.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">La Iglesia:</h4>
-                            <p class="text-muted-dark">Creemos en la iglesia como el cuerpo de Cristo, compuesta por
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Daniel 12:2
+                                    <a href="https://www.biblegateway.com/passage/?search=Daniel%2012:2&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 25:46
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%2025:46&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Apocalipsis 20:11-15; 21:1-4
+                                    <a href="https://www.biblegateway.com/passage/?search=Apocalipsis%2020:11-15;21:1-4&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-6s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-users belief-icon"></i>
+                                <h4 class="belief-title">La Iglesia</h4>
+                            </div>
+                            <p class="belief-description">Creemos en la iglesia como el cuerpo de Cristo, compuesta por
                                 todos los creyentes nacidos de nuevo a nivel universal. La iglesia local es una
                                 manifestación visible de este cuerpo, llamada a adorar a Dios, edificar a los creyentes,
                                 evangelizar al mundo y servir a su comunidad.</p>
-                        </li>
-                        <li>
-                            <h4 class="text-primary-dark">Mayordomía:</h4>
-                            <p class="text-muted-dark">Creemos que todo lo que tenemos y somos proviene de Dios, y por
-                                lo tanto, somos llamados a ser buenos mayordomos de nuestros recursos, tiempo, talentos
-                                y finanzas, honrando a Dios con nuestras primicias y ofrendas.</p>
-                        </li>
-                    </ul>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Efesios 1:22-23
+                                    <a href="https://www.biblegateway.com/passage/?search=Efesios%201:22-23&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Hechos 2:42-47
+                                    <a href="https://www.biblegateway.com/passage/?search=Hechos%202:42-47&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 16:18
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%2016:18&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-7s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-hand-holding-dollar belief-icon"></i>
+                                <h4 class="belief-title">Mayordomía</h4>
+                            </div>
+                            <p class="belief-description">Creemos que todo lo que tenemos y somos proviene de Dios, y
+                                por lo tanto, somos llamados a ser buenos mayordomos de nuestros recursos, tiempo,
+                                talentos y finanzas, honrando a Dios con nuestras primicias y ofrendas.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 1 Pedro 4:10
+                                    <a href="https://www.biblegateway.com/passage/?search=1%20Pedro%204:10&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Corintios 9:6-7
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Corintios%209:6-7&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Malaquías 3:10
+                                    <a href="https://www.biblegateway.com/passage/?search=Malaqu%C3%ADas%203:10&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-8s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-crown belief-icon"></i>
+                                <h4 class="belief-title">Los Nombres de Dios y Su Carácter</h4>
+                            </div>
+                            <p class="belief-description">Creemos que Dios se ha revelado a sí mismo a través de sus
+                                gloriosos nombres, los cuales describen Su carácter y atributos. Cada nombre revela una
+                                faceta de quién es Él y cómo interactúa con Su creación. Reconocemos:</p>
+                            <ul class="names-of-god-list">
+                                <li><i class="fas fa-hand-point-right"></i> HAMASHIAJ : El Dios autoexistente y eterno.
+                                </li>
+                                <li><i class="fas fa-hand-point-right"></i> Shaddai: Dios Todopoderoso.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Adonai: Señor y Maestro.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Jireh: El Señor Proveerá.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Rafa: El Señor que Sana.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Nisi: El Señor es mi Bandera.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Shalom: El Señor es Paz.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Raah: El Señor es mi Pastor.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Tsidkenu: El Señor nuestra Justicia.</li>
+                                <li><i class="fas fa-hand-point-right"></i> Sabaot: El Señor de los Ejércitos.</li>
+                            </ul>
+                            <p class="belief-description mt-3">Estos nombres nos enseñan sobre su soberanía, provisión,
+                                sanidad, protección, paz, guía, justicia y poder incomparable.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Éxodo 3:14 (YHWH)
+                                    <a href="https://www.biblegateway.com/passage/?search=Exodo%203:14&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Génesis 17:1 (El Shaddai)
+                                    <a href="https://www.biblegateway.com/passage/?search=G%C3%A9nesis%2017:1&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Salmo 23:1 (Jehová Raah)
+                                    <a href="https://www.biblegateway.com/passage/?search=Salmo%2023:1&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Filipenses 4:19 (Jehová Jireh en práctica)
+                                    <a href="https://www.biblegateway.com/passage/?search=Filipenses%204:19&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-1-9s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-globe-americas belief-icon"></i>
+                                <h4 class="belief-title">La Gran Comisión y el Discipulado</h4>
+                            </div>
+                            <p class="belief-description">Creemos en el mandato de Jesucristo de ir por todo el mundo y
+                                hacer discípulos a todas las naciones, bautizándolos y enseñándoles a guardar todo lo
+                                que Él ha mandado. Esto implica la evangelización activa, la enseñanza de la Palabra de
+                                Dios y la formación de creyentes maduros que a su vez puedan discipular a otros.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 28:19-20
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%2028:19-20&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Marcos 16:15
+                                    <a href="https://www.biblegateway.com/passage/?search=Marcos%2016:15&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Timoteo 2:2
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Timoteo%202:2&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-2-0s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-hands-praying belief-icon"></i>
+                                <h4 class="belief-title">El Reino de Dios</h4>
+                            </div>
+                            <p class="belief-description">Creemos que el Reino de Dios es el gobierno soberano de Dios,
+                                que ya está presente en la Tierra a través de la obra de Jesucristo y el Espíritu Santo,
+                                y que se manifestará plenamente en Su segunda venida. Buscamos vivir bajo la autoridad
+                                de Su Reino en todas las áreas de nuestras vidas, promoviendo la justicia, la paz y el
+                                gozo en el Espíritu Santo.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Mateo 6:33
+                                    <a href="https://www.biblegateway.com/passage/?search=Mateo%206:33&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 14:17
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%2014:17&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Lucas 17:20-21
+                                    <a href="https://www.biblegateway.com/passage/?search=Lucas%2017:20-21&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Apocalipsis 11:15
+                                    <a href="https://www.biblegateway.com/passage/?search=Apocalipsis%2011:15&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="belief-item animate__animated animate__fadeInUp animate__delay-2-1s">
+                        <div class="glass-card belief-card">
+                            <div class="belief-header">
+                                <i class="fas fa-seedling belief-icon"></i>
+                                <h4 class="belief-title">El Crecimiento Espiritual y la Santificación</h4>
+                            </div>
+                            <p class="belief-description">Creemos que después de la salvación, Dios llama a los
+                                creyentes a un proceso continuo de crecimiento espiritual y santificación, donde somos
+                                transformados a la imagen de Cristo por el poder del Espíritu Santo. Esto implica una
+                                vida de obediencia a la Palabra de Dios, la oración, la comunión con otros creyentes y
+                                la práctica de las disciplinas espirituales.</p>
+                            <ul class="bible-verses">
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 2 Pedro 3:18
+                                    <a href="https://www.biblegateway.com/passage/?search=2%20Pedro%203:18&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Filipenses 1:6
+                                    <a href="https://www.biblegateway.com/passage/?search=Filipenses%201:6&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> Romanos 12:1-2
+                                    <a href="https://www.biblegateway.com/passage/?search=Romanos%2012:1-2&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-quote-left"></i> 1 Tesalonicenses 4:3-7
+                                    <a href="https://www.biblegateway.com/passage/?search=1%20Tesalonicenses%204:3-7&version=RVR1960"
+                                        target="_blank" class="bible-link" title="Ver en Bible Gateway">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <div class="background-overlay"></div>
         </section>
+        <style>
+            /* --- Variables CSS (Asegúrate de que estas o similares estén definidas globalmente) --- */
+            :root {
+                --primary-color: #0A60B3;
+                /* Azul profundo y profesional */
+                --primary-rgb: 10, 96, 179;
+                --secondary-color: #2ECC71;
+                /* Verde esmeralda vibrante para acentos */
+                --accent-color: #FFC107;
+                /* Amarillo dorado para contrastes */
+                --text-color: #333333;
+                --light-text-color: #777777;
+                --dark-text-color: #2c3e50;
+                /* Casi negro azulado para títulos */
+                --border-color: rgba(255, 255, 255, 0.2);
+                /* Borde suave para glassmorphism */
+                --bg-light-gray: #f8f9fa;
+                /* Fondo muy claro para secciones */
+                --gradient-overlay: linear-gradient(135deg, rgba(10, 96, 179, 0.8), rgba(46, 204, 113, 0.8));
+                /* Gradiente para fondo o elementos */
+                --glass-background: rgba(255, 255, 255, 0.1);
+                /* Fondo translúcido para glassmorphism */
+                --glass-backdrop-filter: blur(10px) saturate(150%);
+                --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+                --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            /* --- Creencias Section Specifics --- */
+            #creencias {
+                background: var(--bg-light-gray);
+                /* Fondo suave para toda la sección */
+                padding: 80px 0;
+                /* Más padding para espacio */
+                position: relative;
+                overflow: hidden;
+                /* Asegura que los elementos fuera de los límites no se vean */
+                min-height: 100vh;
+                /* Para que la sección ocupe al menos la altura de la ventana */
+                display: flex;
+                align-items: center;
+                /* Centrar verticalmente el contenido */
+            }
+
+            #creencias .section-title {
+                font-size: 3.2rem;
+                /* Título principal más grande y llamativo */
+                font-weight: 800;
+                color: var(--dark-text-color);
+                margin-bottom: 1.5rem;
+                position: relative;
+                padding-bottom: 20px;
+            }
+
+            #creencias .section-title::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: var(--primary-color);
+                border-radius: 2px;
+            }
+
+            #creencias .section-subtitle {
+                font-size: 1.3rem;
+                /* Subtítulo descriptivo */
+                color: var(--light-text-color);
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+                line-height: 1.8;
+            }
+
+            /* --- Estilo de Grid para las Creencias --- */
+            .belief-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                /* Columnas responsivas */
+                gap: 30px;
+                /* Espacio entre las tarjetas */
+                margin-top: 50px;
+                align-items: stretch;
+                /* Asegura que todas las tarjetas tengan la misma altura si el contenido es similar */
+            }
+
+            /* --- Estilos Generales para las Tarjetas Glassmorphism --- */
+            .glass-card {
+                background: var(--glass-background);
+                backdrop-filter: var(--glass-backdrop-filter);
+                border: 1px solid var(--border-color);
+                border-radius: 1.5rem;
+                /* Bordes más redondeados */
+                padding: 2.5rem;
+                /* Mayor padding */
+                box-shadow: var(--shadow-medium);
+                /* Sombra más definida */
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                /* Transición para hover */
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .glass-card:hover {
+                transform: translateY(-8px);
+                /* Efecto flotante al pasar el ratón */
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+                /* Sombra más intensa al pasar el ratón */
+            }
+
+            /* Tarjeta de Introducción Especial */
+            .belief-grid .intro-card {
+                grid-column: 1 / -1;
+                /* Ocupa todo el ancho */
+                background: linear-gradient(135deg, rgba(10, 96, 179, 0.9), rgba(46, 204, 113, 0.9));
+                /* Fondo de gradiente llamativo */
+                color: white;
+                padding: 3.5rem 3rem;
+                border: none;
+                box-shadow: var(--shadow-medium);
+                margin-bottom: 20px;
+                /* Espacio debajo de la intro card */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .intro-card .card-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+                color: white;
+            }
+
+            .intro-card .card-text {
+                font-size: 1.15rem;
+                line-height: 1.7;
+                color: rgba(255, 255, 255, 0.9);
+                max-width: 800px;
+            }
+
+            .belief-icon-intro {
+                font-size: 5rem;
+                /* Icono grande para la intro */
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 1.5rem;
+                animation: bounceIn 1s ease-out;
+                /* Animación de entrada para el icono */
+            }
+
+            /* Estilos para las tarjetas individuales de creencias */
+            .belief-card {
+                min-height: 280px;
+                /* Asegura una altura mínima para todas las tarjetas */
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                /* Alinea el contenido al principio de la tarjeta */
+            }
+
+            .belief-card .belief-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .belief-card .belief-icon {
+                font-size: 2.5rem;
+                /* Tamaño de los iconos */
+                color: var(--primary-color);
+                margin-right: 1rem;
+                line-height: 1;
+                /* Asegura que el icono no añada espacio extra */
+            }
+
+            .belief-card .belief-title {
+                font-size: 1.6rem;
+                /* Título de cada creencia */
+                font-weight: 700;
+                color: var(--dark-text-color);
+                margin: 0;
+                /* Elimina márgenes por defecto */
+            }
+
+            .belief-card .belief-description {
+                font-size: 1rem;
+                line-height: 1.7;
+                color: var(--light-text-color);
+                margin-top: 0.5rem;
+                flex-grow: 1;
+                /* Permite que el párrafo ocupe el espacio disponible */
+            }
+
+            /* Estilo para el fondo abstracto (opcional, para JS o SVG) */
+            .background-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at top left, rgba(var(--primary-rgb), 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at bottom right, rgba(var(--secondary-color), 0.05) 0%, transparent 40%);
+                z-index: 0;
+                /* Detrás del contenido */
+                pointer-events: none;
+                /* No interfiere con clics */
+            }
+
+            /* --- Responsive Design --- */
+            @media (max-width: 992px) {
+                #creencias .section-title {
+                    font-size: 2.8rem;
+                }
+
+                #creencias .section-subtitle {
+                    font-size: 1.2rem;
+                }
+
+                .belief-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 25px;
+                }
+
+                .intro-card .card-title {
+                    font-size: 2rem;
+                }
+
+                .intro-card .card-text {
+                    font-size: 1.05rem;
+                }
+
+                .belief-card .belief-title {
+                    font-size: 1.4rem;
+                }
+
+                .belief-card .belief-icon {
+                    font-size: 2.2rem;
+                }
+
+                .glass-card {
+                    padding: 2rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                #creencias {
+                    padding: 60px 0;
+                }
+
+                #creencias .section-title {
+                    font-size: 2.2rem;
+                    padding-bottom: 15px;
+                }
+
+                #creencias .section-title::after {
+                    width: 60px;
+                }
+
+                #creencias .section-subtitle {
+                    font-size: 1rem;
+                    margin-bottom: 3rem;
+                }
+
+                .belief-grid {
+                    grid-template-columns: 1fr;
+                    /* Una columna en móviles */
+                    gap: 20px;
+                }
+
+                .intro-card {
+                    padding: 2.5rem 1.5rem;
+                }
+
+                .intro-card .card-title {
+                    font-size: 1.8rem;
+                }
+
+                .intro-card .card-text {
+                    font-size: 0.95rem;
+                }
+
+                .belief-icon-intro {
+                    font-size: 4rem;
+                }
+
+                .belief-card {
+                    padding: 1.5rem;
+                }
+
+                .belief-card .belief-title {
+                    font-size: 1.3rem;
+                }
+
+                .belief-card .belief-icon {
+                    font-size: 2rem;
+                }
+
+                .belief-card .belief-description {
+                    font-size: 0.9rem;
+                }
+            }
+
+            /* Estilos para la lista de versículos bíblicos dentro de cada tarjeta */
+            .belief-card .bible-verses {
+                list-style: none;
+                padding-left: 0;
+                margin-top: 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+                padding-top: 1rem;
+            }
+
+            .belief-card .bible-verses li {
+                font-size: 0.9rem;
+                color: var(--light-text-color);
+                margin-bottom: 0.3rem;
+                display: flex;
+                align-items: flex-start;
+                line-height: 1.4;
+                position: relative;
+                /* Importante para posicionar el enlace */
+                padding-right: 25px;
+                /* Espacio para el icono de enlace */
+            }
+
+            .belief-card .bible-verses li:last-child {
+                margin-bottom: 0;
+            }
+
+            .belief-card .bible-verses li .fas.fa-quote-left {
+                /* Específico para el icono de cita */
+                font-size: 0.7rem;
+                color: var(--primary-color);
+                margin-right: 0.6rem;
+                position: relative;
+                top: 0.15rem;
+                opacity: 0.7;
+            }
+
+            /* Estilos para el nuevo enlace del versículo */
+            .bible-link {
+                position: absolute;
+                /* Posiciona el enlace absolutamente */
+                right: 0;
+                /* Al lado derecho del list item */
+                top: 50%;
+                transform: translateY(-50%);
+                /* Centra verticalmente */
+                color: var(--primary-color);
+                /* Color del icono de enlace */
+                font-size: 0.85rem;
+                /* Tamaño del icono */
+                opacity: 0.6;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+                text-decoration: none;
+                /* Quita el subrayado por defecto del enlace */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                /* Ancho del área del icono */
+                height: 20px;
+                /* Alto del área del icono */
+                border-radius: 50%;
+                /* Para hacerlo circular si quieres un fondo al hover */
+                /* background-color: rgba(var(--primary-rgb), 0.1); Opcional: un pequeño fondo */
+            }
+
+            .bible-link:hover {
+                opacity: 1;
+                /* Icono más visible al pasar el ratón */
+                color: var(--secondary-color);
+                /* Cambia de color al pasar el ratón */
+                transform: translateY(-50%) scale(1.1);
+                /* Ligeramente más grande al pasar el ratón */
+            }
+
+            /* Asegura que el contenido se vea bien en pantallas pequeñas */
+            @media (max-width: 768px) {
+                .belief-card .bible-verses {
+                    margin-top: 0.8rem;
+                    padding-top: 0.8rem;
+                }
+
+                .belief-card .bible-verses li {
+                    font-size: 0.8rem;
+                    margin-bottom: 0.2rem;
+                    padding-right: 20px;
+                    /* Ajusta espacio para el icono en móviles */
+                }
+
+                .belief-card .bible-verses li .fas.fa-quote-left {
+                    font-size: 0.6rem;
+                    margin-right: 0.5rem;
+                    top: 0.1rem;
+                }
+
+                .bible-link {
+                    font-size: 0.75rem;
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+
+            /* Estilos para la lista de Nombres de Dios */
+            .names-of-god-list {
+                list-style: none;
+                /* Quita el estilo de lista por defecto */
+                padding-left: 0;
+                margin-top: 1rem;
+                /* Espacio superior */
+                margin-bottom: 1.5rem;
+                /* Espacio inferior antes del siguiente párrafo */
+            }
+
+            .names-of-god-list li {
+                font-size: 1rem;
+                color: var(--dark-text-color);
+                /* Un color que destaque un poco más */
+                margin-bottom: 0.7rem;
+                /* Espacio entre cada elemento de la lista */
+                display: flex;
+                /* Para alinear el icono y el texto */
+                align-items: flex-start;
+                line-height: 1.5;
+            }
+
+            .names-of-god-list li:last-child {
+                margin-bottom: 0;
+            }
+
+            .names-of-god-list li .fas {
+                font-size: 0.9rem;
+                /* Tamaño del icono */
+                color: var(--primary-color);
+                /* Color del icono */
+                margin-right: 0.8rem;
+                position: relative;
+                top: 0.3rem;
+                /* Ajuste vertical para alinear con el texto */
+                flex-shrink: 0;
+                /* Evita que el icono se encoja */
+            }
+
+            .names-of-god-list li strong {
+                color: var(--primary-color);
+                /* Hace los nombres más prominentes */
+            }
+        </style>
 
         <a href="biblical_games_web.html" class="church-logo-link">
             <img src="https://img.freepik.com/vector-premium/ilustracion-mando-videojuegos-victor-diseno-logo-mascota_1146923-176.jpg"
