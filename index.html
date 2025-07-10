@@ -2141,8 +2141,8 @@
             </div>
         </section>
 
-        <section id="creencias" class="section py-5 position-relative overflow-hidden">
-            <div class="container position-relative z-index-1">
+        <section id="creencias" class="section">
+            <div class="container">
                 <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Nuestras Creencias
                     Fundamentales</h2>
                 <p class="section-subtitle text-center mb-5 animate__animated animate__fadeInUp animate__delay-0-2s">
@@ -2653,7 +2653,7 @@
                                 gloriosos nombres, los cuales describen Su carácter y atributos. Cada nombre revela una
                                 faceta de quién es Él y cómo interactúa con Su creación. Reconocemos:</p>
                             <ul class="names-of-god-list">
-                                <li><i class="fas fa-hand-point-right"></i> HAMASHIAJ : El Dios autoexistente y eterno.
+                                <li><i class="fas fa-hand-point-right"></i> Hamashiaj : El Dios autoexistente y eterno.
                                 </li>
                                 <li><i class="fas fa-hand-point-right"></i> Shaddai: Dios Todopoderoso.</li>
                                 <li><i class="fas fa-hand-point-right"></i> Adonai: Señor y Maestro.</li>
@@ -2829,6 +2829,7 @@
 
             <div class="background-overlay"></div>
         </section>
+
         <style>
             /* --- Variables CSS (Asegúrate de que estas o similares estén definidas globalmente) --- */
             :root {
@@ -2857,6 +2858,7 @@
             }
 
             /* --- Creencias Section Specifics --- */
+            /* --- Creencias Section Specifics --- */
             #creencias {
                 background: var(--bg-light-gray);
                 /* Fondo suave para toda la sección */
@@ -2864,10 +2866,6 @@
                 /* Más padding para espacio */
                 position: relative;
                 overflow: hidden;
-                /* Asegura que los elementos fuera de los límites no se vean */
-                min-height: 100vh;
-                /* Para que la sección ocupe al menos la altura de la ventana */
-                display: flex;
                 align-items: center;
                 /* Centrar verticalmente el contenido */
             }
@@ -3280,12 +3278,41 @@
                 color: var(--primary-color);
                 /* Hace los nombres más prominentes */
             }
+
+            /* Estilos para todas las secciones por defecto (ocultas) */
+            .main-content .section {
+                display: none;
+                /* Oculta la sección por defecto */
+                opacity: 0;
+                /* Para una transición de opacidad más suave */
+                transition: opacity 0.5s ease-in-out;
+                /* Transición para el efecto de aparición */
+                /* Asegúrate de que las secciones puedan tener su padding y otros estilos cuando estén activas */
+            }
+
+            /* Estilos para la sección activa (visible) */
+            .main-content .section.active {
+                display: block;
+                /* Muestra la sección */
+                opacity: 1;
+                /* Completamente visible */
+                /* Puedes añadir cualquier otro estilo específico para la sección activa aquí si lo necesitas */
+            }
+
+            /* Además, asegúrate de que tu contenedor principal tenga el padding para que el contenido no se pegue al header fijo */
+            .main-content {
+                padding-top: var(--header-height);
+                /* Asumiendo que tienes una variable CSS para la altura de tu header */
+            }
         </style>
+
+
 
         <a href="biblical_games_web.html" class="church-logo-link">
             <img src="https://img.freepik.com/vector-premium/ilustracion-mando-videojuegos-victor-diseno-logo-mascota_1146923-176.jpg"
                 alt="Logo de la Iglesia" class="church-logo">
         </a>
+
         <section id="contacto" class="section">
             <div class="container">
                 <h2>Contáctanos</h2>
