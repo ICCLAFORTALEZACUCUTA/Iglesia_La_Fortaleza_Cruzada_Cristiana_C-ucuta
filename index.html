@@ -4335,64 +4335,7 @@
             }
         ].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort events by date
 
-        const sermonsData = [
-            {
-                id: "sermon1",
-                title: "El Poder del Perdón",
-                preacher: "Joel Pineda",
-                date: "2025-05-15",
-                area: "Gracia",
-                imageUrl: "https://archivo.prensa-latina.cu/wp-content/uploads/2023/04/Real-Madrid.jpg",
-                link: "https://www.youtube.com/embed/vjrgrvr3B4c",
-                keyVerse: ["Juan 3:16", "Mateo 5:9"],
-                objetivo: "Guiar a la congregación a experimentar la libertad que trae el perdón genuino.",
-                description1: "Este mensaje aborda la importancia del perdón desde una perspectiva bíblica, destacando cómo Jesús enseñó a perdonar incluso en circunstancias difíciles.",
-                description2: "Se exploran ejemplos de perdón en las Escrituras y cómo aplicarlos en la vida diaria para sanar relaciones rotas y fortalecer nuestra fe.",
-                description3: "El mensaje también anima a los creyentes a perdonarse a sí mismos, reconociendo que la gracia de Dios cubre todos los pecados.",
-                finalConclusion: "El perdón es una llave espiritual que abre la puerta a la sanidad interior, la reconciliación y una vida más plena en Cristo.",
-                targetAudience: "General",
-                archivoUrl: "https://drive.google.com/uc?export=download&id=ID_DEL_ARCHIVO"
-
-            },
-
-
-            {
-                id: "sermon2",
-                title: "La Fe en Tiempos de Incertidumbre",
-                preacher: "Pastora María Gómez",
-                date: "2025-05-08",
-                area: "Fe",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                description: "Cómo mantener la esperanza y la confianza en Dios en medio de la adversidad y los desafíos de la vida. Aprende a caminar por fe, no por vista, y a confiar en la soberanía de Dios."
-            },
-            {
-                id: "sermon3",
-                title: "El Amor Que Transforma",
-                preacher: "Pastor Carlos Ruiz",
-                date: "2025-05-01",
-                area: "Familia",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                description: "Descubre el impacto del amor incondicional de Dios en tu vida y entorno. Un mensaje práctico sobre cómo el amor de Cristo puede sanar y restaurar familias y comunidades."
-            },
-            {
-                id: "sermon4",
-                title: "Propósito y Destino",
-                preacher: "Pastor Juan Pérez",
-                date: "2025-04-24",
-                area: "Discipulado",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                description: "Dios tiene un plan y un propósito para tu vida. Este mensaje te ayudará a descubrir tu llamado y a caminar en el destino que Él ha preparado para ti desde antes de la fundación del mundo."
-            },
-            {
-                id: "sermon5",
-                title: "Renovando tu Mente",
-                preacher: "Pastora María Gómez",
-                date: "2025-04-17",
-                area: "Fe",
-                link: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                description: "Un estudio sobre cómo transformar tus pensamientos para vivir una vida victoriosa y alineada con la voluntad de Dios. La clave está en renovar tu mente con la Palabra de Dios."
-            }
-        ].sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort latest sermons first
+        let sermonsData = [];
 
         // --- Utility functions for Modals and Loading Overlay ---
 
