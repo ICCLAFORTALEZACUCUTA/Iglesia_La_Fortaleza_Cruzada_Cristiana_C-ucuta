@@ -5072,50 +5072,6 @@
                 });
             }
 
-            if (uploadSermonForm) {
-                uploadSermonForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    uploadMessage.style.display = 'none'; // Hide previous message
-
-                    if (CONFIG.currentUserRole !== 'administrator' && CONFIG.currentUserRole !== 'editor') {
-                        uploadMessage.textContent = 'No tienes permisos para subir predicaciones.';
-                        uploadMessage.classList.remove('success');
-                        uploadMessage.classList.add('danger', 'show');
-                        return;
-                    }
-
-                    showFullScreenLoading(true);
-
-                    // Simulate upload process
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-
-                    const newSermon = {
-                        id: `sermon${sermonsData.length + 1}`, // Simple ID generation
-                        title: uploadSermonForm.sermonTitle.value,
-                        preacher: uploadSermonForm.sermonPreacher.value,
-                        date: uploadSermonForm.sermonDate.value,
-                        area: uploadSermonForm.sermonArea.value,
-                        link: uploadSermonForm.sermonLink.value,
-                        description: uploadSermonForm.sermonDescription.value || "Sin descripción."
-                    };
-
-                    sermonsData.unshift(newSermon); // Add to the beginning of the array (latest first)
-                    sermonsData.sort((a, b) => new Date(b.date) - new Date(a.date)); // Re-sort by date
-
-                    showFullScreenLoading(false);
-                    uploadMessage.textContent = '¡Predicación subida con éxito! (Nota: Solo demo, no se guarda de forma persistente)';
-                    uploadMessage.classList.remove('danger');
-                    uploadMessage.classList.add('success', 'show');
-
-                    uploadSermonForm.reset();
-                    hideModal('sermonAuthModal'); // Close modal after successful upload
-
-                    // Re-render sermons and update filters
-                    populateFilterOptions();
-                    applySermonFilters();
-                });
-            }
-
             // --- Contact Form Submission (Example) ---
             const contactForm = document.getElementById('contactForm');
             if (contactForm) {
