@@ -2241,33 +2241,32 @@
                     /* Sombra más pronunciada */
                 }
 
-                    .carousel-item img.carousel-img {
-                        height: 200px;
-                        /* Reduce la altura en pantallas muy pequeñas */
-                        border-radius: 10px;
-                    }
+                .carousel-item img.carousel-img {
+                    height: 200px;
+                    /* Reduce la altura en pantallas muy pequeñas */
+                    border-radius: 10px;
+                }
 
-                    .carousel-control-prev-icon,
-                    .carousel-control-next-icon {
-                        padding: 12px;
-                        /* Reduce el tamaño del círculo de las flechas en móvil */
-                        background-size: 50%;
-                    }
+                .carousel-control-prev-icon,
+                .carousel-control-next-icon {
+                    padding: 12px;
+                    /* Reduce el tamaño del círculo de las flechas en móvil */
+                    background-size: 50%;
+                }
 
-                    .carousel-indicators [data-bs-target] {
-                        width: 8px;
-                        height: 8px;
-                        margin: 0 3px;
-                    }
+                .carousel-indicators [data-bs-target] {
+                    width: 8px;
+                    height: 8px;
+                    margin: 0 3px;
+                }
 
-                    h2 {
-                        font-size: 2rem;
-                    }
+                h2 {
+                    font-size: 2rem;
+                }
 
-                    h3 {
-                        font-size: 1.8rem;
-                    }
-
+                h3 {
+                    font-size: 1.8rem;
+                }
             </style>
             <br>
 
@@ -4992,6 +4991,19 @@
                     formattedDate += ` - ${end.toLocaleDateString('es-ES', options)}`;
                 }
                 return formattedDate;
+            }
+
+            /**
+ * Trunca un texto a una longitud máxima y añade puntos suspensivos si es necesario.
+ * @param {string} text El texto a truncar.
+ * @param {number} maxLength La longitud máxima deseada para el texto.
+ * @returns {string} El texto truncado o el texto original si es más corto que maxLength.
+ */
+            function truncateText(text, maxLength) {
+                if (!text || text.length <= maxLength) {
+                    return text;
+                }
+                return text.substring(0, maxLength) + '...';
             }
 
 
