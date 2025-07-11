@@ -5954,6 +5954,7 @@
             document.getElementById('sermonModalDate').textContent = new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('sermonModalPreacher').textContent = sermon.preacher || 'Desconocido';
             document.getElementById('sermonModalArea').textContent = sermon.area || 'No definida';
+            document.getElementById('sermonModalKeyVerses').textContent = sermon.verse || 'No definido';
             document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
             document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
             document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
