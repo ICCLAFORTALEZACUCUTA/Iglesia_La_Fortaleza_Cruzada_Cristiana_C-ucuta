@@ -1412,9 +1412,7 @@
             }
 
             /* Asegura que las columnas se apilen en móvil */
-            .row {
-                flex-direction: column;
-            }
+
 
             .col-md-6 {
                 max-width: 100%;
@@ -1498,6 +1496,62 @@
                 font-size: 1.8rem;
             }
         }
+
+        /* Estilo para el contenedor de la imagen que crea el efecto de difuminado en los bordes */
+        .image-gradient-border {
+            position: relative;
+            display: block;
+            margin: 0 auto;
+            /* Centra el contenedor horizontalmente si no ocupa el 100% del ancho */
+            overflow: hidden;
+            /* Asegura que el gradiente se aplique dentro de los límites */
+            border-radius: 0.25rem;
+            /* Hereda el redondeo de la imagen */
+            /* Añadimos un poco de padding al contenedor para que el gradiente tenga espacio para expandirse */
+            padding: 15px;
+            /* Un padding que crea un "marco" donde el gradiente se hará visible */
+            box-sizing: border-box;
+            /* Asegura que el padding no aumente el tamaño total del contenedor */
+        }
+
+        .image-gradient-border img {
+            display: block;
+            width: 100%;
+            /* La imagen ocupa el 100% del ancho de su contenedor */
+            height: 300px;
+            /* Altura fija para consistencia con la que definimos en el HTML */
+            object-fit: cover;
+            /* Ajusta la imagen para cubrir el espacio sin distorsionarse */
+            border-radius: 0.25rem;
+            /* Asegura que la imagen mantenga su propio redondeo */
+        }
+
+        /* Pseudo-elemento para el efecto de difuminado borroso en los bordes */
+        .image-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* Un gradiente transparente en el centro que se vuelve opaco en los bordes */
+            /* Puedes ajustar el color de rgba() para que coincida con el fondo de tu sección o el color de tu 'glass-card' */
+            background: radial-gradient(circle at center,
+                    rgba(255, 255, 255, 0) 40%,
+                    /* Transparente más amplio en el centro */
+                    rgba(255, 255, 255, 1) 100%
+                    /* COMPLETAMENTE OPACO y blanco en los bordes para difuminar */
+                );
+            /* Aplicamos un filtro de desenfoque (blur) MUCHO MÁS PRONUNCIADO al gradiente */
+            filter: blur(40px);
+            /* Aumentado a 40px para un efecto de "fading" más fuerte */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Para alinear la tarjeta de texto y la imagen cuando no tienen la misma altura */
+        /* Asegúrate de que el contenedor padre de las columnas (el .row) tenga align-items-center */
+        /* Esto ya lo incluimos en el HTML que te di. */
     </style>
 </head>
 
@@ -1841,27 +1895,145 @@
             <div class="container">
                 <h2>Quiénes Somos</h2>
 
-                <div class="glass-card mb-4">
-                    <div class="d-flex flex-column flex-md-row justify-content-around text-center mt-4">
-                        <div class="p-3">
-                            <i class="fas fa-bullseye fa-2x mb-2 text-secondary"></i>
-                            <h4 class="text-primary-dark">Misión</h4>
-                            <p class="text-muted-dark">Desarrollar un avivamiento espiritual permanente que genere
-                                crecimiento integral en las personas para la gloria de Dios.</p>
+                <div class="container mt-5 mb-5">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="glass-card text-center p-4 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-bullseye fa-3x mb-3 text-primary-dark"></i>
+                                <h3 class="text-primary-dark fw-bold mb-3">Nuestra Misión</h3>
+                                <p class="text-muted-dark lead">
+                                    Desarrollar un avivamiento espiritual permanente que genere crecimiento integral en
+                                    las personas
+                                    para la gloria de Dios.
+                                </p>
+                            </div>
                         </div>
-                        <div class="p-3">
-                            <i class="fas fa-eye fa-2x mb-2 text-secondary"></i>
-                            <h4 class="text-primary-dark">Visión</h4>
-                            <p class="text-muted-dark">Somos una comunidad viva, sin ánimo de lucro, que proclama,
-                                practica y enseña el evangelio de fe y poder, formando discípulos para Nuestro Señor
-                                Jesucristo, quien es el único mediador entre Dios y los hombres, con el fin de bendecir
-                                a Colombia y a las naciones.</p>
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="image-gradient-border">
+                                <img src="https://st4.depositphotos.com/15807724/20668/i/450/depositphotos_206680140-stock-photo-closeup-picture-male-adulthood-sharing.jpg"
+                                    alt="Misión de la Iglesia" class="img-fluid rounded shadow-sm"
+                                    style="height: 300px; object-fit: cover;">
+                            </div>
                         </div>
-                        <div class="p-3">
-                            <i class="fas fa-heart fa-2x mb-2 text-secondary"></i>
-                            <h4 class="text-primary-dark">Valores</h4>
-                            <p class="text-muted-dark">Amor, gozo, paz, paciencia, benignidad, bondad, fe, mansedumbre y
-                                dominio propio.</p>
+                    </div>
+
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-6 mb-4 mb-md-0 order-md-2">
+                            <div class="glass-card text-center p-4 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-eye fa-3x mb-3 text-primary-dark"></i>
+                                <h3 class="text-primary-dark fw-bold mb-3">Nuestra Visión</h3>
+                                <p class="text-muted-dark lead">
+                                    Somos una comunidad viva, sin ánimo de lucro, que proclama, practica y enseña el
+                                    evangelio de fe y poder,
+                                    formando discípulos para Nuestro Señor Jesucristo, quien es el único mediador entre
+                                    Dios y los hombres,
+                                    con el fin de bendecir a Colombia y a las naciones.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4 mb-md-0 order-md-1">
+                            <div class="image-gradient-border">
+                                <img src="https://st4.depositphotos.com/15807724/20668/i/450/depositphotos_206680140-stock-photo-closeup-picture-male-adulthood-sharing.jpg"
+                                    alt="Visión de la Iglesia" class="img-fluid rounded shadow-sm"
+                                    style="height: 300px; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="glass-card text-center p-4 h-100 d-flex flex-column justify-content-start">
+                                <i class="fas fa-hand-holding-heart fa-3x mb-3 text-primary-dark"></i>
+                                <h3 class="text-primary-dark fw-bold mb-4">Nuestros Valores</h3>
+
+                                <div class="row justify-content-center align-items-stretch g-3 flex-grow-1">
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-heart mb-1 text-danger" style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Amor</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-laugh-beam mb-1 text-warning"
+                                                style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Gozo</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-dove mb-1 text-info" style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Paz</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-hourglass-half mb-1 text-secondary"
+                                                style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Paciencia</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-hands-helping mb-1 text-success"
+                                                style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Benignidad</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-hand-holding mb-1 text-primary"
+                                                style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Bondad</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-cross mb-1 text-dark" style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Fe</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-leaf mb-1 text-success" style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Mansedumbre</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                        <div
+                                            class="p-3 border rounded shadow-sm h-100 d-flex flex-column justify-content-center align-items-center bg-light">
+                                            <i class="fas fa-balance-scale mb-1 text-muted"
+                                                style="font-size: 1.6em;"></i>
+                                            <p class="text-muted-dark fw-bold mb-0">Dominio propio</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="image-gradient-border">
+                                <img src="https://st4.depositphotos.com/15807724/20668/i/450/depositphotos_206680140-stock-photo-closeup-picture-male-adulthood-sharing.jpg"
+                                    alt="Valores de la Iglesia" class="img-fluid rounded shadow-sm"
+                                    style="height: 300px; object-fit: cover;">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1896,91 +2068,295 @@
                 </div>
 
                 <div class="glass-card">
-                    <h3 class="text-dark">Nuestro Equipo Espiritual</h3>
-                    <div class="ministries-grid">
-                        <div class="ministry-card" data-pastor-id="juan">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/157526063_3687681718019918_4724282678552833556_n.jpg?stp=dst-jpg_tt6&cstp=mx960x720&ctp=s960x720&_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFiLuVd3pZ0P11Dr5oGkXxU8eLhDs0hR6Dx4uEOzSFHoD_rMWX-5ZIMOOrqN_iEtrFTdfh1tJ6FD7xEek-B6Ji1&_nc_ohc=f3wnF2GxScgQ7kNvwEOUyLn&_nc_oc=Adn__HfDlKcR5jH_mYfEq-wZ16gGqJa2Kjh-reo4mw2BtDD9R8uTiwKawH3yDHGWqoc&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=y0MWvpPONSEYcKasYbuGLg&oh=00_AfMC3TVaVKquxeWvsoZEL1mqw_xuL7wH6Nhu1whGBxoZQg&oe=688BB36C"
-                                alt="Pastor Juan Pérez">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Pastor Miguel Bautista</h4>
-                                <p class="text-muted-dark">Pastor Principal</p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                    <h2 class="text-center text-primary mb-4">Momentos Especiales</h2>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                                class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                                aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                                aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6GYdIu62yg_fU40KA-UGTR-Djy5-u_aeLb4wPPnbyZTIyxYUzv57272pgArM84NCzjM9PXU07H5WAkwOXuomx0SCNAmHBO_TLF7QgbqRjVByubt1glK78U9jI7hGpUv0N5wtjcfLeZHSZJ2sv_SAcHwomFVYNMxTtSPkTJmlwwTdLQ7bX9SDZAXhI/s720/FB_IMG_1667876105076.jpg"
+                                    class="d-block w-100 carousel-img" alt="Evento Comunitario">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://live.staticflickr.com/7097/7403591632_6981a075d2_b.jpg"
+                                    class="d-block w-100 carousel-img" alt="Actividad de Fe">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://diariopublicable.com/wp-content/uploads/2018/08/5b88b1c624749_crop.jpg"
+                                    class="d-block w-100 carousel-img" alt="Celebración Anual">
                             </div>
                         </div>
-                        <div class="ministry-card" data-pastor-id="maria">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/156921011_3687681391353284_941226635117097245_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHpIag9TyOtePyPZ_WPDvrPWAg_KzurcXJYCD8rO6txcucdX9H4y5Wci6o4ed364wF_qABVU53WtLQ577w9LJpw&_nc_ohc=E5wJpRHZAgcQ7kNvwFrv7WL&_nc_oc=AdmWD2N46u3SDoIBgLINzcTqOk8WMDR4O51Kd2NhdlHZHGQHSyaXftdePrcWNu0NOo8&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7OnQ7sHQvRyAMsA6Nl7Iqg&oh=00_AfOpnkUxg5vY0aWdCjaHxuV2C9KHAHLpZIUCkTF9D3-jQw&oe=688BE0B8"
-                                alt="Pastora Leidy Contreras">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Pastora Leidy Contreras</h4>
-                                <p class="text-muted-dark">Pastora Asociada</p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                /* --- Mejoras para el Carrusel de Imágenes (Nuevo) --- */
+                #galeria-momentos {
+                    background-color: var(--light-color);
+                    /* Fondo claro para la sección del carrusel */
+                    padding: 4rem 0;
+                    /* Espaciado generoso */
+                    border-top: 1px solid var(--card-border-light);
+                    /* Separador sutil */
+                }
+
+                .carousel-item img.carousel-img {
+                    height: 250px;
+                    /* Altura fija para las imágenes del carrusel, como solicitaste */
+                    object-fit: cover;
+                    /* Asegura que la imagen cubra el área sin distorsionarse */
+                    border-radius: 15px;
+                    /* Bordes redondeados para un toque moderno, similar a tus tarjetas */
+                    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+                    /* Sombra elegante para darle profundidad */
+                    transition: transform 0.5s ease-in-out;
+                    /* Transición suave al cambiar de imagen */
+                }
+
+                .carousel-item img.carousel-img:hover {
+                    transform: scale(1.01);
+                    /* Pequeño efecto de zoom al pasar el ratón */
+                }
+
+                /* Estilo para los indicadores del carrusel (los puntos de abajo) */
+                .carousel-indicators [data-bs-target] {
+                    background-color: var(--primary-color);
+                    /* Color de los puntos, usando tu variable */
+                    opacity: 0.6;
+                    /* Un poco de transparencia */
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    /* Hacerlos circulares */
+                    transition: opacity 0.3s ease, background-color 0.3s ease;
+                }
+
+                .carousel-indicators .active {
+                    background-color: var(--secondary-color);
+                    /* Color del punto activo, resaltando */
+                    opacity: 1;
+                    /* Sin transparencia para el activo */
+                    transform: scale(1.2);
+                    /* Ligeramente más grande */
+                }
+
+                /* Estilo para las flechas de navegación (prev/next) */
+                .carousel-control-prev,
+                .carousel-control-next {
+                    width: 6%;
+                    /* Hace que las áreas de clic de las flechas sean un poco más grandes */
+                    opacity: 0.8;
+                    /* Ligeramente transparentes por defecto */
+                    transition: opacity 0.3s ease;
+                }
+
+                .carousel-control-prev:hover,
+                .carousel-control-next:hover {
+                    opacity: 1;
+                    /* Totalmente visibles al pasar el ratón */
+                    background-color: rgba(0, 0, 0, 0.1);
+                    /* Sutil fondo al pasar el ratón */
+                }
+
+                .carousel-control-prev-icon,
+                .carousel-control-next-icon {
+                    background-color: var(--primary-color);
+                    /* Fondo de las flechas, usando tu color principal */
+                    border-radius: 50%;
+                    /* Las hace circulares */
+                    padding: 18px;
+                    /* Tamaño del círculo de fondo */
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                    /* Sombra para las flechas */
+                    background-size: 60%;
+                    /* Ajusta el tamaño del icono de la flecha dentro del círculo */
+                }
+
+                /* Mejora general de h2 y h3 para más profesionalismo */
+                h2 {
+                    font-size: 2.8rem;
+                    /* Un poco más grande para los títulos de sección */
+                    font-weight: 700;
+                    /* Más audaz */
+                    color: var(--text-primary-dark);
+                    /* Color más oscuro para el contraste */
+                }
+
+                h2::after {
+                    width: 100px;
+                    /* Subrayado un poco más largo */
+                    height: 4px;
+                    /* Un poco más grueso */
+                    background-color: var(--primary-color);
+                    /* Usamos el color primario */
+                }
+
+                h3 {
+                    font-size: 2.2rem;
+                    /* Títulos de tarjeta un poco más grandes */
+                    font-weight: 600;
+                    /* Más audaz */
+                }
+
+                /* Ajustes para la responsividad de texto e iconos en tarjetas de valores */
+                /* Estos ya son responsivos por el uso de 'em' y clases de Bootstrap, pero puedes afinarlos */
+                .glass-card .fa-3x {
+                    font-size: 3em;
+                    /* Mantiene un tamaño relativo grande para los iconos principales */
+                    margin-bottom: 1.5rem !important;
+                    /* Más espacio debajo de los iconos principales */
+                }
+
+                .glass-card .fw-bold {
+                    font-weight: 700 !important;
+                    /* Asegura que el texto sea realmente audaz */
+                }
+
+                /* Pequeñas animaciones para las tarjetas de valores */
+                .glass-card .p-3.border.rounded {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+
+                .glass-card .p-3.border.rounded:hover {
+                    transform: translateY(-5px);
+                    /* Efecto de "levantar" al pasar el ratón */
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+                    /* Sombra más pronunciada */
+                }
+
+                    .carousel-item img.carousel-img {
+                        height: 200px;
+                        /* Reduce la altura en pantallas muy pequeñas */
+                        border-radius: 10px;
+                    }
+
+                    .carousel-control-prev-icon,
+                    .carousel-control-next-icon {
+                        padding: 12px;
+                        /* Reduce el tamaño del círculo de las flechas en móvil */
+                        background-size: 50%;
+                    }
+
+                    .carousel-indicators [data-bs-target] {
+                        width: 8px;
+                        height: 8px;
+                        margin: 0 3px;
+                    }
+
+                    h2 {
+                        font-size: 2rem;
+                    }
+
+                    h3 {
+                        font-size: 1.8rem;
+                    }
+
+            </style>
+            <br>
+
+            <div class="glass-card">
+                <h3 class="text-dark">Nuestro Equipo Directivo</h3>
+                <div class="ministries-grid">
+                    <div class="ministry-card" data-pastor-id="juan">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/157526063_3687681718019918_4724282678552833556_n.jpg?stp=dst-jpg_tt6&cstp=mx960x720&ctp=s960x720&_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFiLuVd3pZ0P11Dr5oGkXxU8eLhDs0hR6Dx4uEOzSFHoD_rMWX-5ZIMOOrqN_iEtrFTdfh1tJ6FD7xEek-B6Ji1&_nc_ohc=f3wnF2GxScgQ7kNvwEOUyLn&_nc_oc=Adn__HfDlKcR5jH_mYfEq-wZ16gGqJa2Kjh-reo4mw2BtDD9R8uTiwKawH3yDHGWqoc&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=y0MWvpPONSEYcKasYbuGLg&oh=00_AfMC3TVaVKquxeWvsoZEL1mqw_xuL7wH6Nhu1whGBxoZQg&oe=688BB36C"
+                            alt="Pastor Juan Pérez">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Pastor Miguel Bautista</h4>
+                            <p class="text-muted-dark">Pastor Principal</p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="carlos">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
-                                alt="Rosana Rodriguez">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Rosana Rodriguez</h4>
-                                <p class="text-muted-dark">Presbiterio </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="maria">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/156921011_3687681391353284_941226635117097245_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHpIag9TyOtePyPZ_WPDvrPWAg_KzurcXJYCD8rO6txcucdX9H4y5Wci6o4ed364wF_qABVU53WtLQ577w9LJpw&_nc_ohc=E5wJpRHZAgcQ7kNvwFrv7WL&_nc_oc=AdmWD2N46u3SDoIBgLINzcTqOk8WMDR4O51Kd2NhdlHZHGQHSyaXftdePrcWNu0NOo8&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7OnQ7sHQvRyAMsA6Nl7Iqg&oh=00_AfOpnkUxg5vY0aWdCjaHxuV2C9KHAHLpZIUCkTF9D3-jQw&oe=688BE0B8"
+                            alt="Pastora Leidy Contreras">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Pastora Leidy Contreras</h4>
+                            <p class="text-muted-dark">Pastora Asociada</p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="raines">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/468174008_10236246597084542_4326832039647632234_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeGpiOTAMV24oGRMG86DMLggecLdqxnLLdV5wt2rGcst1b_tffT9UK32_bZm9kRT6bnPFKsonmUaQCI0Qodq_a70&_nc_ohc=epKBUWsxPg8Q7kNvwFhjiFK&_nc_oc=Adna3L9zi2-on-AAE63XCk8f6KkINUzjdVUvmnFgwLUHMyMPIk5tKt29jdf1lGAUoeU&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=D4ifTiGSjqWa2Hc0-9P0zQ&oh=00_AfPAH5BaLbzK3KzoMkK0JsxR1gOqDmjIU2W9bqqT6VG0Ig&oe=686B1485"
-                                alt="Lider Raines Lara">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Lider Raines Lara</h4>
-                                <p class="text-muted-dark">Lider Alabanza </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="carlos">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
+                            alt="Rosana Rodriguez">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Rosana Rodriguez</h4>
+                            <p class="text-muted-dark">Presbiterio </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="brenda">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/470673744_122142328472372489_8711504693103405727_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGzlTqBolYBoRFhoweKT1j3VrLzjRAxsD5WsvONEDGwPikC41iwT_vVHAQisfLhhCU8LLx-oOGjuPJYvrcXD8zf&_nc_ohc=XEqGRbw-e7oQ7kNvwF3mpr0&_nc_oc=Adljnyz8BgIDpGYJB-3KbDatlxl3nMG-Sdi1bkvOVN9KNAZzkylfurj350xMl3PugxI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=Qmdb05CCqCyb3TXzjyw1nw&oh=00_AfNaRkcqkqFEvz0fKswm1e2ELbeOXOZ2BeSeIghjk6TgKw&oe=686B3CD5"
-                                alt="Lider Brenda Pereira">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Lider Brenda Pereira</h4>
-                                <p class="text-muted-dark">Lider Salon Kids </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="raines">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/468174008_10236246597084542_4326832039647632234_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeGpiOTAMV24oGRMG86DMLggecLdqxnLLdV5wt2rGcst1b_tffT9UK32_bZm9kRT6bnPFKsonmUaQCI0Qodq_a70&_nc_ohc=epKBUWsxPg8Q7kNvwFhjiFK&_nc_oc=Adna3L9zi2-on-AAE63XCk8f6KkINUzjdVUvmnFgwLUHMyMPIk5tKt29jdf1lGAUoeU&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=D4ifTiGSjqWa2Hc0-9P0zQ&oh=00_AfPAH5BaLbzK3KzoMkK0JsxR1gOqDmjIU2W9bqqT6VG0Ig&oe=686B1485"
+                            alt="Lider Raines Lara">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Lider Raines Lara</h4>
+                            <p class="text-muted-dark">Lider Alabanza </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="fabian">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/495584815_999664712278342_7762599421405385125_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHnl2LDgSl8DUXffazKwr90NKYxS8kLCwI0pjFLyQsLAlRE5q0lZOp_YmE7MD8rSrPeTSaSbGE_LMPbdNbai--t&_nc_ohc=hyYiWJ5kxqYQ7kNvwHFmtpc&_nc_oc=Adm-OxoxC82tVA2DF2szBWuTz4lk0JomUzvJOSVluag7C5X1fzPlmEb6ot3pZu-gDus&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=hyG4nsefn2b_4Zex-HKOUg&oh=00_AfNj4WRoGC81Ss4u2l7v8Z1mu-EUznw5dDOJ9Aw2rskwrQ&oe=686B2021"
-                                alt="Lider Fabian Leal">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Lider Fabian Leal</h4>
-                                <p class="text-muted-dark">Lider Jovenes </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="brenda">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/470673744_122142328472372489_8711504693103405727_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGzlTqBolYBoRFhoweKT1j3VrLzjRAxsD5WsvONEDGwPikC41iwT_vVHAQisfLhhCU8LLx-oOGjuPJYvrcXD8zf&_nc_ohc=XEqGRbw-e7oQ7kNvwF3mpr0&_nc_oc=Adljnyz8BgIDpGYJB-3KbDatlxl3nMG-Sdi1bkvOVN9KNAZzkylfurj350xMl3PugxI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=Qmdb05CCqCyb3TXzjyw1nw&oh=00_AfNaRkcqkqFEvz0fKswm1e2ELbeOXOZ2BeSeIghjk6TgKw&oe=686B3CD5"
+                            alt="Lider Brenda Pereira">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Lider Brenda Pereira</h4>
+                            <p class="text-muted-dark">Lider Salon Kids </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="jefferson">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
-                                alt="Lider Jefferson Martinez">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Lider Jefferson Martinez</h4>
-                                <p class="text-muted-dark">Lider Servidores </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="fabian">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/495584815_999664712278342_7762599421405385125_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHnl2LDgSl8DUXffazKwr90NKYxS8kLCwI0pjFLyQsLAlRE5q0lZOp_YmE7MD8rSrPeTSaSbGE_LMPbdNbai--t&_nc_ohc=hyYiWJ5kxqYQ7kNvwHFmtpc&_nc_oc=Adm-OxoxC82tVA2DF2szBWuTz4lk0JomUzvJOSVluag7C5X1fzPlmEb6ot3pZu-gDus&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=hyG4nsefn2b_4Zex-HKOUg&oh=00_AfNj4WRoGC81Ss4u2l7v8Z1mu-EUznw5dDOJ9Aw2rskwrQ&oe=686B2021"
+                            alt="Lider Fabian Leal">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Lider Fabian Leal</h4>
+                            <p class="text-muted-dark">Lider Jovenes </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="lisbeth">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
-                                alt="Lisbeth Martinez">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Lisbeth Martinez</h4>
-                                <p class="text-muted-dark">Presbiterio </p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="jefferson">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
+                            alt="Lider Jefferson Martinez">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Lider Jefferson Martinez</h4>
+                            <p class="text-muted-dark">Lider Servidores </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
-                        <div class="ministry-card" data-pastor-id="helen">
-                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
-                                alt="Helen Sanchez">
-                            <div class="ministry-card-content">
-                                <h4 class="text-primary-dark">Helen Sanchez</h4>
-                                <p class="text-muted-dark">Presbiterio</p>
-                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                            </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="lisbeth">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
+                            alt="Lisbeth Martinez">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Lisbeth Martinez</h4>
+                            <p class="text-muted-dark">Presbiterio </p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        </div>
+                    </div>
+                    <div class="ministry-card" data-pastor-id="helen">
+                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
+                            alt="Helen Sanchez">
+                        <div class="ministry-card-content">
+                            <h4 class="text-primary-dark">Helen Sanchez</h4>
+                            <p class="text-muted-dark">Presbiterio</p>
+                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
 
@@ -2862,7 +3238,7 @@
             #creencias {
                 background: var(--bg-light-gray);
                 /* Fondo suave para toda la sección */
-                padding: 80px 0;
+                padding: 100px 0;
                 /* Más padding para espacio */
                 position: relative;
                 overflow: hidden;
@@ -3346,18 +3722,30 @@
                     <div class="col-md-6 mb-4">
                         <div class="glass-card h-100">
                             <h3 class="text-dark">Nuestra Ubicación y Horarios</h3>
-                            <p class="text-muted-dark"><i class="fas fa-map-marker-alt text-primary-dark"></i> Mz AN
-                                Lote 20 - B La Fortaleza</p>
-                            <p class="text-muted-dark"><i class="fas fa-phone-alt text-primary-dark"></i> +57
-                                31012345678</p>
-                            <p class="text-muted-dark"><i class="fas fa-envelope text-primary-dark"></i>
-                                iglesialafortalezacruzadacristiana@gmail.com</p>
-                            <p class="text-muted-dark"><i class="fas fa-clock text-primary-dark"></i> <strong>Horarios
-                                    de Oficina:</strong> L a V, 8:00 AM - 4:00 PM</p>
-                            <p class="text-muted-dark"><i class="fas fa-church text-primary-dark"></i> <strong>Servicios
-                                    Dominicales:</strong> 10:00 AM</p>
-                            <p class="text-muted-dark"><i class="fas fa-church text-primary-dark"></i> <strong>Servicios
-                                    Martes:</strong> 06:30 PM</p>
+                            <p class="text-muted-dark">
+                                <i class="fas fa-map-marker-alt text-info me-2"></i> Mz AN Lote 20 - B La Fortaleza
+                            </p>
+                            <p class="text-muted-dark">
+                                <i class="fab fa-whatsapp text-success me-2"></i> <a href="https://wa.me/5731012345678"
+                                    target="_blank" class="text-muted-dark text-decoration-none"> +5731012345678</a>
+                            </p>
+                            <p class="text-muted-dark">
+                                <i class="fas fa-envelope text-danger me-2"></i>
+                                <a href="mailto:iglesialafortalezacruzadacristiana@gmail.com"
+                                    class="text-muted-dark text-decoration-none">iglesialafortalezacruzadacristiana@gmail.com</a>
+                            </p>
+                            <p class="text-muted-dark">
+                                <i class="fas fa-clock text-secondary me-2"></i> <strong>Horarios de Oficina:</strong>
+                                Lu a Vi 08:00 a.m. - 04:00 a.m.
+                            </p>
+                            <p class="text-muted-dark">
+                                <i class="fas fa-church text-primary me-2"></i> <strong>Servicios Dominicales:</strong>
+                                08:30 a.m.
+                            </p>
+                            <p class="text-muted-dark">
+                                <i class="fas fa-church text-success me-2"></i> <strong>Servicios Martes:</strong> 06:30
+                                p.m.
+                            </p>
                             <div class="map-container">
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d279.4718491828743!2d-72.55519290457653!3d7.902507190430007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e664f928b7cc66f%3A0x4921eaa2d021692!2sCDI%20GUERREROS%20C.A.P.I!5e1!3m2!1ses!2sco!4v1751401349360!5m2!1ses!2sco"
@@ -4732,112 +5120,112 @@
 
 
             // --- DECLARAR VARIABLE GLOBAL ---
-let sermonsData = [];
+            let sermonsData = [];
 
-async function fetchSermonsFromBackend() {
-    try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbyZGpYqCc4oI7f37W6neSxSqfD6RPQ9nGpB4Cbd2cywOJUDLtvO6xUpdcN-DNFSCGJP/exec");
-        const data = await response.json();
+            async function fetchSermonsFromBackend() {
+                try {
+                    const response = await fetch("https://script.google.com/macros/s/AKfycbyZGpYqCc4oI7f37W6neSxSqfD6RPQ9nGpB4Cbd2cywOJUDLtvO6xUpdcN-DNFSCGJP/exec");
+                    const data = await response.json();
 
-        // Validar que recibimos un arreglo
-        if (Array.isArray(data)) {
-            sermonsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-            populateFilterOptions();
-            renderSermons(sermonsData);
-        } else {
-            console.error("❌ La respuesta no es un arreglo:", data);
-        }
-    } catch (error) {
-        console.error("❌ Error al cargar predicaciones:", error);
-    }
-}
+                    // Validar que recibimos un arreglo
+                    if (Array.isArray(data)) {
+                        sermonsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        populateFilterOptions();
+                        renderSermons(sermonsData);
+                    } else {
+                        console.error("❌ La respuesta no es un arreglo:", data);
+                    }
+                } catch (error) {
+                    console.error("❌ Error al cargar predicaciones:", error);
+                }
+            }
 
-function populateFilterOptions() {
-    const years = new Set();
-    const areas = new Set();
+            function populateFilterOptions() {
+                const years = new Set();
+                const areas = new Set();
 
-    sermonsData.forEach(sermon => {
-        if (sermon.date) years.add(new Date(sermon.date).getFullYear());
-        if (sermon.area) areas.add(sermon.area);
-    });
+                sermonsData.forEach(sermon => {
+                    if (sermon.date) years.add(new Date(sermon.date).getFullYear());
+                    if (sermon.area) areas.add(sermon.area);
+                });
 
-    // AÑO
-    filterYear.innerHTML = '<option value="">Año</option>';
-    Array.from(years).sort((a, b) => b - a).forEach(year => {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        filterYear.appendChild(option);
-    });
+                // AÑO
+                filterYear.innerHTML = '<option value="">Año</option>';
+                Array.from(years).sort((a, b) => b - a).forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    filterYear.appendChild(option);
+                });
 
-    // ÁREA
-    filterArea.innerHTML = '<option value="">Área</option>';
-    Array.from(areas).sort().forEach(area => {
-        const option = document.createElement('option');
-        option.value = area;
-        option.textContent = area;
-        filterArea.appendChild(option);
-    });
-}
+                // ÁREA
+                filterArea.innerHTML = '<option value="">Área</option>';
+                Array.from(areas).sort().forEach(area => {
+                    const option = document.createElement('option');
+                    option.value = area;
+                    option.textContent = area;
+                    filterArea.appendChild(option);
+                });
+            }
 
-function applySermonFilters() {
-    const selectedYear = filterYear.value;
-    const selectedMonth = filterMonth.value;
-    const selectedArea = filterArea.value;
-    const searchTerm = searchSermon.value.toLowerCase();
+            function applySermonFilters() {
+                const selectedYear = filterYear.value;
+                const selectedMonth = filterMonth.value;
+                const selectedArea = filterArea.value;
+                const searchTerm = searchSermon.value.toLowerCase();
 
-    const filtered = sermonsData.filter(sermon => {
-        const date = new Date(sermon.date);
-        const year = date.getFullYear().toString();
-        const month = (date.getMonth() + 1).toString();
+                const filtered = sermonsData.filter(sermon => {
+                    const date = new Date(sermon.date);
+                    const year = date.getFullYear().toString();
+                    const month = (date.getMonth() + 1).toString();
 
-        const matchesYear = !selectedYear || year === selectedYear;
-        const matchesMonth = !selectedMonth || month === selectedMonth;
-        const matchesArea = !selectedArea || sermon.area === selectedArea;
+                    const matchesYear = !selectedYear || year === selectedYear;
+                    const matchesMonth = !selectedMonth || month === selectedMonth;
+                    const matchesArea = !selectedArea || sermon.area === selectedArea;
 
-        const matchesSearch = !searchTerm || [
-            sermon.title,
-            sermon.preacher,
-            sermon.area,
-            sermon.description1,
-            sermon.description2,
-            sermon.description3,
-            sermon.objetivo,
-            sermon.finalConclusion,
-            sermon.targetAudience
-        ].some(field => field?.toLowerCase().includes(searchTerm));
+                    const matchesSearch = !searchTerm || [
+                        sermon.title,
+                        sermon.preacher,
+                        sermon.area,
+                        sermon.description1,
+                        sermon.description2,
+                        sermon.description3,
+                        sermon.objetivo,
+                        sermon.finalConclusion,
+                        sermon.targetAudience
+                    ].some(field => field?.toLowerCase().includes(searchTerm));
 
-        return matchesYear && matchesMonth && matchesArea && matchesSearch;
-    });
+                    return matchesYear && matchesMonth && matchesArea && matchesSearch;
+                });
 
-    renderSermons(filtered);
-}
+                renderSermons(filtered);
+            }
 
-function renderSermons(filteredSermons) {
-    sermonsContainer.innerHTML = '';
-    if (filteredSermons.length === 0) {
-        sermonsContainer.innerHTML = '<p class="text-muted text-center">No se encontraron predicaciones.</p>';
-        return;
-    }
+            function renderSermons(filteredSermons) {
+                sermonsContainer.innerHTML = '';
+                if (filteredSermons.length === 0) {
+                    sermonsContainer.innerHTML = '<p class="text-muted text-center">No se encontraron predicaciones.</p>';
+                    return;
+                }
 
-    filteredSermons.forEach(sermon => {
-        const card = document.createElement('div');
-        card.classList.add("col-md-6", "col-lg-4", "mb-4");
+                filteredSermons.forEach(sermon => {
+                    const card = document.createElement('div');
+                    card.classList.add("col-md-6", "col-lg-4", "mb-4");
 
-        card.innerHTML = `
+                    card.innerHTML = `
     <div class="card h-100 sermon-card shadow-sm border-0 rounded-4 overflow-hidden">
-        <img src="${sermon.imageUrl || 'https://via.placeholder.com/400x220?text=Predicación'}" class="card-img-top" alt="${sermon.title}" style="height: 220px; object-fit: cover;">
+        <img src="${sermon.imageUrl || 'https://via.placeholder.com/400x220?text=Imagen+de+Predicacion'}" class="card-img-top" alt="${sermon.title}" style="height: 220px; object-fit: cover;">
         <div class="card-body d-flex flex-column justify-content-between">
             <div>
-                <h5 class="card-title text-primary fw-bold">${sermon.title}</h5>
+                <h5 class="card-title text-primary fw-bold">${truncateText(sermon.title, 60)}</h5>
                 <p class="card-text text-muted mb-1">
                     <i class="fas fa-calendar-alt me-1"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}
                 </p>
                 <p class="card-text text-muted mb-1">
-                    <i class="fas fa-user me-1"></i> ${sermon.preacher}
+                    <i class="fas fa-user me-1"></i> ${truncateText(sermon.preacher, 40)}
                 </p>
-                <p class="card-text mb-1"><strong>Área:</strong> ${sermon.area}</p>
-                <p class="card-text mb-2"><strong>Objetivo:</strong> ${sermon.objetivo || 'No definido'}</p>
+                <p class="card-text mb-1"><strong>Área:</strong> ${truncateText(sermon.area, 30)}</p>
+                <p class="card-text mb-2"><strong>Objetivo:</strong> ${truncateText(sermon.objetivo, 80)}</p>
             </div>
             <div class="text-end">
                 <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
@@ -4846,26 +5234,26 @@ function renderSermons(filteredSermons) {
     </div>
 `;
 
-        sermonsContainer.appendChild(card);
-    });
-}
+                    sermonsContainer.appendChild(card);
+                });
+            }
 
-// --- ASIGNAR EVENTOS A LOS FILTROS ---
-const resetFiltersBtn = document.getElementById('resetFilters');
-filterYear.addEventListener('change', applySermonFilters);
-filterMonth.addEventListener('change', applySermonFilters);
-filterArea.addEventListener('change', applySermonFilters);
-searchSermon.addEventListener('input', applySermonFilters);
-resetFiltersBtn.addEventListener('click', () => {
-    filterYear.value = '';
-    filterMonth.value = '';
-    filterArea.value = '';
-    searchSermon.value = '';
-    applySermonFilters();
-});
+            // --- ASIGNAR EVENTOS A LOS FILTROS ---
+            const resetFiltersBtn = document.getElementById('resetFilters');
+            filterYear.addEventListener('change', applySermonFilters);
+            filterMonth.addEventListener('change', applySermonFilters);
+            filterArea.addEventListener('change', applySermonFilters);
+            searchSermon.addEventListener('input', applySermonFilters);
+            resetFiltersBtn.addEventListener('click', () => {
+                filterYear.value = '';
+                filterMonth.value = '';
+                filterArea.value = '';
+                searchSermon.value = '';
+                applySermonFilters();
+            });
 
-// ✅ LLAMADA FINAL
-fetchSermonsFromBackend();
+            // ✅ LLAMADA FINAL
+            fetchSermonsFromBackend();
 
 
             // --- Event Creation Login/Form Logic ---
