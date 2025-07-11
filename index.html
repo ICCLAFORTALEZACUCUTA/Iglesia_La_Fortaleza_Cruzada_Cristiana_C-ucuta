@@ -4729,10 +4729,10 @@
                     <p><strong>Fecha:</strong> <span id="sermonModalDate"></span></p>
                     <p><strong>Predicador:</strong> <span id="sermonModalPreacher"></span></p>
                     <p><strong>Área:</strong> <span id="sermonModalArea"></span></p>
-                    <p id="sermonModalKeyVerses" class="mb-3">
+                    <div class="mb-3" id="sermonModalKeyVerses">
                         <strong>Versículos Clave:</strong>
-                    <ul id="sermonModalKeyVerseList" class="mb-0"></ul>
-                    </p>
+                        <ul id="sermonModalKeyVerseList" class="mb-0"></ul>
+                    </div>
                     <p><strong>Objetivo:</strong> <span id="sermonModalObjetivo"></span></p>
                     <hr>
                     <p id="sermonModalDescription1"></p>
@@ -5864,6 +5864,23 @@
             });
         }
 
+        function getYouTubeEmbedUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                if (urlObj.hostname.includes('youtube.com')) {
+                    const videoId = urlObj.searchParams.get('v');
+                    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+                } else if (urlObj.hostname.includes('youtu.be')) {
+                    const videoId = urlObj.pathname.slice(1);
+                    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+                }
+            } catch (e) {
+                return null;
+            }
+            return null;
+        }
+
+
         // Función para mostrar un mensaje de alerta
         function displayMessage(element, message, type = 'success') {
             element.textContent = message;
@@ -5954,7 +5971,6 @@
             document.getElementById('sermonModalDate').textContent = new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('sermonModalPreacher').textContent = sermon.preacher || 'Desconocido';
             document.getElementById('sermonModalArea').textContent = sermon.area || 'No definida';
-            document.getElementById('sermonModalKeyVerses').textContent = sermon.verse || 'No definido';
             document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
             document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
             document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
@@ -5964,12 +5980,25 @@
             document.getElementById('sermonModalImage').src = sermon.imageUrl || '';
 
             // ✅ Versículos clave correctamente
+            // Versículos clave
             const keyVerseList = document.getElementById('sermonModalKeyVerseList');
             const keyVerseSection = document.getElementById('sermonModalKeyVerses');
             keyVerseList.innerHTML = '';
 
-            if (sermon.keyVerse && sermon.keyVerse.length > 0) {
-                sermon.keyVerse.forEach(verse => {
+            let verses = [];
+
+            // Si viene como array (recomendado)
+            if (Array.isArray(sermon.keyVerse) && sermon.keyVerse.length > 0) {
+                verses = sermon.keyVerse;
+            }
+            // Si viene como string separado por comas
+            else if (typeof sermon.verse === 'string' && sermon.verse.trim() !== '') {
+                verses = sermon.verse.split(',').map(v => v.trim());
+            }
+
+            // Mostrar si hay contenido
+            if (verses.length > 0) {
+                verses.forEach(verse => {
                     const li = document.createElement('li');
                     li.textContent = verse;
                     keyVerseList.appendChild(li);
@@ -5979,17 +6008,25 @@
                 keyVerseSection.style.display = 'none';
             }
 
+
             // ✅ Video embebido
             const videoIframe = document.getElementById('sermonModalVideo');
             const videoContainer = videoIframe.parentElement;
 
             if (sermon.link) {
-                videoIframe.src = sermon.link;
-                videoContainer.style.display = 'block';
+                const embedUrl = getYouTubeEmbedUrl(sermon.link);
+                if (embedUrl) {
+                    videoIframe.src = embedUrl;
+                    videoContainer.style.display = 'block';
+                } else {
+                    videoIframe.src = '';
+                    videoContainer.style.display = 'none';
+                }
             } else {
                 videoIframe.src = '';
                 videoContainer.style.display = 'none';
             }
+
 
             // ✅ Descargar archivo
             const downloadBtn = document.getElementById('sermonModalFileDownload');
