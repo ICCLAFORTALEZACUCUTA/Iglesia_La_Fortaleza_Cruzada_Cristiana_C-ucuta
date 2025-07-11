@@ -5502,26 +5502,33 @@
                     card.classList.add("col-md-6", "col-lg-4", "mb-4");
 
                     card.innerHTML = `
-    <div class="card h-100 sermon-card shadow-sm border-0 rounded-4 overflow-hidden">
-        <img src="${sermon.imageUrl || 'https://via.placeholder.com/400x220?text=Imagen+de+Predicacion'}" class="card-img-top" alt="${sermon.title}" style="height: 220px; object-fit: cover;">
-        <div class="card-body d-flex flex-column justify-content-between">
-            <div>
-                <h5 class="card-title text-primary fw-bold">${truncateText(sermon.title, 60)}</h5>
-                <p class="card-text text-muted mb-1">
-                    <i class="fas fa-calendar-alt me-1"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}
-                </p>
-                <p class="card-text text-muted mb-1">
-                    <i class="fas fa-user me-1"></i> ${truncateText(sermon.preacher, 40)}
-                </p>
-                <p class="card-text mb-1"><strong>Área:</strong> ${truncateText(sermon.area, 30)}</p>
-                <p class="card-text mb-2"><strong>Objetivo:</strong> ${truncateText(sermon.objetivo, 80)}</p>
-            </div>
-            <div class="text-end">
-                <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
-            </div>
+<div class="card h-100 sermon-card shadow-sm border-0 rounded-4 overflow-hidden" style="min-width: 250px;">
+    <img 
+        src="${sermon.imageUrl || 'https://via.placeholder.com/400x220?text=Imagen+de+Predicacion'}" 
+        class="card-img-top" 
+        alt="${sermon.title}" 
+        style="height: 220px; object-fit: cover;" 
+        onerror="this.onerror=null;this.src='https://via.placeholder.com/400x220?text=Imagen+no+disponible';"
+    >
+    <div class="card-body d-flex flex-column justify-content-between">
+        <div>
+            <h5 class="card-title text-primary fw-bold">${truncateText(sermon.title, 60)}</h5>
+            <p class="card-text text-muted mb-1">
+                <i class="fas fa-calendar-alt me-1"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}
+            </p>
+            <p class="card-text text-muted mb-1">
+                <i class="fas fa-user me-1"></i> ${truncateText(sermon.preacher, 40)}
+            </p>
+            <p class="card-text mb-1"><strong>Área:</strong> ${truncateText(sermon.area, 30)}</p>
+            <p class="card-text mb-2"><strong>Objetivo:</strong> ${truncateText(sermon.objetivo, 80)}</p>
+        </div>
+        <div class="text-end">
+            <button class="btn btn-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
         </div>
     </div>
+</div>
 `;
+
 
                     sermonsContainer.appendChild(card);
                 });
