@@ -1757,6 +1757,176 @@
                         transform: translateY(0);
                     }
                 }
+
+                /* --- Sección de Historia - Mejoras y Línea de Tiempo --- */
+
+                /* Estilo para la imagen principal de la historia */
+                .history-image {
+                    border-radius: 15px !important;
+                    /* Más redondeado y consistente con el glass-card */
+                    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
+                    /* Sombra consistente */
+                    object-fit: cover;
+                    /* Asegura que la imagen cubra bien su espacio */
+                    width: 100%;
+                    height: auto;
+                    /* Mantener la proporción */
+                }
+
+                /* Contenedor general de la línea de tiempo */
+                .timeline-container {
+                    position: relative;
+                    padding: 20px 0;
+                    margin-top: 3rem;
+                    /* Espacio superior para separar del texto de historia */
+                    /* No se necesita background-color aquí ya que está dentro de glass-card */
+                }
+
+                /* Contenedor de la línea vertical */
+                .timeline {
+                    position: relative;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+
+                /* La línea vertical central */
+                .timeline::after {
+                    content: '';
+                    position: absolute;
+                    width: 4px;
+                    /* Grosor de la línea */
+                    background-color: var(--primary-color);
+                    /* Color de la línea, usando tu variable */
+                    top: 0;
+                    bottom: 0;
+                    left: 50%;
+                    /* Centra la línea */
+                    margin-left: -2px;
+                    /* Ajuste para centrar perfectamente */
+                    border-radius: 2px;
+                }
+
+                /* Estilo para cada evento individual de la línea de tiempo */
+                .timeline-item {
+                    padding: 10px 0;
+                    position: relative;
+                    width: 50%;
+                    /* La mitad del ancho para izquierda/derecha */
+                    animation: fadeIn 1s ease-out forwards;
+                    /* Animación de aparición suave */
+                    opacity: 0;
+                    /* Empieza invisible para la animación */
+                }
+
+                /* Bolita en la línea de tiempo para cada evento */
+                .timeline-item::after {
+                    content: '';
+                    position: absolute;
+                    width: 20px;
+                    /* Tamaño de la bolita */
+                    height: 20px;
+                    background-color: var(--secondary-color);
+                    /* Color de la bolita */
+                    border: 4px solid var(--card-bg-light);
+                    /* Borde para que resalte sobre la línea */
+                    top: 25px;
+                    /* Posición vertical de la bolita */
+                    border-radius: 50%;
+                    /* Hacerla circular */
+                    z-index: 1;
+                    /* Asegura que esté por encima de la línea */
+                    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+                    transition: background-color 0.3s ease, border-color 0.3s ease;
+                }
+
+                /* Alineación a la izquierda de la línea */
+                .timeline-item.left {
+                    left: 0;
+                    padding-right: 40px;
+                    /* Espacio para la línea y la bolita */
+                }
+
+                .timeline-item.left::after {
+                    right: -10px;
+                    /* Posiciona la bolita en el lado derecho del elemento izquierdo */
+                }
+
+                /* Alineación a la derecha de la línea */
+                .timeline-item.right {
+                    left: 50%;
+                    padding-left: 40px;
+                    /* Espacio para la línea y la bolita */
+                }
+
+                .timeline-item.right::after {
+                    left: -10px;
+                    /* Posiciona la bolita en el lado izquierdo del elemento derecho */
+                }
+
+                /* Contenido de cada evento (la "tarjeta" del hito) */
+                .timeline-content {
+                    padding: 20px;
+                    background: var(--card-bg-light);
+                    /* Utiliza tu variable para el fondo de la tarjeta */
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                    /* Sombra más sutil para los ítems */
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+
+                .timeline-content:hover {
+                    transform: translateY(-5px);
+                    /* Efecto de "levantar" al pasar el ratón */
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+                    /* Sombra más pronunciada al pasar el ratón */
+                }
+
+                /* Animación de aparición de los ítems de la línea de tiempo */
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                /* --- Responsive para Línea de Tiempo (en móviles) --- */
+                @media (max-width: 767.98px) {
+                    .timeline::after {
+                        left: 30px;
+                        /* Línea vertical más a la izquierda en móviles */
+                    }
+
+                    .timeline-item {
+                        width: 100%;
+                        /* Ocupa todo el ancho */
+                        padding-left: 60px;
+                        /* Más espacio a la izquierda para la línea y bolitas */
+                        padding-right: 15px;
+                        /* Menos padding a la derecha */
+                    }
+
+                    .timeline-item.left,
+                    .timeline-item.right {
+                        left: 0;
+                        /* Todos los ítems se alinean a la izquierda en móviles */
+                    }
+
+                    .timeline-item.left::after,
+                    .timeline-item.right::after {
+                        left: 20px;
+                        /* Bolitas siempre a la izquierda de la línea en móviles */
+                    }
+
+                    .timeline-container h4 {
+                        font-size: 1.6rem;
+                        /* Ajuste del tamaño del título en móviles */
+                    }
+                }
             </style>
 
 
@@ -2038,12 +2208,13 @@
                     </div>
                 </div>
 
-                <div class="glass-card mb-4">
-                    <h3 class="text-dark">Nuestra Historia: De la Semilla a la Cosecha en Cristo </h3>
-                    <div class="row d-flex align-items-center">
+                <div class="glass-card mb-4 p-4">
+                    <h3 class="text-primary-dark mb-4">Nuestra Historia: De la Semilla a la Cosecha en Cristo </h3>
+                    <div class="row d-flex align-items-center mb-5">
                         <div class="col-md-6 order-md-2">
                             <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/89319432_104784571150746_3683856675992764416_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGZ0MY-vHnhJ3ikuw1EtqFl-3XTQthDuJz7ddNC2EO4nDTwlIbyewjY94gljnTEHgTHdupnp0cy6Eba-7Zavxps&_nc_ohc=Tjc_QjGlVOUQ7kNvwHiHNpK&_nc_oc=AdmZnZdz0MAdp4YPp2ybwm_shDFC1FRfPMsxmKT-D7hW82DITIUwQ7269fwdpGKsQ-U&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=t2ZzT1_PJuaxlOmhWzYvVw&oh=00_AfMOqqJj6YYFa4brFaiFtzruHHpwcRQMnC80-ARw8QuAIQ&oe=688CA8F8"
-                                alt="Historia de la Iglesia" class="img-fluid rounded shadow-sm mb-3 mb-md-0">
+                                alt="Historia de la Iglesia"
+                                class="img-fluid rounded shadow-sm history-image mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6 order-md-1 text-left">
                             <p class="text-muted-dark">Nacimos en Cúcuta/La Fortaleza con un llamado claro: ser una
@@ -2065,297 +2236,134 @@
                                 la grandeza de Dios manifestarse.</p>
                         </div>
                     </div>
+
+                    <div class="timeline-container">
+                        <h4 class="text-center text-primary-dark mb-5">Hitos de Nuestra Historia</h4>
+                        <div class="timeline">
+                            <div class="timeline-item left">
+                                <div class="timeline-content glass-card p-3 shadow-sm">
+                                    <h5 class="fw-bold text-primary-dark">2017 - Nacimiento de La Fortaleza</h5>
+                                    <p class="text-muted-dark">Con la visión ardiente de plantar una iglesia enfocada en
+                                        el evangelismo. Se inician las primeras reuniones en lugares humildes, y desde
+                                        allí se envía a los creyentes para un trabajo espiritual y de crecimiento,
+                                        buscando expandir el mensaje y consolidar la fe de la comunidad..</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item right">
+                                <div class="timeline-content glass-card p-3 shadow-sm">
+                                    <h5 class="fw-bold text-primary-dark">2018 - Primeras Cosechas y Crecimiento</h5>
+                                    <p class="text-muted-dark">A pesar de los desafíos iniciales, la comunidad comienza
+                                        a crecer. Se observan los primeros testimonios de vidas transformadas y se
+                                        consolida el núcleo de la congregación.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item left">
+                                <div class="timeline-content glass-card p-3 shadow-sm">
+                                    <h5 class="fw-bold text-primary-dark">2020 - Consolidación y Alcance Comunitario
+                                    </h5>
+                                    <p class="text-muted-dark">La iglesia establece una base sólida. Se inician
+                                        programas de alcance comunitario y se fortalece el discipulado, extendiendo la
+                                        influencia del evangelio en la ciudad.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item right">
+                                <div class="timeline-content glass-card p-3 shadow-sm">
+                                    <h5 class="fw-bold text-primary-dark">2025 - Mirando al Futuro con Fe</h5>
+                                    <p class="text-muted-dark">Continuamos firmes en nuestra misión evangelística,
+                                        siendo testigos de milagros y de familias encontrando esperanza. Preparándonos
+                                        para nuevos retos y mayores bendiciones.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="glass-card">
-                    <h2 class="text-center text-primary mb-4">Momentos Especiales</h2>
-                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
-                        </div>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6GYdIu62yg_fU40KA-UGTR-Djy5-u_aeLb4wPPnbyZTIyxYUzv57272pgArM84NCzjM9PXU07H5WAkwOXuomx0SCNAmHBO_TLF7QgbqRjVByubt1glK78U9jI7hGpUv0N5wtjcfLeZHSZJ2sv_SAcHwomFVYNMxTtSPkTJmlwwTdLQ7bX9SDZAXhI/s720/FB_IMG_1667876105076.jpg"
-                                    class="d-block w-100 carousel-img" alt="Evento Comunitario">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://live.staticflickr.com/7097/7403591632_6981a075d2_b.jpg"
-                                    class="d-block w-100 carousel-img" alt="Actividad de Fe">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://diariopublicable.com/wp-content/uploads/2018/08/5b88b1c624749_crop.jpg"
-                                    class="d-block w-100 carousel-img" alt="Celebración Anual">
+                    <h3 class="text-dark">Nuestro Equipo Directivo</h3>
+                    <div class="ministries-grid">
+                        <div class="ministry-card" data-pastor-id="juan">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/157526063_3687681718019918_4724282678552833556_n.jpg?stp=dst-jpg_tt6&cstp=mx960x720&ctp=s960x720&_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFiLuVd3pZ0P11Dr5oGkXxU8eLhDs0hR6Dx4uEOzSFHoD_rMWX-5ZIMOOrqN_iEtrFTdfh1tJ6FD7xEek-B6Ji1&_nc_ohc=f3wnF2GxScgQ7kNvwEOUyLn&_nc_oc=Adn__HfDlKcR5jH_mYfEq-wZ16gGqJa2Kjh-reo4mw2BtDD9R8uTiwKawH3yDHGWqoc&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=y0MWvpPONSEYcKasYbuGLg&oh=00_AfMC3TVaVKquxeWvsoZEL1mqw_xuL7wH6Nhu1whGBxoZQg&oe=688BB36C"
+                                alt="Pastor Juan Pérez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Pastor Miguel Bautista</h4>
+                                <p class="text-muted-dark">Pastor Principal</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <style>
-                /* --- Mejoras para el Carrusel de Imágenes (Nuevo) --- */
-                #galeria-momentos {
-                    background-color: var(--light-color);
-                    /* Fondo claro para la sección del carrusel */
-                    padding: 4rem 0;
-                    /* Espaciado generoso */
-                    border-top: 1px solid var(--card-border-light);
-                    /* Separador sutil */
-                }
-
-                .carousel-item img.carousel-img {
-                    height: 250px;
-                    /* Altura fija para las imágenes del carrusel, como solicitaste */
-                    object-fit: cover;
-                    /* Asegura que la imagen cubra el área sin distorsionarse */
-                    border-radius: 15px;
-                    /* Bordes redondeados para un toque moderno, similar a tus tarjetas */
-                    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-                    /* Sombra elegante para darle profundidad */
-                    transition: transform 0.5s ease-in-out;
-                    /* Transición suave al cambiar de imagen */
-                }
-
-                .carousel-item img.carousel-img:hover {
-                    transform: scale(1.01);
-                    /* Pequeño efecto de zoom al pasar el ratón */
-                }
-
-                /* Estilo para los indicadores del carrusel (los puntos de abajo) */
-                .carousel-indicators [data-bs-target] {
-                    background-color: var(--primary-color);
-                    /* Color de los puntos, usando tu variable */
-                    opacity: 0.6;
-                    /* Un poco de transparencia */
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
-                    /* Hacerlos circulares */
-                    transition: opacity 0.3s ease, background-color 0.3s ease;
-                }
-
-                .carousel-indicators .active {
-                    background-color: var(--secondary-color);
-                    /* Color del punto activo, resaltando */
-                    opacity: 1;
-                    /* Sin transparencia para el activo */
-                    transform: scale(1.2);
-                    /* Ligeramente más grande */
-                }
-
-                /* Estilo para las flechas de navegación (prev/next) */
-                .carousel-control-prev,
-                .carousel-control-next {
-                    width: 6%;
-                    /* Hace que las áreas de clic de las flechas sean un poco más grandes */
-                    opacity: 0.8;
-                    /* Ligeramente transparentes por defecto */
-                    transition: opacity 0.3s ease;
-                }
-
-                .carousel-control-prev:hover,
-                .carousel-control-next:hover {
-                    opacity: 1;
-                    /* Totalmente visibles al pasar el ratón */
-                    background-color: rgba(0, 0, 0, 0.1);
-                    /* Sutil fondo al pasar el ratón */
-                }
-
-                .carousel-control-prev-icon,
-                .carousel-control-next-icon {
-                    background-color: var(--primary-color);
-                    /* Fondo de las flechas, usando tu color principal */
-                    border-radius: 50%;
-                    /* Las hace circulares */
-                    padding: 18px;
-                    /* Tamaño del círculo de fondo */
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-                    /* Sombra para las flechas */
-                    background-size: 60%;
-                    /* Ajusta el tamaño del icono de la flecha dentro del círculo */
-                }
-
-                /* Mejora general de h2 y h3 para más profesionalismo */
-                h2 {
-                    font-size: 2.8rem;
-                    /* Un poco más grande para los títulos de sección */
-                    font-weight: 700;
-                    /* Más audaz */
-                    color: var(--text-primary-dark);
-                    /* Color más oscuro para el contraste */
-                }
-
-                h2::after {
-                    width: 100px;
-                    /* Subrayado un poco más largo */
-                    height: 4px;
-                    /* Un poco más grueso */
-                    background-color: var(--primary-color);
-                    /* Usamos el color primario */
-                }
-
-                h3 {
-                    font-size: 2.2rem;
-                    /* Títulos de tarjeta un poco más grandes */
-                    font-weight: 600;
-                    /* Más audaz */
-                }
-
-                /* Ajustes para la responsividad de texto e iconos en tarjetas de valores */
-                /* Estos ya son responsivos por el uso de 'em' y clases de Bootstrap, pero puedes afinarlos */
-                .glass-card .fa-3x {
-                    font-size: 3em;
-                    /* Mantiene un tamaño relativo grande para los iconos principales */
-                    margin-bottom: 1.5rem !important;
-                    /* Más espacio debajo de los iconos principales */
-                }
-
-                .glass-card .fw-bold {
-                    font-weight: 700 !important;
-                    /* Asegura que el texto sea realmente audaz */
-                }
-
-                /* Pequeñas animaciones para las tarjetas de valores */
-                .glass-card .p-3.border.rounded {
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                }
-
-                .glass-card .p-3.border.rounded:hover {
-                    transform: translateY(-5px);
-                    /* Efecto de "levantar" al pasar el ratón */
-                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-                    /* Sombra más pronunciada */
-                }
-
-                .carousel-item img.carousel-img {
-                    height: 200px;
-                    /* Reduce la altura en pantallas muy pequeñas */
-                    border-radius: 10px;
-                }
-
-                .carousel-control-prev-icon,
-                .carousel-control-next-icon {
-                    padding: 12px;
-                    /* Reduce el tamaño del círculo de las flechas en móvil */
-                    background-size: 50%;
-                }
-
-                .carousel-indicators [data-bs-target] {
-                    width: 8px;
-                    height: 8px;
-                    margin: 0 3px;
-                }
-
-                h2 {
-                    font-size: 2rem;
-                }
-
-                h3 {
-                    font-size: 1.8rem;
-                }
-            </style>
-            <br>
-
-            <div class="glass-card">
-                <h3 class="text-dark">Nuestro Equipo Directivo</h3>
-                <div class="ministries-grid">
-                    <div class="ministry-card" data-pastor-id="juan">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/157526063_3687681718019918_4724282678552833556_n.jpg?stp=dst-jpg_tt6&cstp=mx960x720&ctp=s960x720&_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFiLuVd3pZ0P11Dr5oGkXxU8eLhDs0hR6Dx4uEOzSFHoD_rMWX-5ZIMOOrqN_iEtrFTdfh1tJ6FD7xEek-B6Ji1&_nc_ohc=f3wnF2GxScgQ7kNvwEOUyLn&_nc_oc=Adn__HfDlKcR5jH_mYfEq-wZ16gGqJa2Kjh-reo4mw2BtDD9R8uTiwKawH3yDHGWqoc&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=y0MWvpPONSEYcKasYbuGLg&oh=00_AfMC3TVaVKquxeWvsoZEL1mqw_xuL7wH6Nhu1whGBxoZQg&oe=688BB36C"
-                            alt="Pastor Juan Pérez">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Pastor Miguel Bautista</h4>
-                            <p class="text-muted-dark">Pastor Principal</p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="maria">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/156921011_3687681391353284_941226635117097245_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHpIag9TyOtePyPZ_WPDvrPWAg_KzurcXJYCD8rO6txcucdX9H4y5Wci6o4ed364wF_qABVU53WtLQ577w9LJpw&_nc_ohc=E5wJpRHZAgcQ7kNvwFrv7WL&_nc_oc=AdmWD2N46u3SDoIBgLINzcTqOk8WMDR4O51Kd2NhdlHZHGQHSyaXftdePrcWNu0NOo8&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7OnQ7sHQvRyAMsA6Nl7Iqg&oh=00_AfOpnkUxg5vY0aWdCjaHxuV2C9KHAHLpZIUCkTF9D3-jQw&oe=688BE0B8"
+                                alt="Pastora Leidy Contreras">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Pastora Leidy Contreras</h4>
+                                <p class="text-muted-dark">Pastora Asociada</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="maria">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/156921011_3687681391353284_941226635117097245_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHpIag9TyOtePyPZ_WPDvrPWAg_KzurcXJYCD8rO6txcucdX9H4y5Wci6o4ed364wF_qABVU53WtLQ577w9LJpw&_nc_ohc=E5wJpRHZAgcQ7kNvwFrv7WL&_nc_oc=AdmWD2N46u3SDoIBgLINzcTqOk8WMDR4O51Kd2NhdlHZHGQHSyaXftdePrcWNu0NOo8&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7OnQ7sHQvRyAMsA6Nl7Iqg&oh=00_AfOpnkUxg5vY0aWdCjaHxuV2C9KHAHLpZIUCkTF9D3-jQw&oe=688BE0B8"
-                            alt="Pastora Leidy Contreras">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Pastora Leidy Contreras</h4>
-                            <p class="text-muted-dark">Pastora Asociada</p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="carlos">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
+                                alt="Rosana Rodriguez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Rosana Rodriguez</h4>
+                                <p class="text-muted-dark">Presbiterio </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="carlos">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
-                            alt="Rosana Rodriguez">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Rosana Rodriguez</h4>
-                            <p class="text-muted-dark">Presbiterio </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="raines">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/468174008_10236246597084542_4326832039647632234_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeGpiOTAMV24oGRMG86DMLggecLdqxnLLdV5wt2rGcst1b_tffT9UK32_bZm9kRT6bnPFKsonmUaQCI0Qodq_a70&_nc_ohc=epKBUWsxPg8Q7kNvwFhjiFK&_nc_oc=Adna3L9zi2-on-AAE63XCk8f6KkINUzjdVUvmnFgwLUHMyMPIk5tKt29jdf1lGAUoeU&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=D4ifTiGSjqWa2Hc0-9P0zQ&oh=00_AfPAH5BaLbzK3KzoMkK0JsxR1gOqDmjIU2W9bqqT6VG0Ig&oe=686B1485"
+                                alt="Lider Raines Lara">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Lider Raines Lara</h4>
+                                <p class="text-muted-dark">Lider Alabanza </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="raines">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/468174008_10236246597084542_4326832039647632234_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeGpiOTAMV24oGRMG86DMLggecLdqxnLLdV5wt2rGcst1b_tffT9UK32_bZm9kRT6bnPFKsonmUaQCI0Qodq_a70&_nc_ohc=epKBUWsxPg8Q7kNvwFhjiFK&_nc_oc=Adna3L9zi2-on-AAE63XCk8f6KkINUzjdVUvmnFgwLUHMyMPIk5tKt29jdf1lGAUoeU&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=D4ifTiGSjqWa2Hc0-9P0zQ&oh=00_AfPAH5BaLbzK3KzoMkK0JsxR1gOqDmjIU2W9bqqT6VG0Ig&oe=686B1485"
-                            alt="Lider Raines Lara">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Lider Raines Lara</h4>
-                            <p class="text-muted-dark">Lider Alabanza </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="brenda">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/470673744_122142328472372489_8711504693103405727_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGzlTqBolYBoRFhoweKT1j3VrLzjRAxsD5WsvONEDGwPikC41iwT_vVHAQisfLhhCU8LLx-oOGjuPJYvrcXD8zf&_nc_ohc=XEqGRbw-e7oQ7kNvwF3mpr0&_nc_oc=Adljnyz8BgIDpGYJB-3KbDatlxl3nMG-Sdi1bkvOVN9KNAZzkylfurj350xMl3PugxI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=Qmdb05CCqCyb3TXzjyw1nw&oh=00_AfNaRkcqkqFEvz0fKswm1e2ELbeOXOZ2BeSeIghjk6TgKw&oe=686B3CD5"
+                                alt="Lider Brenda Pereira">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Lider Brenda Pereira</h4>
+                                <p class="text-muted-dark">Lider Salon Kids </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="brenda">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/470673744_122142328472372489_8711504693103405727_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGzlTqBolYBoRFhoweKT1j3VrLzjRAxsD5WsvONEDGwPikC41iwT_vVHAQisfLhhCU8LLx-oOGjuPJYvrcXD8zf&_nc_ohc=XEqGRbw-e7oQ7kNvwF3mpr0&_nc_oc=Adljnyz8BgIDpGYJB-3KbDatlxl3nMG-Sdi1bkvOVN9KNAZzkylfurj350xMl3PugxI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=Qmdb05CCqCyb3TXzjyw1nw&oh=00_AfNaRkcqkqFEvz0fKswm1e2ELbeOXOZ2BeSeIghjk6TgKw&oe=686B3CD5"
-                            alt="Lider Brenda Pereira">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Lider Brenda Pereira</h4>
-                            <p class="text-muted-dark">Lider Salon Kids </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="fabian">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/495584815_999664712278342_7762599421405385125_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHnl2LDgSl8DUXffazKwr90NKYxS8kLCwI0pjFLyQsLAlRE5q0lZOp_YmE7MD8rSrPeTSaSbGE_LMPbdNbai--t&_nc_ohc=hyYiWJ5kxqYQ7kNvwHFmtpc&_nc_oc=Adm-OxoxC82tVA2DF2szBWuTz4lk0JomUzvJOSVluag7C5X1fzPlmEb6ot3pZu-gDus&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=hyG4nsefn2b_4Zex-HKOUg&oh=00_AfNj4WRoGC81Ss4u2l7v8Z1mu-EUznw5dDOJ9Aw2rskwrQ&oe=686B2021"
+                                alt="Lider Fabian Leal">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Lider Fabian Leal</h4>
+                                <p class="text-muted-dark">Lider Jovenes </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="fabian">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/495584815_999664712278342_7762599421405385125_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHnl2LDgSl8DUXffazKwr90NKYxS8kLCwI0pjFLyQsLAlRE5q0lZOp_YmE7MD8rSrPeTSaSbGE_LMPbdNbai--t&_nc_ohc=hyYiWJ5kxqYQ7kNvwHFmtpc&_nc_oc=Adm-OxoxC82tVA2DF2szBWuTz4lk0JomUzvJOSVluag7C5X1fzPlmEb6ot3pZu-gDus&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=hyG4nsefn2b_4Zex-HKOUg&oh=00_AfNj4WRoGC81Ss4u2l7v8Z1mu-EUznw5dDOJ9Aw2rskwrQ&oe=686B2021"
-                            alt="Lider Fabian Leal">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Lider Fabian Leal</h4>
-                            <p class="text-muted-dark">Lider Jovenes </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="jefferson">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
+                                alt="Lider Jefferson Martinez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Lider Jefferson Martinez</h4>
+                                <p class="text-muted-dark">Lider Servidores </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="jefferson">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t1.6435-9/147393544_10225725227702102_5990049714465942371_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFr6tEZwIsTeqPp0sIbzj0Z6YvXRylILUjpi9dHKUgtSCaZ21A3t0FdobUHms0aedV85qnA5PBPIaBfXR09uUuf&_nc_ohc=Dqdw9Mc4lN0Q7kNvwGuARaH&_nc_oc=AdkbAOppPs3FtDypdfKvjDCmq17ehesQhxPEkSW9NpECpe07G28KpvG2kQuXkkywdjY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fAgW_RbYpqwI6wnMQx2nMQ&oh=00_AfNPl2CAik_TwdLsmS9TMyLxi3cjzH4diOm3ctLbuwz3gQ&oe=688BB636"
-                            alt="Lider Jefferson Martinez">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Lider Jefferson Martinez</h4>
-                            <p class="text-muted-dark">Lider Servidores </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="lisbeth">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
+                                alt="Lisbeth Martinez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Lisbeth Martinez</h4>
+                                <p class="text-muted-dark">Presbiterio </p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="lisbeth">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
-                            alt="Lisbeth Martinez">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Lisbeth Martinez</h4>
-                            <p class="text-muted-dark">Presbiterio </p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
-                        </div>
-                    </div>
-                    <div class="ministry-card" data-pastor-id="helen">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
-                            alt="Helen Sanchez">
-                        <div class="ministry-card-content">
-                            <h4 class="text-primary-dark">Helen Sanchez</h4>
-                            <p class="text-muted-dark">Presbiterio</p>
-                            <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                        <div class="ministry-card" data-pastor-id="helen">
+                            <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/502969134_4138373736492280_9171160744233380858_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=cf85f3&_nc_eui2=AeHmednP4-PmJqGaTL_WMiAB3-u5W6tAyojf67lbq0DKiF1GGgX_Nva40KXgCyGxo5MeTEU1GeUUOwsIEEcPMPkp&_nc_ohc=OtOATfhB7a0Q7kNvwGmEpIm&_nc_oc=AdmX6GJJSGrLce_uUm_gRLDHwJFV4KdBTpXdoOebnnKpGG-lBS3P35iBzyLeDogCDBw&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=7n1jkHVebV4sGoilpj820Q&oh=00_AfOGtbALZbkGt3wTcwjpMhlvwH2vq7siPcwjp6TR3yHImA&oe=686B4318"
+                                alt="Helen Sanchez">
+                            <div class="ministry-card-content">
+                                <h4 class="text-primary-dark">Helen Sanchez</h4>
+                                <p class="text-muted-dark">Presbiterio</p>
+                                <button class="btn btn-secondary btn-sm read-bio-btn">Leer Biografía</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </section>
 
@@ -2539,10 +2547,13 @@
                                 <i class="fas fa-book-bible belief-icon"></i>
                                 <h4 class="belief-title">La Inspiración Divina de la Biblia</h4>
                             </div>
-                            <p class="belief-description">Creemos que la Biblia, compuesta por el Antiguo y Nuevo
-                                Testamento, es la Palabra de Dios inspirada verbalmente y plenamente, infalible en sus
-                                manuscritos originales, y es la autoridad suprema y final en todo asunto de fe y
-                                conducta. Es la revelación escrita de Dios para la humanidad.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que la Biblia, compuesta por el Antiguo y Nuevo
+                                    Testamento, es la Palabra de Dios inspirada verbalmente y plenamente, infalible en
+                                    sus
+                                    manuscritos originales, y es la autoridad suprema y final en todo asunto de fe y
+                                    conducta. Es la revelación escrita de Dios para la humanidad.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> 2 Timoteo 3:16-17
@@ -2566,6 +2577,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2575,10 +2587,15 @@
                                 <i class="fas fa-church belief-icon"></i>
                                 <h4 class="belief-title">La Naturaleza de Dios (La Trinidad)</h4>
                             </div>
-                            <p class="belief-description">Creemos en un solo Dios verdadero y vivo, infinito, eterno y
-                                perfecto en santidad, sabiduría, poder y amor. Él es el Creador y Sustentador de todas
-                                las cosas. Este único Dios existe eternamente en tres personas co-iguales: Padre, Hijo
-                                (Jesucristo) y Espíritu Santo. Son un solo Dios, pero distintas personas.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en un solo Dios verdadero y vivo, infinito, eterno
+                                    y
+                                    perfecto en santidad, sabiduría, poder y amor. Él es el Creador y Sustentador de
+                                    todas
+                                    las cosas. Este único Dios existe eternamente en tres personas co-iguales: Padre,
+                                    Hijo
+                                    (Jesucristo) y Espíritu Santo. Son un solo Dios, pero distintas personas.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Deuteronomio 6:4
@@ -2609,6 +2626,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2618,11 +2636,15 @@
                                 <i class="fas fa-cross belief-icon"></i>
                                 <h4 class="belief-title">Jesucristo: Dios con Nosotros (Emanuel)</h4>
                             </div>
-                            <p class="belief-description">Creemos en la deidad absoluta de nuestro Señor Jesucristo, en
-                                su nacimiento virginal, en su vida sin pecado, en sus milagros divinos, en su muerte
-                                sustitutoria y expiatoria en la cruz por nuestros pecados, en su resurrección corporal
-                                de entre los muertos, en su ascensión a la diestra del Padre, donde intercede por
-                                nosotros, y en su regreso personal y visible en poder y gloria.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en la deidad absoluta de nuestro Señor Jesucristo,
+                                    en
+                                    su nacimiento virginal, en su vida sin pecado, en sus milagros divinos, en su muerte
+                                    sustitutoria y expiatoria en la cruz por nuestros pecados, en su resurrección
+                                    corporal
+                                    de entre los muertos, en su ascensión a la diestra del Padre, donde intercede por
+                                    nosotros, y en su regreso personal y visible en poder y gloria.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Juan 1:1-3, 14
@@ -2653,6 +2675,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2662,12 +2685,17 @@
                                 <i class="fas fa-user-injured belief-icon"></i>
                                 <h4 class="belief-title">La Creación del Hombre y el Pecado</h4>
                             </div>
-                            <p class="belief-description">Creemos que el hombre fue creado directamente por Dios a su
-                                imagen y semejanza, en un estado de inocencia, pero por la desobediencia de Adán, toda
-                                la humanidad cayó en pecado. Como resultado, todos los seres humanos nacen con una
-                                naturaleza pecaminosa, están separados de Dios y son incapaces, por sí mismos, de
-                                alcanzar la salvación. El pecado es una transgresión de la ley de Dios y trae consigo la
-                                muerte espiritual y física.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que el hombre fue creado directamente por Dios a
+                                    su
+                                    imagen y semejanza, en un estado de inocencia, pero por la desobediencia de Adán,
+                                    toda
+                                    la humanidad cayó en pecado. Como resultado, todos los seres humanos nacen con una
+                                    naturaleza pecaminosa, están separados de Dios y son incapaces, por sí mismos, de
+                                    alcanzar la salvación. El pecado es una transgresión de la ley de Dios y trae
+                                    consigo la
+                                    muerte espiritual y física.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Génesis 1:27; 3:6-7
@@ -2691,6 +2719,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2700,12 +2729,16 @@
                                 <i class="fas fa-hand-holding-heart belief-icon"></i>
                                 <h4 class="belief-title">La Gracia de Dios y la Salvación</h4>
                             </div>
-                            <p class="belief-description">Creemos que la salvación del hombre es un regalo de Dios,
-                                obtenida solo por gracia a través de la fe en Jesucristo. La redención se logra a través
-                                del derramamiento de la sangre de Jesucristo en la cruz, quien murió por nuestros
-                                pecados, fue sepultado y resucitó al tercer día conforme a las Escrituras. Creemos que
-                                el arrepentimiento del pecado y la fe en Cristo son las únicas condiciones para la
-                                salvación. El que cree en Jesús tiene vida eterna.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que la salvación del hombre es un regalo de Dios,
+                                    obtenida solo por gracia a través de la fe en Jesucristo. La redención se logra a
+                                    través
+                                    del derramamiento de la sangre de Jesucristo en la cruz, quien murió por nuestros
+                                    pecados, fue sepultado y resucitó al tercer día conforme a las Escrituras. Creemos
+                                    que
+                                    el arrepentimiento del pecado y la fe en Cristo son las únicas condiciones para la
+                                    salvación. El que cree en Jesús tiene vida eterna.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Efesios 2:8-9
@@ -2736,6 +2769,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2745,10 +2779,14 @@
                                 <i class="fas fa-bath belief-icon"></i>
                                 <h4 class="belief-title">El Bautismo en Agua</h4>
                             </div>
-                            <p class="belief-description">Creemos en el bautismo en agua por inmersión total para
-                                aquellos que han creído en Jesucristo y se han arrepentido de sus pecados. Es un acto
-                                público de obediencia, un símbolo de la muerte, sepultura y resurrección con Cristo, y
-                                una declaración de fe en Su obra redentora.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en el bautismo en agua por inmersión total para
+                                    aquellos que han creído en Jesucristo y se han arrepentido de sus pecados. Es un
+                                    acto
+                                    público de obediencia, un símbolo de la muerte, sepultura y resurrección con Cristo,
+                                    y
+                                    una declaración de fe en Su obra redentora.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Mateo 28:19
@@ -2772,6 +2810,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2781,10 +2820,15 @@
                                 <i class="fas fa-bread-slice belief-icon"></i>
                                 <h4 class="belief-title">La Cena del Señor</h4>
                             </div>
-                            <p class="belief-description">Creemos en la celebración de la Cena del Señor (Comunión) como
-                                un mandato de Jesucristo para sus seguidores. Es una conmemoración de Su sacrificio en
-                                la cruz y Su sangre derramada, así como una anticipación de Su segunda venida.
-                                Participar de ella es un privilegio para los creyentes bautizados.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en la celebración de la Cena del Señor (Comunión)
+                                    como
+                                    un mandato de Jesucristo para sus seguidores. Es una conmemoración de Su sacrificio
+                                    en
+                                    la cruz y Su sangre derramada, así como una anticipación de Su segunda venida.
+                                    Participar
+                                    de ella es un privilegio para los creyentes bautizados.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> 1 Corintios 11:23-26
@@ -2801,6 +2845,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2810,11 +2855,14 @@
                                 <i class="fas fa-dove belief-icon"></i>
                                 <h4 class="belief-title">El Bautismo en el Espíritu Santo</h4>
                             </div>
-                            <p class="belief-description">Creemos en el bautismo en el Espíritu Santo como una
-                                experiencia subsiguiente a la salvación para aquellos que creen, con la evidencia
-                                inicial de hablar en otras lenguas según el Espíritu les da que hablen. Esta experiencia
-                                empodera a los creyentes para testificar y servir, y les permite vivir una vida más
-                                profunda y efectiva en Cristo.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en el bautismo en el Espíritu Santo como una
+                                    experiencia subsiguiente a la salvación para aquellos que creen, con la evidencia
+                                    inicial de hablar en otras lenguas según el Espíritu les da que hablen. Esta
+                                    experiencia
+                                    empodera a los creyentes para testificar y servir, y les permite vivir una vida más
+                                    profunda y efectiva en Cristo.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Hechos 1:8; 2:4
@@ -2838,6 +2886,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2847,10 +2896,13 @@
                                 <i class="fas fa-hand-holding-medical belief-icon"></i>
                                 <h4 class="belief-title">La Sanidad Divina</h4>
                             </div>
-                            <p class="belief-description">Creemos en la sanidad divina, la cual es provista para los
-                                creyentes a través de la expiación de Jesucristo en la cruz. Dios todavía sana hoy, y
-                                oramos con fe por la sanidad de los enfermos, creyendo en Su poder para restaurar el
-                                cuerpo, el alma y el espíritu.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en la sanidad divina, la cual es provista para los
+                                    creyentes a través de la expiación de Jesucristo en la cruz. Dios todavía sana hoy,
+                                    y
+                                    oramos con fe por la sanidad de los enfermos, creyendo en Su poder para restaurar el
+                                    cuerpo, el alma y el espíritu.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Isaías 53:4-5
@@ -2874,6 +2926,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2883,9 +2936,12 @@
                                 <i class="fas fa-cloud-sun belief-icon"></i>
                                 <h4 class="belief-title">La Segunda Venida de Cristo</h4>
                             </div>
-                            <p class="belief-description">Creemos en el regreso personal y visible de nuestro Señor
-                                Jesucristo a la Tierra. Este evento glorioso marcará la consumación de la historia de la
-                                redención y el establecimiento de Su reino eterno.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en el regreso personal y visible de nuestro Señor
+                                    Jesucristo a la Tierra. Este evento glorioso marcará la consumación de la historia
+                                    de la
+                                    redención y el establecimiento de Su reino eterno.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Juan 14:1-3
@@ -2909,6 +2965,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2918,9 +2975,13 @@
                                 <i class="fas fa-gavel belief-icon"></i>
                                 <h4 class="belief-title">El Juicio Final y la Vida Eterna</h4>
                             </div>
-                            <p class="belief-description">Creemos en la resurrección de los salvos para vida eterna con
-                                Dios en el cielo, y la resurrección de los no salvos para juicio eterno y castigo en el
-                                infierno. Creemos en un cielo nuevo y una tierra nueva donde morará la justicia.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en la resurrección de los salvos para vida eterna
+                                    con
+                                    Dios en el cielo, y la resurrección de los no salvos para juicio eterno y castigo en
+                                    el
+                                    infierno. Creemos en un cielo nuevo y una tierra nueva donde morará la justicia.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Daniel 12:2
@@ -2944,6 +3005,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2953,10 +3015,14 @@
                                 <i class="fas fa-users belief-icon"></i>
                                 <h4 class="belief-title">La Iglesia</h4>
                             </div>
-                            <p class="belief-description">Creemos en la iglesia como el cuerpo de Cristo, compuesta por
-                                todos los creyentes nacidos de nuevo a nivel universal. La iglesia local es una
-                                manifestación visible de este cuerpo, llamada a adorar a Dios, edificar a los creyentes,
-                                evangelizar al mundo y servir a su comunidad.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en la iglesia como el cuerpo de Cristo, compuesta
+                                    por
+                                    todos los creyentes nacidos de nuevo a nivel universal. La iglesia local es una
+                                    manifestación visible de este cuerpo, llamada a adorar a Dios, edificar a los
+                                    creyentes,
+                                    evangelizar al mundo y servir a su comunidad.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Efesios 1:22-23
@@ -2980,6 +3046,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -2989,9 +3056,12 @@
                                 <i class="fas fa-hand-holding-dollar belief-icon"></i>
                                 <h4 class="belief-title">Mayordomía</h4>
                             </div>
-                            <p class="belief-description">Creemos que todo lo que tenemos y somos proviene de Dios, y
-                                por lo tanto, somos llamados a ser buenos mayordomos de nuestros recursos, tiempo,
-                                talentos y finanzas, honrando a Dios con nuestras primicias y ofrendas.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que todo lo que tenemos y somos proviene de Dios,
+                                    y
+                                    por lo tanto, somos llamados a ser buenos mayordomos de nuestros recursos, tiempo,
+                                    talentos y finanzas, honrando a Dios con nuestras primicias y ofrendas.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> 1 Pedro 4:10
@@ -3015,6 +3085,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -3024,24 +3095,29 @@
                                 <i class="fas fa-crown belief-icon"></i>
                                 <h4 class="belief-title">Los Nombres de Dios y Su Carácter</h4>
                             </div>
-                            <p class="belief-description">Creemos que Dios se ha revelado a sí mismo a través de sus
-                                gloriosos nombres, los cuales describen Su carácter y atributos. Cada nombre revela una
-                                faceta de quién es Él y cómo interactúa con Su creación. Reconocemos:</p>
-                            <ul class="names-of-god-list">
-                                <li><i class="fas fa-hand-point-right"></i> Hamashiaj : El Dios autoexistente y eterno.
-                                </li>
-                                <li><i class="fas fa-hand-point-right"></i> Shaddai: Dios Todopoderoso.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Adonai: Señor y Maestro.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Jireh: El Señor Proveerá.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Rafa: El Señor que Sana.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Nisi: El Señor es mi Bandera.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Shalom: El Señor es Paz.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Raah: El Señor es mi Pastor.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Tsidkenu: El Señor nuestra Justicia.</li>
-                                <li><i class="fas fa-hand-point-right"></i> Sabaot: El Señor de los Ejércitos.</li>
-                            </ul>
-                            <p class="belief-description mt-3">Estos nombres nos enseñan sobre su soberanía, provisión,
-                                sanidad, protección, paz, guía, justicia y poder incomparable.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que Dios se ha revelado a sí mismo a través de sus
+                                    gloriosos nombres, los cuales describen Su carácter y atributos. Cada nombre revela
+                                    una
+                                    faceta de quién es Él y cómo interactúa con Su creación. Reconocemos:</p>
+                                <ul class="names-of-god-list">
+                                    <li><i class="fas fa-hand-point-right"></i> Hamashiaj : El Dios autoexistente y
+                                        eterno.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Shaddai: Dios Todopoderoso.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Adonai: Señor y Maestro.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Jireh: El Señor Proveerá.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Rafa: El Señor que Sana.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Nisi: El Señor es mi Bandera.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Shalom: El Señor es Paz.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Raah: El Señor es mi Pastor.</li>
+                                    <li><i class="fas fa-hand-point-right"></i> Tsidkenu: El Señor nuestra Justicia.
+                                    </li>
+                                    <li><i class="fas fa-hand-point-right"></i> Sabaot: El Señor de los Ejércitos.</li>
+                                </ul>
+                                <p class="belief-description mt-3">Estos nombres nos enseñan sobre su soberanía,
+                                    provisión,
+                                    sanidad, protección, paz, guía, justicia y poder incomparable.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Éxodo 3:14 (YHWH)
@@ -3072,6 +3148,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -3081,10 +3158,15 @@
                                 <i class="fas fa-globe-americas belief-icon"></i>
                                 <h4 class="belief-title">La Gran Comisión y el Discipulado</h4>
                             </div>
-                            <p class="belief-description">Creemos en el mandato de Jesucristo de ir por todo el mundo y
-                                hacer discípulos a todas las naciones, bautizándolos y enseñándoles a guardar todo lo
-                                que Él ha mandado. Esto implica la evangelización activa, la enseñanza de la Palabra de
-                                Dios y la formación de creyentes maduros que a su vez puedan discipular a otros.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos en el mandato de Jesucristo de ir por todo el
+                                    mundo y
+                                    hacer discípulos a todas las naciones, bautizándolos y enseñándoles a guardar todo
+                                    lo
+                                    que Él ha mandado. Esto implica la evangelización activa, la enseñanza de la Palabra
+                                    de
+                                    Dios y la formación de creyentes maduros que a su vez puedan discipular a otros.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Mateo 28:19-20
@@ -3108,6 +3190,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -3117,11 +3200,17 @@
                                 <i class="fas fa-hands-praying belief-icon"></i>
                                 <h4 class="belief-title">El Reino de Dios</h4>
                             </div>
-                            <p class="belief-description">Creemos que el Reino de Dios es el gobierno soberano de Dios,
-                                que ya está presente en la Tierra a través de la obra de Jesucristo y el Espíritu Santo,
-                                y que se manifestará plenamente en Su segunda venida. Buscamos vivir bajo la autoridad
-                                de Su Reino en todas las áreas de nuestras vidas, promoviendo la justicia, la paz y el
-                                gozo en el Espíritu Santo.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que el Reino de Dios es el gobierno soberano de
+                                    Dios,
+                                    que ya está presente en la Tierra a través de la obra de Jesucristo y el Espíritu
+                                    Santo,
+                                    y que se manifestará plenamente en Su segunda venida. Buscamos vivir bajo la
+                                    autoridad
+                                    de Su Reino en todas las áreas de nuestras vidas, promoviendo la justicia, la paz y
+                                    el
+                                    gozo en el Espíritu Santo.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> Mateo 6:33
@@ -3152,6 +3241,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -3161,11 +3251,16 @@
                                 <i class="fas fa-seedling belief-icon"></i>
                                 <h4 class="belief-title">El Crecimiento Espiritual y la Santificación</h4>
                             </div>
-                            <p class="belief-description">Creemos que después de la salvación, Dios llama a los
-                                creyentes a un proceso continuo de crecimiento espiritual y santificación, donde somos
-                                transformados a la imagen de Cristo por el poder del Espíritu Santo. Esto implica una
-                                vida de obediencia a la Palabra de Dios, la oración, la comunión con otros creyentes y
-                                la práctica de las disciplinas espirituales.</p>
+                            <div class="belief-description-wrapper">
+                                <p class="belief-description">Creemos que después de la salvación, Dios llama a los
+                                    creyentes a un proceso continuo de crecimiento espiritual y santificación, donde
+                                    somos
+                                    transformados a la imagen de Cristo por el poder del Espíritu Santo. Esto implica
+                                    una
+                                    vida de obediencia a la Palabra de Dios, la oración, la comunión con otros creyentes
+                                    y
+                                    la práctica de las disciplinas espirituales.</p>
+                            </div>
                             <ul class="bible-verses">
                                 <li>
                                     <i class="fas fa-quote-left"></i> 2 Pedro 3:18
@@ -3196,6 +3291,7 @@
                                     </a>
                                 </li>
                             </ul>
+                            <button class="read-more-btn">Ver más <i class="fas fa-chevron-down"></i></button>
                         </div>
                     </div>
 
@@ -3679,7 +3775,188 @@
                 padding-top: var(--header-height);
                 /* Asumiendo que tienes una variable CSS para la altura de tu header */
             }
+
+            /* --- Sección Creencias - Estilos del Botón "Ver Más" Refinado --- */
+
+            /* Asegura que el grid de creencias sea uniforme */
+            .belief-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                /* Columnas responsivas */
+                gap: 30px;
+                /* Espacio entre las tarjetas */
+                align-items: stretch;
+                /* CLAVE para que todas las tarjetas en la fila tengan la misma altura */
+            }
+
+            /* Las tarjetas de creencia deben estirarse para llenar el espacio y organizar su contenido */
+            .belief-card {
+                display: flex;
+                /* Usar flexbox dentro de la tarjeta */
+                flex-direction: column;
+                /* Apilar elementos verticalmente */
+                height: 100%;
+                /* Asegura que la tarjeta ocupe toda la altura disponible en el grid */
+                /* ...mantén los demás estilos de .belief-card que ya tienes (padding, border-radius, box-shadow, backdrop-filter, border, transition)... */
+            }
+
+            /* Estilos para el contenedor de la descripción con "Ver Más" */
+            .belief-description-wrapper {
+                position: relative;
+                max-height: 140px;
+                /* Altura máxima inicial para el texto visible. Ajusta este valor si lo deseas. */
+                overflow: hidden;
+                /* Oculta el texto que excede la altura */
+                /* ...mantén los demás estilos de .belief-description-wrapper (margin-bottom, transition, flex-grow)... */
+                flex-grow: 1;
+                /* Permite que este div ocupe todo el espacio vertical disponible, empujando los elementos de abajo (versículos y botón) hacia el final de la tarjeta */
+            }
+
+
+            /* Estilos para los versículos bíblicos (asegurar que tengan espacio suficiente) */
+            .bible-verses {
+                list-style: none;
+                padding: 0;
+                margin-top: 15px;
+                /* Espacio superior después de la descripción */
+                border-top: 1px dashed rgba(0, 0, 0, 0.1);
+                /* Separador sutil */
+                padding-top: 15px;
+                /* ...mantén los demás estilos de .bible-verses (li, i, a)... */
+            }
+
+            /* --- NUEVOS ESTILOS PARA EL BOTÓN "VER MÁS" (reemplaza tu bloque actual de .read-more-btn) --- */
+            .read-more-btn {
+                display: none;
+                /* Ocultar por defecto; JavaScript lo mostrará si es necesario */
+                background: var(--primary-color);
+                /* Fondo sólido con tu color primario */
+                color: var(--light-color);
+                /* Texto claro para contraste */
+                border: none;
+                border-radius: 20px;
+                /* Bordes redondeados para un look moderno */
+                font-weight: bold;
+                cursor: pointer;
+                padding: 8px 20px;
+                /* Padding para un tamaño decente y compacto */
+                margin: 15px auto 0 auto;
+                /* ¡Centra el botón horizontalmente y le da margen superior! */
+                width: fit-content;
+                /* Ajusta el ancho al contenido del texto, no a todo el ancho de la tarjeta */
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                /* Sombra suave para un efecto 3D sutil */
+                transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+
+            .read-more-btn i {
+                margin-left: 8px;
+                /* Espacio entre el texto del botón y el icono */
+                transition: transform 0.3s ease;
+                /* Transición suave para la rotación de la flecha */
+            }
+
+            .read-more-btn.expanded i {
+                transform: rotate(180deg);
+                /* Gira la flecha hacia arriba cuando el texto está expandido */
+            }
+
+            .belief-card {
+                display: flex;
+                /* Habilita flexbox para el diseño interno */
+                flex-direction: column;
+                /* Organiza los elementos hijos en una columna */
+                justify-content: space-between;
+                /* Distribuye el espacio entre los elementos, empujando el botón hacia abajo */
+                /* Opcional: min-height si todas las tarjetas deben tener la misma altura, incluso con contenido variable */
+                min-height: 450px;
+                /* Ajusta este valor según la altura deseada para todas tus tarjetas */
+                padding: 20px;
+                /* Ajusta el relleno según sea necesario */
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                /* otros estilos de glass-card */
+            }
+
+            .belief-description-wrapper {
+                flex-grow: 1;
+                /* Permite que el wrapper de la descripción ocupe el espacio disponible */
+                overflow: hidden;
+                /* Oculta el contenido que excede la altura máxima */
+                position: relative;
+                /* Necesario para el efecto de desvanecimiento si lo aplicas */
+                margin-bottom: 15px;
+                /* Espacio antes de los versículos */
+            }
+
+            /* Si quieres que el botón tenga un margen superior consistente */
+            .read-more-btn {
+                margin-top: auto;
+                /* Esto empujará el botón a la parte inferior si hay espacio */
+                align-self: center;
+                /* Centra el botón horizontalmente si la tarjeta es más ancha */
+                width: fit-content;
+                /* El botón solo ocupa el ancho de su contenido */
+                padding: 8px 15px;
+                border-radius: 20px;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background-color 0.3s ease;
+            }
+
+            .read-more-btn:hover {
+                background-color: var(--text-primary-dark);
+            }
+
+            /* Asegúrate de que tus listas de versículos también tengan un margen inferior */
+            .bible-verses {
+                margin-bottom: 15px;
+                /* Espacio entre los versículos y el botón */
+            }
         </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const beliefCards = document.querySelectorAll('.belief-card');
+
+                beliefCards.forEach(card => {
+                    const descriptionWrapper = card.querySelector('.belief-description-wrapper');
+                    const descriptionParagraph = card.querySelector('.belief-description');
+                    const readMoreBtn = card.querySelector('.read-more-btn');
+
+                    if (descriptionWrapper && descriptionParagraph && readMoreBtn) {
+                        setTimeout(() => {
+                            if (descriptionParagraph.scrollHeight > descriptionWrapper.clientHeight) {
+                                readMoreBtn.style.display = 'block';
+                            } else {
+                                descriptionWrapper.classList.add('expanded');
+                                descriptionWrapper.style.maxHeight = 'none';
+                                if (descriptionWrapper.classList.contains('expanded')) {
+                                    descriptionWrapper.style.maxHeight = descriptionParagraph.scrollHeight + 'px';
+                                }
+                                readMoreBtn.style.display = 'none';
+                            }
+                        }, 100);
+
+                        readMoreBtn.addEventListener('click', () => {
+                            const isExpanded = descriptionWrapper.classList.toggle('expanded');
+
+                            if (isExpanded) {
+                                descriptionWrapper.style.maxHeight = descriptionParagraph.scrollHeight + 'px';
+                                readMoreBtn.innerHTML = 'Ver menos <i class="fas fa-chevron-up"></i>';
+                            } else {
+                                descriptionWrapper.style.maxHeight = '140px'; // Asegúrate de que coincida con el CSS
+                                readMoreBtn.innerHTML = 'Ver más <i class="fas fa-chevron-down"></i>';
+                            }
+                            readMoreBtn.classList.toggle('expanded', isExpanded);
+                        });
+                    }
+                });
+            });
+        </script>
 
 
 
