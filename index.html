@@ -2063,7 +2063,7 @@
 
         <section id="nosotros" class="section">
             <div class="container">
-                <h2>Quiénes Somos</h2>
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Quiénes Somos</h2>
 
                 <div class="container mt-5 mb-5">
                     <div class="row align-items-center mb-5">
@@ -2369,7 +2369,7 @@
 
         <section id="ministerios" class="section">
             <div class="container">
-                <h2>Nuestros Ministerios</h2>
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Nuestros Ministerios</h2>
                 <p class="text-muted-dark mb-5">Conoce las áreas en las que servimos a Dios y a nuestra comunidad.</p>
                 <div class="ministries-grid">
                     <div class="ministry-card" data-ministry-id="alabanza">
@@ -2433,7 +2433,8 @@
 
         <section id="predicaciones" class="section">
             <div class="container">
-                <h2>Nuestras Predicaciones</h2>
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Nuestras Predicaciones
+                </h2>
                 <p class="text-muted-dark mb-5">Escucha la Palabra que transforma vidas.</p>
 
                 <div class="glass-card filter-bar mb-4">
@@ -2477,7 +2478,8 @@
 
         <section id="eventos" class="section">
             <div class="container">
-                <h2>Eventos Realizados y Próximos Eventos</h2>
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Eventos Realizados y
+                    Próximos Eventos</h2>
                 <p class="text-muted-dark mb-5">Participa en nuestras actividades y fortalece tu fe.</p>
                 <div class="events-grid">
                     <div class="event-card glass-card" data-event-id="conferenciaAnual">
@@ -3341,9 +3343,13 @@
                 /* Centrar verticalmente el contenido */
             }
 
-            #creencias .section-title {
+            #creencias .section-title,
+            #nosotros .section-title,
+            #contacto .section-title,
+            #predicaciones .section-title,
+            #ministerios .section-title,
+            #eventos .section-title {
                 font-size: 3.2rem;
-                /* Título principal más grande y llamativo */
                 font-weight: 800;
                 color: var(--dark-text-color);
                 margin-bottom: 1.5rem;
@@ -3351,7 +3357,12 @@
                 padding-bottom: 20px;
             }
 
-            #creencias .section-title::after {
+            #creencias .section-title::after,
+            #nosotros .section-title::after,
+            #predicaciones .section-title::after,
+            #contacto .section-title::after,
+            #ministerios .section-titl::after,
+            #eventos .section-title::after {
                 content: '';
                 position: absolute;
                 left: 50%;
@@ -3363,7 +3374,12 @@
                 border-radius: 2px;
             }
 
-            #creencias .section-subtitle {
+            #creencias .section-subtitle,
+            #nosotros .section-subtitle,
+            #contacto .section-subtitle,
+            #predicaciones .section-subtitle,
+            #ministerios .section-subtitle,
+            #eventos .section-subtitle {
                 font-size: 1.3rem;
                 /* Subtítulo descriptivo */
                 color: var(--light-text-color);
@@ -3967,7 +3983,7 @@
 
         <section id="contacto" class="section">
             <div class="container">
-                <h2>Contáctanos</h2>
+                <h2 class="section-title text-center mb-3 animate__animated animate__fadeInUp">Contáctanos</h2>
                 <p class="text-muted-dark mb-5">Estamos aquí para servirte. Envíanos un mensaje o visítanos.</p>
 
                 <div class="row">
@@ -5502,32 +5518,29 @@
                     card.classList.add("col-md-6", "col-lg-4", "mb-4");
 
                     card.innerHTML = `
-<div class="card sermon-card shadow-sm border-0 rounded-4 overflow-hidden" style="max-width: 100%; min-width: 300px;">
-    <img 
-        src="${sermon.imageUrl || 'https://via.placeholder.com/600x300?text=Imagen+de+Predicación'}" 
-        class="card-img-top" 
-        alt="${sermon.title}" 
-        style="height: 200px; object-fit: cover;" 
-        onerror="this.onerror=null;this.src='https://via.placeholder.com/600x300?text=Imagen+no+disponible';"
-    >
-    <div class="card-body">
-        <h5 class="card-title fw-semibold text-dark mb-2">${truncateText(sermon.title, 60)}</h5>
-        <p class="card-text text-muted mb-1">
-            <i class="fas fa-calendar-alt me-1 text-primary"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}
-        </p>
-        <p class="card-text text-muted mb-1">
-            <i class="fas fa-user me-1 text-primary"></i> ${truncateText(sermon.preacher, 40)}
-        </p>
-        <p class="card-text mb-1"><strong>Área:</strong> ${truncateText(sermon.area, 30)}</p>
-        <p class="card-text mb-3"><strong>Objetivo:</strong> ${truncateText(sermon.objetivo, 80)}</p>
-        <div class="text-end">
-            <button class="btn btn-outline-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
-        </div>
-    </div>
-</div>
-`;
-
-
+                    <div class="card sermon-card shadow-sm border-0 rounded-4 overflow-hidden" style="max-width: 100%; min-width: 350px;">
+                        <img 
+                            src="${sermon.imageUrl || 'https://via.placeholder.com/600x300?text=Imagen+de+Predicación'}" 
+                            class="card-img-top" 
+                            alt="${sermon.title}" 
+                            style="height: 250px; object-fit: cover;" 
+                            onerror="this.onerror=null;this.src='https://via.placeholder.com/600x300?text=Imagen+no+disponible';">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold text-dark mb-2">${truncateText(sermon.title, 60)}</h5>
+                                <p class="card-text text-muted mb-1">
+                                    <i class="fas fa-calendar-alt me-1 text-primary"></i> ${new Date(sermon.date).toLocaleDateString('es-ES')}
+                                </p>
+                                <p class="card-text text-muted mb-1">
+                                    <i class="fas fa-user me-1 text-primary"></i> ${truncateText(sermon.preacher, 40)}
+                                </p>
+                                <p class="card-text mb-1"><strong>Área:</strong> ${truncateText(sermon.area, 30)}</p>
+                                <p class="card-text mb-3"><strong>Objetivo:</strong> ${truncateText(sermon.objetivo, 80)}</p>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-primary btn-sm" onclick='showSermonModal(${JSON.stringify(sermon)})'>Ver más</button>
+                                </div>
+                            </div>
+                        </div>
+                        `;
 
                     sermonsContainer.appendChild(card);
                 });
