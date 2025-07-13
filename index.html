@@ -8,8 +8,6 @@
     <link rel="icon"
         href="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/321644661_2256614257854855_6336957085506948870_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHo3hx6i4iy9RbXwdXTnySz6OC5tXkudDfo4Lm1eS50N3EE2UX7PmYT9yMbcir7yidJGb2_z3HhgTcNEBOdWi9v&_nc_ohc=CFGu4WLQH-sQ7kNvwF50-4y&_nc_oc=AdnPldjNeImrazx-rU2qDUKNQEREL9dluOX7GQC1GfsVwmwx-PvCUR8q3DKh3wss7jY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=XR-GkAtF-pGaiD-rRW32_w&oh=00_AfOU44PLRdLgHLDoP5xD-jttQJQfU1RUko3uyOyNU01cww&oe=6869F8C6"
         type="image/x-icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Variables CSS (Mantén las tuyas o usa estas) */
         :root {
@@ -6189,7 +6187,7 @@
                 loadingOverlay.style.display = 'none';
 
                 if (result.status === "success") {
-                    // Mostrar mensaje personalizado
+                    // Mostrar mensaje bonito
                     messageEl.className = "alert alert-success-custom";
                     messageEl.innerHTML = `
         <span class="emoji">🎉📖</span> 
@@ -6199,16 +6197,30 @@
     `;
                     messageEl.style.display = "block";
 
-                    // Limpiar formulario después de una pequeña espera
+                    // Limpiar el formulario después de mostrar el mensaje
+                    form.reset();
+
+                    // Esperar unos milisegundos antes de permitir clic
                     setTimeout(() => {
-                        form.reset(); // Limpiar campos
+                        // Al hacer clic en cualquier parte de la pantalla...
+                        document.body.addEventListener("click", () => {
+                            // Ocultar el contenedor del formulario
+                            const predicacionModal = document.getElementById("subirPredicacionContenedor") || document.querySelector(".formulario-predicacion");
+                            if (predicacionModal) predicacionModal.style.display = "none";
+
+                            // Recargar la página o sección
+                            location.reload(); // <-- Esto recarga toda la página
+                            // O puedes usar location.href = "predicaciones.html"; si quieres ir a una URL específica
+                        }, { once: true }); // Se ejecuta una sola vez
                     }, 500);
 
                 } else {
+                    // Si hubo error
                     messageEl.className = "alert alert-danger text-center";
                     messageEl.textContent = "❌ " + result.message;
                     messageEl.style.display = "block";
                 }
+
 
 
             } catch (err) {
