@@ -5831,9 +5831,10 @@
                             uploadMessage.style.display = 'none'; // Ensure upload message is hidden
                         }, 1000); // Simulate login delay
                     } else {
-                        loginMessage.textContent = 'Usuario o contraseña incorrectos.';
+                        loginMessage.textContent = 'Usuario o contraseña incorrectos. Contactate con el Pastor';
                         loginMessage.classList.remove('success');
-                        loginMessage.classList.add('danger', 'show');
+                        loginMessage.classList.add('danger', 'show')
+                        loginMessage.style.display = 'block';;
                     }
                 });
             }
