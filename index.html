@@ -6227,130 +6227,116 @@
         // ✅ REEMPLAZA este código JS por el que ya usas para convertir el archivo a base64 y enviarlo correctamente
 
         document.getElementById("uploadSermonForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            const form = e.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const loadingOverlay = document.getElementById('loadingOverlay');
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const loadingOverlay = document.getElementById('loadingOverlay');
 
-            // Mostrar el efecto de carga
-            loadingOverlay.style.display = 'flex';
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+    // Mostrar loading
+    loadingOverlay.style.display = 'flex';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
 
-            const fileInput = form.sermonFile;
-            const file = fileInput?.files[0];
+    const fileInput = form.sermonFile;
+    const file = fileInput?.files[0];
 
-            const reader = new FileReader();
-            reader.onload = async function () {
-                const base64File = reader.result.split(',')[1];
+    const processForm = async (base64File = null) => {
+        const formData = new URLSearchParams();
 
-                const formData = new URLSearchParams();
+        formData.append("title", form.title.value);
+        formData.append("date", form.date.value);
+        formData.append("preacher", form.preacher.value);
+        formData.append("area", form.area.value);
+        formData.append("objetivo", form.objetivo.value);
+        formData.append("description1", form.description1.value);
+        formData.append("description2", form.description2.value);
+        formData.append("description3", form.description3.value);
+        formData.append("finalConclusion", form.finalConclusion.value);
+        formData.append("targetAudience", form.targetAudience.value);
+        formData.append("link", form.link.value);
 
-                formData.append("title", form.title.value);
-                formData.append("date", form.date.value);
-                formData.append("preacher", form.preacher.value);
-                formData.append("area", form.area.value);
-                formData.append("objetivo", form.objetivo.value);
-                formData.append("description1", form.description1.value);
-                formData.append("description2", form.description2.value);
-                formData.append("description3", form.description3.value);
-                formData.append("finalConclusion", form.finalConclusion.value);
-                formData.append("targetAudience", form.targetAudience.value);
-                formData.append("link", form.link.value);
-
-                const selectedImageOption = document.querySelector('input[name="imageChoice"]:checked').value;
-
-                if (selectedImageOption === 'url') {
-                    // ✅ Usar directamente la URL
-                    formData.append("imageUrl", form.imageUrl.value);
-                } else {
-                    // ✅ Convertir imagen a base64
-                    const imageFile = form.imageFile.files[0];
-                    if (imageFile) {
-                        const base64 = await toBase64(imageFile);
-                        formData.append("imageContent", base64.split(',')[1]);
-                        formData.append("imageName", imageFile.name);
-                        formData.append("imageType", imageFile.type);
-                    }
-                }
-
-
-                const keyVerseInputs = document.querySelectorAll("input[name='keyVerse[]']");
-                const keyVerses = Array.from(keyVerseInputs)
-                    .map(input => input.value.trim())
-                    .filter(v => v.length > 0);
-                formData.append("keyVerse", keyVerses.join(", "));
-
-                if (file) {
-                    formData.append("fileName", file.name);
-                    formData.append("fileType", file.type);
-                    formData.append("fileContent", base64File);
-                }
-
-                try {
-                    const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: formData.toString()
-                    });
-
-                    const result = await response.json();
-                    console.log("Resultado:", result);
-
-                    loadingOverlay.style.display = 'none';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Subir Predicación';
-
-                    if (result.status === "success") {
-                        form.reset();
-
-                        const modal = new bootstrap.Modal(document.getElementById('successModal'));
-                        modal.show();
-
-                        document.getElementById("successModalBtn").addEventListener("click", () => {
-                            modal.hide();
-                            const formContainer = document.getElementById("uploadFormContainer");
-                            if (formContainer) formContainer.style.display = "none";
-                            location.reload();
-                        }, { once: true });
-                    } else {
-                        alert("❌ Error: " + result.message);
-                    }
-
-                } catch (err) {
-                    alert("❌ Error de conexión.");
-                } finally {
-                    loadingOverlay.style.display = 'none';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Subir Predicación';
-                }
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                reader.onload(); // continuar sin archivo
+        // ✅ Imagen
+        const selectedImageOption = document.querySelector('input[name="imageChoice"]:checked').value;
+        if (selectedImageOption === 'url') {
+            formData.append("imageUrl", form.imageUrl.value);
+        } else {
+            const imageFile = form.imageFile.files[0];
+            if (imageFile) {
+                const base64 = await toBase64(imageFile);
+                formData.append("imageContent", base64.split(',')[1]);
+                formData.append("imageName", imageFile.name);
+                formData.append("imageType", imageFile.type);
             }
-        });
+        }
 
-        document.querySelectorAll('input[name="imageChoice"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                const selected = document.querySelector('input[name="imageChoice"]:checked').value;
-                const urlContainer = document.getElementById('imageUrlContainer');
-                const fileContainer = document.getElementById('imageFileContainer');
+        // ✅ Versículos
+        const keyVerseInputs = document.querySelectorAll("input[name='keyVerse[]']");
+        const keyVerses = Array.from(keyVerseInputs)
+            .map(input => input.value.trim())
+            .filter(v => v.length > 0);
+        formData.append("keyVerse", keyVerses.join(", "));
 
-                if (selected === 'url') {
-                    urlContainer.classList.remove('d-none');
-                    fileContainer.classList.add('d-none');
-                } else {
-                    urlContainer.classList.add('d-none');
-                    fileContainer.classList.remove('d-none');
-                }
+        // ✅ Archivo opcional
+        if (base64File && file) {
+            formData.append("fileName", file.name);
+            formData.append("fileType", file.type);
+            formData.append("fileContent", base64File);
+        }
+
+        try {
+            const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
             });
-        });
+
+            const result = await response.json();
+            console.log("Resultado:", result);
+
+            loadingOverlay.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subir Predicación';
+
+            if (result.status === "success") {
+                form.reset();
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+                document.getElementById("successModalBtn").addEventListener("click", () => {
+                    modal.hide();
+                    document.getElementById("uploadFormContainer").style.display = "none";
+                    location.reload();
+                }, { once: true });
+            } else {
+                alert("❌ Error: " + result.message);
+            }
+
+        } catch (err) {
+            alert("❌ Error de conexión.");
+            loadingOverlay.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subir Predicación';
+        }
+    };
+
+    // ✅ Si hay archivo, leerlo como base64
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            if (!reader.result) {
+                alert("No se pudo leer el archivo.");
+                return;
+            }
+            const base64File = reader.result.split(',')[1];
+            processForm(base64File);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        processForm(); // sin archivo
+    }
+});
 
     </script>
 
