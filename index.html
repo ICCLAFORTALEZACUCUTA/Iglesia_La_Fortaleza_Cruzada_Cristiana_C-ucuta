@@ -5536,6 +5536,8 @@
                 try {
                     const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec");
                     const data = await response.json();
+                    console.log("📡 Esperando respuesta del servidor...");
+
 
                     // Validar que recibimos un arreglo
                     if (Array.isArray(data)) {
@@ -6240,13 +6242,14 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Subir Predicación';
 
-                alert("❌ Error de conexión o servidor. Intenta más tarde.");
-                console.error("Error al subir:", err);
+                console.error("❌ ERROR DE RED O SERVIDOR:", err);
+                alert("❌ No se pudo conectar con el servidor. Verifica tu conexión o URL del servidor.");
             }
+
         });
 
     </script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
