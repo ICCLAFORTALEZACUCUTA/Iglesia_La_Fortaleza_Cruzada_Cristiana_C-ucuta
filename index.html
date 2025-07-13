@@ -4938,15 +4938,14 @@
             });
         }
 
-
-
         // --- CONFIGURACIÓN (SIMULADA) ---
         const CONFIG = {
             // Estas credenciales son solo para DEMOSTRACIÓN en el frontend. NO usar en producción.
             USERS: {
-                'admin': { password: 'password123', role: 'administrator', name: 'Administrador' },
-                'editor': { password: 'editor123', role: 'editor', name: 'Editor' },
+                'admin': { password: 'admin', role: 'administrator', name: 'Administrador' },
+                'editor': { password: 'editor', role: 'editor', name: 'Editor' },
                 'miembro': { password: 'miembro', role: 'editor', name: 'Editor' },
+                'invitado': { password: 'invitado', role: 'editor', name: 'Editor' },
             },
             // Simulación de rol del usuario actual (se establece tras un login simulado)
             currentUserRole: null
