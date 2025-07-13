@@ -1966,6 +1966,34 @@
                         /* Ajuste del tamaño del título en móviles */
                     }
                 }
+
+                .alert-success-custom {
+                    background: linear-gradient(135deg, #a3e635, #22c55e);
+                    color: #0f5132;
+                    border: 2px solid #14532d;
+                    padding: 20px;
+                    font-size: 1.2rem;
+                    border-radius: 12px;
+                    box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+                    animation: fadeIn 1s ease-in-out;
+                }
+
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .emoji {
+                    font-size: 1.5rem;
+                    margin-right: 8px;
+                }
             </style>
 
 
@@ -4766,11 +4794,12 @@
         }
     </style>
 
-    <div class="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
-        <div style="color: white; font-size: 1.5em;">⏳ Subiendo predicación...</div>
+    <div class="loading-overlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="color: white; font-size: 1.5em;">⏳ Tú Predicación esta cargando...</div>
     </div>
-  
 
+    <div id="uploadMessage" class="alert text-center fw-bold" style="display: none;"></div>
 
     <!-- Contenedor para predicaciones -->
     <div id="sermonsContainer" class="row justify-content-center gy-4"></div>
@@ -6160,9 +6189,13 @@
                 loadingOverlay.style.display = 'none';
 
                 if (result.status === "success") {
-                    messageEl.className = "alert alert-success text-center";
-                    messageEl.textContent = "✅ " + result.message;
-                    form.reset();
+                    messageEl.className = "alert alert-success-custom";
+                    messageEl.innerHTML = `
+                    <span class="emoji">🎉📖</span> 
+                    <strong>¡La predicación se ha cargado con éxito!</strong><br>
+                    🙌 Gracias por dejar tu mensaje. El Señor te bendecirá abundantemente.<br>
+                    <span class="emoji">🙏✨🕊️</span>
+                    `;
                 } else {
                     messageEl.className = "alert alert-danger text-center";
                     messageEl.textContent = "❌ " + result.message;
