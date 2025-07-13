@@ -6189,17 +6189,27 @@
                 loadingOverlay.style.display = 'none';
 
                 if (result.status === "success") {
+                    // Mostrar mensaje personalizado
                     messageEl.className = "alert alert-success-custom";
                     messageEl.innerHTML = `
-                    <span class="emoji">🎉📖</span> 
-                    <strong>¡La predicación se ha cargado con éxito!</strong><br>
-                    🙌 Gracias por dejar tu mensaje. El Señor te bendecirá abundantemente.<br>
-                    <span class="emoji">🙏✨🕊️</span>
-                    `;
+        <span class="emoji">🎉📖</span> 
+        <strong>¡La predicación se ha cargado con éxito!</strong><br>
+        🙌 Gracias por dejar tu mensaje. El Señor te bendecirá abundantemente.<br>
+        <span class="emoji">🙏✨🕊️</span>
+    `;
+                    messageEl.style.display = "block";
+
+                    // Limpiar formulario después de una pequeña espera
+                    setTimeout(() => {
+                        form.reset(); // Limpiar campos
+                    }, 500);
+
                 } else {
                     messageEl.className = "alert alert-danger text-center";
                     messageEl.textContent = "❌ " + result.message;
+                    messageEl.style.display = "block";
                 }
+
 
             } catch (err) {
                 // Ocultar el efecto de carga en caso de error
