@@ -6213,11 +6213,19 @@
             // ✅ Descargar archivo
             const downloadBtn = document.getElementById('sermonModalFileDownload');
             if (sermon.archivoUrl) {
-                downloadBtn.style.display = 'block';
-                downloadBtn.href = sermon.archivoUrl;
+                const match = sermon.archivoUrl.match(/[-\w]{25,}/); // extrae el ID del enlace de Drive
+                if (match) {
+                    const fileId = match[0];
+                    const directDownloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                    downloadBtn.href = directDownloadUrl;
+                    downloadBtn.style.display = 'block';
+                } else {
+                    downloadBtn.style.display = 'none';
+                }
             } else {
                 downloadBtn.style.display = 'none';
             }
+
 
             // ✅ Mostrar modal
             const modal = new bootstrap.Modal(document.getElementById('sermonModal'));
