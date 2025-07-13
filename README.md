@@ -28,9 +28,9 @@ Juegos Bíblicos Interactivos: Fortalece tu fe jugando. Desarrollamos minijuegos
 
 🏃 Éxodo Runner
 
-🪖 Batalla Celestial
+🥊 Batalla Celestial
 
-🪨 Honda de la Victoria
+🥍 Honda de la Victoria
 
 🛠️ Trabajo Arduo
 
@@ -78,4 +78,3 @@ Cúcuta, Norte de Santander, Colombia
 
 🙌 Créditos y Agradecimientos
 Este sitio fue desarrollado por Joel Steven Pineda Rincon, para la comunidad de la Iglesia La Fortaleza Cruzada Cristiana, como parte de nuestra misión de evangelizar a través de las plataformas digitales. Agradecemos a todos los colaboradores que han aportado su tiempo, creatividad y pasión por el Reino de Dios.
-Iglesia La Fortaleza Cruzada Cristiana – Cúcuta, Colombia
