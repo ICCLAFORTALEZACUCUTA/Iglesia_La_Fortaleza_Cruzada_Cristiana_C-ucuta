@@ -8,7 +8,7 @@
     <link rel="icon"
         href="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/321644661_2256614257854855_6336957085506948870_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHo3hx6i4iy9RbXwdXTnySz6OC5tXkudDfo4Lm1eS50N3EE2UX7PmYT9yMbcir7yidJGb2_z3HhgTcNEBOdWi9v&_nc_ohc=CFGu4WLQH-sQ7kNvwF50-4y&_nc_oc=AdnPldjNeImrazx-rU2qDUKNQEREL9dluOX7GQC1GfsVwmwx-PvCUR8q3DKh3wss7jY&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=XR-GkAtF-pGaiD-rRW32_w&oh=00_AfOU44PLRdLgHLDoP5xD-jttQJQfU1RUko3uyOyNU01cww&oe=6869F8C6"
         type="image/x-icon">
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         /* Variables CSS (Mantén las tuyas o usa estas) */
         :root {
@@ -4350,42 +4350,42 @@
                             <h5 class="text-primary-dark mb-3">Detalles y Conclusión</h5>
 
                             <!-- Descripción 1 -->
-<div class="form-group">
-    <label for="editorDescripcion1">Descripción 1:</label>
-    <div id="editorDescripcion1" class="quill-editor"></div>
-    <input type="hidden" name="description1" id="description1">
-  </div>
-  
-  <!-- Descripción 2 -->
-  <div class="form-group">
-    <label for="editorDescripcion2">Descripción 2:</label>
-    <div id="editorDescripcion2" class="quill-editor"></div>
-    <input type="hidden" name="description2" id="description2">
-  </div>
-  
-  <!-- Descripción 3 -->
-  <div class="form-group">
-    <label for="editorDescripcion3">Descripción 3:</label>
-    <div id="editorDescripcion3" class="quill-editor"></div>
-    <input type="hidden" name="description3" id="description3">
-  </div>
-  
-  <!-- Conclusión Final -->
-  <div class="form-group">
-    <label for="editorConclusion">Conclusión Final:</label>
-    <div id="editorConclusion" class="quill-editor"></div>
-    <input type="hidden" name="finalConclusion" id="finalConclusion">
-  </div>
+                            <div class="form-group">
+                                <label for="editorDescripcion1">Descripción 1:</label>
+                                <div id="editorDescripcion1" class="quill-editor"></div>
+                                <input type="hidden" name="description1" id="description1">
+                            </div>
+
+                            <!-- Descripción 2 -->
+                            <div class="form-group">
+                                <label for="editorDescripcion2">Descripción 2:</label>
+                                <div id="editorDescripcion2" class="quill-editor"></div>
+                                <input type="hidden" name="description2" id="description2">
+                            </div>
+
+                            <!-- Descripción 3 -->
+                            <div class="form-group">
+                                <label for="editorDescripcion3">Descripción 3:</label>
+                                <div id="editorDescripcion3" class="quill-editor"></div>
+                                <input type="hidden" name="description3" id="description3">
+                            </div>
+
+                            <!-- Conclusión Final -->
+                            <div class="form-group">
+                                <label for="editorConclusion">Conclusión Final:</label>
+                                <div id="editorConclusion" class="quill-editor"></div>
+                                <input type="hidden" name="finalConclusion" id="finalConclusion">
+                            </div>
 
                             <hr class="my-4">
                             <h5 class="text-primary-dark mb-3">Objetivos</h5>
 
                             <!-- Objetivo -->
-<div class="form-group">
-    <label for="editorObjetivo">Objetivo Predicación:</label>
-    <div id="editorObjetivo" class="quill-editor"></div>
-    <input type="hidden" name="objetivo" id="objetivo">
-  </div>
+                            <div class="form-group">
+                                <label for="editorObjetivo">Objetivo Predicación:</label>
+                                <div id="editorObjetivo" class="quill-editor"></div>
+                                <input type="hidden" name="objetivo" id="objetivo">
+                            </div>
                             <div class="form-group">
                                 <label for="targetAudience">Pueblo Objetivo:</label>
                                 <select id="targetAudience" name="targetAudience" class="form-select" required>
@@ -4481,10 +4481,10 @@
         /* --- Estilos Generales para el Modal de Predicaciones --- */
 
         .quill-editor {
-    height: 150px;
-    background-color: white;
-    margin-bottom: 20px;
-  }
+            height: 150px;
+            background-color: white;
+            margin-bottom: 20px;
+        }
 
         /* Estilo para el contenedor del modal */
         #sermonAuthModal {
@@ -4844,25 +4844,52 @@
                 </div>
                 <div class="modal-body">
                     <img id="sermonModalImage" src="" alt="Imagen Predicación" class="img-fluid rounded mb-3">
+
                     <h2 id="sermonModalTitle"></h2>
                     <p class="text-muted" id="sermonModalMeta"></p>
+
                     <p><strong>Fecha:</strong> <span id="sermonModalDate"></span></p>
                     <p><strong>Predicador:</strong> <span id="sermonModalPreacher"></span></p>
                     <p><strong>Área:</strong> <span id="sermonModalArea"></span></p>
-                    <p class="mb-3" id="sermonModalKeyVerses">
+
+                    <div id="sermonModalKeyVerses" class="mb-3">
                         <strong>Versículos Clave:</strong>
-                    <ul id="sermonModalKeyVerseList" class="mb-0"></ul>
-                    </p>
-                    <p><strong>Objetivo:</strong> <span id="sermonModalObjetivo"></span></p>
+                        <ul id="sermonModalKeyVerseList" class="mb-0"></ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Objetivo:</strong>
+                        <div id="sermonModalObjetivo" class="border rounded p-2 bg-light"></div>
+                    </div>
+
                     <hr>
-                    <p id="sermonModalDescription1"></p>
-                    <p id="sermonModalDescription2"></p>
-                    <p id="sermonModalDescription3"></p>
-                    <p><strong>Conclusión:</strong> <span id="sermonModalConclusion"></span></p>
+
+                    <div class="mb-3">
+                        <strong>Descripción 1:</strong>
+                        <div id="sermonModalDescription1" class="border rounded p-2"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Descripción 2:</strong>
+                        <div id="sermonModalDescription2" class="border rounded p-2"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Descripción 3:</strong>
+                        <div id="sermonModalDescription3" class="border rounded p-2"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Conclusión:</strong>
+                        <div id="sermonModalConclusion" class="border rounded p-2 bg-light"></div>
+                    </div>
+
                     <p><strong>Audiencia Objetivo:</strong> <span id="sermonModalAudience"></span></p>
+
                     <div class="ratio ratio-16x9 mt-3" style="display: none;">
                         <iframe id="sermonModalVideo" src="" frameborder="0" allowfullscreen></iframe>
                     </div>
+
                     <a id="sermonModalFileDownload" href="#" class="btn btn-outline-primary w-100 mt-3" target="_blank"
                         download style="display:none;">
                         <i class="fas fa-download"></i> Descargar Archivo de la Predicación
@@ -4871,6 +4898,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Modal de Éxito -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -4913,21 +4941,21 @@
             }
         });
 
-          // Inicializar cada editor
-  const quillObjetivo = new Quill('#editorObjetivo', { theme: 'snow' });
-  const quillDescripcion1 = new Quill('#editorDescripcion1', { theme: 'snow' });
-  const quillDescripcion2 = new Quill('#editorDescripcion2', { theme: 'snow' });
-  const quillDescripcion3 = new Quill('#editorDescripcion3', { theme: 'snow' });
-  const quillConclusion = new Quill('#editorConclusion', { theme: 'snow' });
+        // Inicializar cada editor
+        const quillObjetivo = new Quill('#editorObjetivo', { theme: 'snow' });
+        const quillDescripcion1 = new Quill('#editorDescripcion1', { theme: 'snow' });
+        const quillDescripcion2 = new Quill('#editorDescripcion2', { theme: 'snow' });
+        const quillDescripcion3 = new Quill('#editorDescripcion3', { theme: 'snow' });
+        const quillConclusion = new Quill('#editorConclusion', { theme: 'snow' });
 
-  // Antes de enviar el formulario, pasar contenido HTML a los inputs hidden
-  document.getElementById("uploadSermonForm").addEventListener("submit", function (e) {
-    document.getElementById("objetivo").value = quillObjetivo.root.innerHTML;
-    document.getElementById("description1").value = quillDescripcion1.root.innerHTML;
-    document.getElementById("description2").value = quillDescripcion2.root.innerHTML;
-    document.getElementById("description3").value = quillDescripcion3.root.innerHTML;
-    document.getElementById("finalConclusion").value = quillConclusion.root.innerHTML;
-  });
+        // Antes de enviar el formulario, pasar contenido HTML a los inputs hidden
+        document.getElementById("uploadSermonForm").addEventListener("submit", function (e) {
+            document.getElementById("objetivo").value = quillObjetivo.root.innerHTML;
+            document.getElementById("description1").value = quillDescripcion1.root.innerHTML;
+            document.getElementById("description2").value = quillDescripcion2.root.innerHTML;
+            document.getElementById("description3").value = quillDescripcion3.root.innerHTML;
+            document.getElementById("finalConclusion").value = quillConclusion.root.innerHTML;
+        });
 
     </script>
     <script>
@@ -6170,11 +6198,12 @@
             document.getElementById('sermonModalDate').textContent = new Date(sermon.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('sermonModalPreacher').textContent = sermon.preacher || 'Desconocido';
             document.getElementById('sermonModalArea').textContent = sermon.area || 'No definida';
-            document.getElementById('sermonModalObjetivo').textContent = sermon.objetivo || 'No definido';
-            document.getElementById('sermonModalDescription1').textContent = sermon.description1 || '';
-            document.getElementById('sermonModalDescription2').textContent = sermon.description2 || '';
-            document.getElementById('sermonModalDescription3').textContent = sermon.description3 || '';
-            document.getElementById('sermonModalConclusion').textContent = sermon.finalConclusion || '';
+            document.getElementById('sermonModalObjetivo').innerHTML = sermon.objetivo || '<em>No definido</em>';
+            document.getElementById('sermonModalDescription1').innerHTML = sermon.description1 || '';
+            document.getElementById('sermonModalDescription2').innerHTML = sermon.description2 || '';
+            document.getElementById('sermonModalDescription3').innerHTML = sermon.description3 || '';
+            document.getElementById('sermonModalConclusion').innerHTML = sermon.finalConclusion || '<em>No definida</em>';
+
             document.getElementById('sermonModalAudience').textContent = sermon.targetAudience || '';
 
             let imageUrl = sermon.imageUrl || '';
