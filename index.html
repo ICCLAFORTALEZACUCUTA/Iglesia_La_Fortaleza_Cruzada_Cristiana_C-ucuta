@@ -4400,12 +4400,34 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="imageUrl">URL de la Imagen de Predicación:</label>
-                                <input type="url" id="imageUrl" name="imageUrl" class="form-control"
-                                    placeholder="http://ejemplo.com/imagen.jpg" required>
-                                <small class="form-text text-muted">Introduce la URL de la imagen que se mostrará en la
-                                    tarjeta.</small>
+                                <label class="mb-2">¿Cómo deseas cargar la imagen de la predicación?</label><br>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="imageChoice" id="imageChoiceUrl"
+                                        value="url" checked>
+                                    <label class="form-check-label" for="imageChoiceUrl">Usar URL de la imagen</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="imageChoice" id="imageChoiceFile"
+                                        value="file">
+                                    <label class="form-check-label" for="imageChoiceFile">Subir imagen desde el
+                                        dispositivo</label>
+                                </div>
                             </div>
+
+                            <!-- Input para URL -->
+                            <div class="form-group mt-3" id="imageUrlContainer">
+                                <label for="imageUrl">URL de la Imagen:</label>
+                                <input type="url" id="imageUrl" name="imageUrl" class="form-control"
+                                    placeholder="https://ejemplo.com/imagen.jpg">
+                            </div>
+
+                            <!-- Input para subir imagen (oculto inicialmente) -->
+                            <div class="form-group mt-3 d-none" id="imageFileContainer">
+                                <label for="imageFile">Archivo de Imagen:</label>
+                                <input type="file" id="imageFile" name="imageFile" class="form-control"
+                                    accept="image/*">
+                            </div>
+
 
                             <div class="form-group">
                                 <label for="sermonFile">Cargar Archivo de Predicación:</label>
@@ -4878,6 +4900,16 @@
 
     </script>
     <script>
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
 
 
         // --- CONFIGURACIÓN (SIMULADA) ---
@@ -6197,7 +6229,23 @@
                 formData.append("finalConclusion", form.finalConclusion.value);
                 formData.append("targetAudience", form.targetAudience.value);
                 formData.append("link", form.link.value);
-                formData.append("imageUrl", form.imageUrl.value);
+
+                const selectedImageOption = document.querySelector('input[name="imageChoice"]:checked').value;
+
+                if (selectedImageOption === 'url') {
+                    // ✅ Usar directamente la URL
+                    formData.append("imageUrl", form.imageUrl.value);
+                } else {
+                    // ✅ Convertir imagen a base64
+                    const imageFile = form.imageFile.files[0];
+                    if (imageFile) {
+                        const base64 = await toBase64(imageFile);
+                        formData.append("imageContent", base64.split(',')[1]);
+                        formData.append("imageName", imageFile.name);
+                        formData.append("imageType", imageFile.type);
+                    }
+                }
+
 
                 const keyVerseInputs = document.querySelectorAll("input[name='keyVerse[]']");
                 const keyVerses = Array.from(keyVerseInputs)
@@ -6258,6 +6306,23 @@
                 reader.onload(); // continuar sin archivo
             }
         });
+
+        document.querySelectorAll('input[name="imageChoice"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const selected = document.querySelector('input[name="imageChoice"]:checked').value;
+                const urlContainer = document.getElementById('imageUrlContainer');
+                const fileContainer = document.getElementById('imageFileContainer');
+
+                if (selected === 'url') {
+                    urlContainer.classList.remove('d-none');
+                    fileContainer.classList.add('d-none');
+                } else {
+                    urlContainer.classList.add('d-none');
+                    fileContainer.classList.remove('d-none');
+                }
+            });
+        });
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
