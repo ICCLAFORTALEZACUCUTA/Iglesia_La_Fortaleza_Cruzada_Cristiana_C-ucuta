@@ -4791,20 +4791,7 @@
             }
         }
     </style>
-
-    <!-- Spinner de carga profesional -->
-    <div id="loadingOverlay"
-        class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
-        style="z-index: 9999; display: none;">
-        <div class="text-center text-white">
-            <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-            <p class="fs-5"><i class="fa-solid fa-hourglass-half me-2 text-warning"></i>Tu predicación se está
-                cargando...</p>
-        </div>
-    </div>
-
-
-
+    
     <!-- Modal de Éxito -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -6162,94 +6149,96 @@
             modal.show();
         }
 
-        document.getElementById("uploadSermonForm").addEventListener("submit", async function (e) {
-            e.preventDefault();
+document.getElementById("uploadSermonForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-            const form = e.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const loadingOverlay = document.getElementById("loadingOverlay");
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const loadingOverlay = document.getElementById('loadingOverlay');
 
-            // Mostrar el efecto de carga
-            loadingOverlay.style.display = 'flex';
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+    // Mostrar el efecto de carga
+    loadingOverlay.style.display = 'flex';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
 
-            const formData = new FormData();
+    const formData = new FormData();
 
-            // Agregar campos normales
-            formData.append("title", form.title.value);
-            formData.append("date", form.date.value);
-            formData.append("preacher", form.preacher.value);
-            formData.append("area", form.area.value);
-            formData.append("objetivo", form.objetivo.value);
-            formData.append("description1", form.description1.value);
-            formData.append("description2", form.description2.value);
-            formData.append("description3", form.description3.value);
-            formData.append("finalConclusion", form.finalConclusion.value);
-            formData.append("targetAudience", form.targetAudience.value);
-            formData.append("link", form.link.value);
-            formData.append("imageUrl", form.imageUrl.value);
+    // Agregar campos normales
+    formData.append("title", form.title.value);
+    formData.append("date", form.date.value);
+    formData.append("preacher", form.preacher.value);
+    formData.append("area", form.area.value);
+    formData.append("objetivo", form.objetivo.value);
+    formData.append("description1", form.description1.value);
+    formData.append("description2", form.description2.value);
+    formData.append("description3", form.description3.value);
+    formData.append("finalConclusion", form.finalConclusion.value);
+    formData.append("targetAudience", form.targetAudience.value);
+    formData.append("link", form.link.value);
+    formData.append("imageUrl", form.imageUrl.value);
 
-            // Versículos clave múltiples
-            const keyVerseInputs = document.querySelectorAll("input[name='keyVerse[]']");
-            const keyVerses = [];
-            keyVerseInputs.forEach(input => {
-                if (input.value.trim()) keyVerses.push(input.value.trim());
-            });
-            formData.append("keyVerse", keyVerses.join(", "));
+    // Versículos clave múltiples
+    const keyVerseInputs = document.querySelectorAll("input[name='keyVerse[]']");
+    const keyVerses = [];
+    keyVerseInputs.forEach(input => {
+        if (input.value.trim()) keyVerses.push(input.value.trim());
+    });
+    formData.append("keyVerse", keyVerses.join(", "));
 
-            // Archivo (opcional)
-            const fileInput = form.sermonFile;
-            if (fileInput && fileInput.files.length > 0) {
-                formData.append("sermonFile", fileInput.files[0]);
-            }
+    // Archivo (opcional)
+    const fileInput = form.sermonFile;
+    if (fileInput && fileInput.files.length > 0) {
+        formData.append("sermonFile", fileInput.files[0]);
+    }
 
-
-            try {
-                const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec", {
-                    method: "POST",
-                    body: formData
-                });
-
-                const result = await response.json();
-                console.log("Resultado:", result);
-
-                // Ocultar el efecto de carga y restaurar el botón
-                loadingOverlay.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Subir Predicación';
-
-                if (result.status === "success") {
-                    form.reset(); // Limpiar campos
-
-                    // Mostrar el modal de éxito
-                    const modal = new bootstrap.Modal(document.getElementById('successModal'));
-                    modal.show();
-
-                    document.getElementById("successModalBtn").addEventListener("click", () => {
-                        modal.hide();
-                        const formContainer = document.getElementById("uploadFormContainer");
-                        if (formContainer) formContainer.style.display = "none";
-                        location.reload(); // Refrescar la página
-                    }, { once: true });
-
-                } else {
-                    alert("❌ Ocurrió un error al subir la predicación:\n" + result.message);
-                }
-
-            } catch (err) {
-                loadingOverlay.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Subir Predicación';
-
-                console.error("❌ ERROR DE RED O SERVIDOR:", err);
-                alert("❌ No se pudo conectar con el servidor. Verifica tu conexión o URL del servidor.");
-            }
-
+    try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec", {
+            method: "POST",
+            body: formData
         });
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        const result = await response.json();
+        console.log("Resultado:", result);
+
+        // Ocultar el efecto de carga y restaurar el botón
+        loadingOverlay.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Subir Predicación';
+
+        if (result.status === "success") {
+            form.reset(); // Limpiar campos
+
+            // Mostrar el modal de éxito
+            const modal = new bootstrap.Modal(document.getElementById('successModal'));
+            modal.show();
+
+            document.getElementById("successModalBtn").addEventListener("click", () => {
+                modal.hide();
+
+                const formContainer = document.getElementById("uploadFormContainer");
+                if (formContainer) formContainer.style.display = "none";
+
+                location.reload(); // Recargar página
+            }, { once: true });
+
+        } else {
+            loadingOverlay.style.display = 'none';
+            alert("❌ Ocurrió un error al subir la predicación:\n" + result.message);
+        }
+
+    } catch (err) {
+        console.error("❌ ERROR DE RED O SERVIDOR:", err);
+
+        loadingOverlay.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Subir Predicación';
+
+        alert("❌ No se pudo conectar con el servidor. Verifica tu conexión o URL del servidor.");
+    }
+});
+</script>
+
+
 
 </body>
 
