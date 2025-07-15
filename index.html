@@ -3963,6 +3963,8 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const cards = document.querySelectorAll('.belief-card');
 
+
+
                 cards.forEach(card => {
                     const wrapper = card.querySelector('.belief-description-wrapper');
                     const expandable = card.querySelector('.belief-description-expandable');
@@ -4361,33 +4363,16 @@
                                 <input type="url" id="sermonLink" name="link" class="form-control"
                                     placeholder="http://youtube.com/watch?v=...">
                             </div>
-
-                            <div class="form-group">
-                                <label class="mb-2">¿Cómo deseas cargar la imagen de la predicación?</label><br>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="imageChoice" id="imageChoiceUrl"
-                                        value="url" checked>
-                                    <label class="form-check-label" for="imageChoiceUrl">Usar URL de la imagen</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="imageChoice" id="imageChoiceFile"
-                                        value="file">
-                                    <label class="form-check-label" for="imageChoiceFile">Subir imagen desde el
-                                        dispositivo</label>
-                                </div>
-                            </div>
-
-                            <!-- Input para subir imagen (oculto inicialmente) -->
-                            <div class="form-group mt-3 d-none" id="imageFileContainer">
+                            <div class="form-group mt-3" id="imageFileContainer">
                                 <label for="imageFile">Archivo de Imagen:</label>
-                                <input type="file" id="imageFile" name="imageFile" class="form-control"
-                                    accept="image/*">
+                                <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*"
+                                    required>
                             </div>
 
 
                             <div class="form-group">
-                                <label for="sermonFile">Cargar Archivo de Predicación:</label>
-                                <input type="file" id="sermonFile" name="sermonFile" class="form-control"
+                                <label for="fileUrlArchivo">Cargar Archivo de Predicación:</label>
+                                <input type="file" id="fileUrlArchivo" name="fileUrlArchivo" class="form-control"
                                     accept=".png,.jpeg.jpg.webp.jiff.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf">
                                 <small class="form-text text-muted">Archivos admitidos: Imagen - PDF - Diapositivas -
                                     Word</small>
@@ -4981,6 +4966,7 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
         window.addEventListener("load", () => {
             const loadingOverlay = document.getElementById("loadingOverlay");
             if (loadingOverlay) {
@@ -5012,6 +4998,8 @@
     </script>
     <script>
 
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec';
+
         function toBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -5042,6 +5030,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const keyVerseInputs = document.getElementById('keyVerseInputs');
             const addKeyVerseBtn = document.getElementById('addKeyVerseBtn');
+
 
             addKeyVerseBtn.addEventListener('click', () => {
                 const newInputGroup = document.createElement('div');
@@ -5550,11 +5539,11 @@
             }
 
             /**
- * Trunca un texto a una longitud máxima y añade puntos suspensivos si es necesario.
- * @param {string} text El texto a truncar.
- * @param {number} maxLength La longitud máxima deseada para el texto.
- * @returns {string} El texto truncado o el texto original si es más corto que maxLength.
- */
+             * Trunca un texto a una longitud máxima y añade puntos suspensivos si es necesario.
+             * @param {string} text El texto a truncar.
+             * @param {number} maxLength La longitud máxima deseada para el texto.
+             * @returns {string} El texto truncado o el texto original si es más corto que maxLength.
+             */
             function truncateText(text, maxLength) {
                 if (!text || text.length <= maxLength) {
                     return text;
@@ -5687,19 +5676,20 @@
             const sermonsContainer = document.getElementById('sermonsContainer');
 
 
+
             // --- DECLARAR VARIABLE GLOBAL ---
             let sermonsData = [];
 
             async function fetchSermonsFromBackend() {
                 try {
-                    const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec");
+                    const response = await fetch("https://script.google.com/macros/s/AKfycbyX75ndDjG1F34-jbVYJojuXwaK7SXYwinVLSgBspr0_-jfKvgsf3zXi45c1KA7RnAn/exec?action=getSermons");
                     const data = await response.json();
                     console.log("📡 Esperando respuesta del servidor...");
 
 
                     // Validar que recibimos un arreglo
-                    if (Array.isArray(data)) {
-                        sermonsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    if (data.status === 'success' && Array.isArray(data.sermons)) {
+                        sermonsData = data.sermons.sort((a, b) => new Date(b.date) - new Date(a.date));
                         populateFilterOptions();
                         renderSermons(sermonsData);
                     } else {
@@ -5709,6 +5699,10 @@
                     console.error("❌ Error al cargar predicaciones:", error);
                 }
             }
+            document.addEventListener('DOMContentLoaded', () => {
+                const cards = document.querySelectorAll('.belief-card');
+                fetchSermonsFromBackend(); // ✅ Ya está definida arriba
+            });
 
             function populateFilterOptions() {
                 const years = new Set();
@@ -5825,232 +5819,232 @@
             }
 
 
-// --- Referencias a elementos del DOM ---
-const addEventBtn = document.getElementById('addEventBtn');
-const eventModal = document.getElementById('eventModal');
-const eventLoginFormContainer = document.getElementById('eventLoginFormContainer');
-const eventCreationFormContainer = document.getElementById('eventCreationFormContainer');
-const eventLoginForm = document.getElementById('eventLoginForm');
-const createEventForm = document.getElementById('createEventForm');
-const eventLoginMessage = document.getElementById('eventLoginMessage');
-const eventMessage = document.getElementById('eventMessage');
+            // --- Referencias a elementos del DOM ---
+            const addEventBtn = document.getElementById('addEventBtn');
+            const eventModal = document.getElementById('eventModal');
+            const eventLoginFormContainer = document.getElementById('eventLoginFormContainer');
+            const eventCreationFormContainer = document.getElementById('eventCreationFormContainer');
+            const eventLoginForm = document.getElementById('eventLoginForm');
+            const createEventForm = document.getElementById('createEventForm');
+            const eventLoginMessage = document.getElementById('eventLoginMessage');
+            const eventMessage = document.getElementById('eventMessage');
 
-// Campos específicos para la imagen
-const eventImageFile = document.getElementById('eventImageFile');
-const eventImageURLInput = document.getElementById('eventImageURL'); // El campo oculto
-const eventImageURLDisplay = document.getElementById('eventImageURLDisplay'); // Para mostrar la URL
-const eventImageLinkText = document.getElementById('eventImageLinkText');
+            // Campos específicos para la imagen
+            const eventImageFile = document.getElementById('eventImageFile');
+            const eventImageURLInput = document.getElementById('eventImageURL'); // El campo oculto
+            const eventImageURLDisplay = document.getElementById('eventImageURLDisplay'); // Para mostrar la URL
+            const eventImageLinkText = document.getElementById('eventImageLinkText');
 
-// --- Funciones Auxiliares (Asegúrate de que estas también estén en tu script o enlazadas) ---
-// Función para mostrar/ocultar el modal (ejemplo básico, adapta a tu framework CSS si usas Bootstrap, etc.)
-function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'block';
-        modal.classList.add('show'); // Para Bootstrap u otros que usen esta clase
-        modal.setAttribute('aria-modal', 'true');
-        modal.setAttribute('role', 'dialog');
-        document.body.classList.add('modal-open'); // Para ocultar scroll del body
-    }
-}
-
-// Función para ocultar el modal
-function hideModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        modal.removeAttribute('aria-modal');
-        modal.removeAttribute('role');
-        document.body.classList.remove('modal-open');
-    }
-}
-
-// Función para mostrar mensajes de estado
-function displayMessage(element, message, type) {
-    if (element) {
-        element.textContent = message;
-        // Limpia las clases de tipo de alerta anteriores y añade la nueva
-        element.className = 'alert mt-3 text-center';
-        element.classList.add(`alert-${type}`); // Ej: 'alert-success', 'alert-danger', 'alert-info'
-        element.style.display = 'block';
-    }
-}
-
-// --- Lógica del Botón "Agregar Evento" ---
-if (addEventBtn) {
-    addEventBtn.addEventListener('click', () => {
-        // Reiniciar la visibilidad de los formularios y los mensajes
-        eventLoginFormContainer.style.display = 'flex'; // Muestra el formulario de login inicialmente
-        eventCreationFormContainer.style.display = 'none'; // Oculta el formulario de creación
-        eventLoginMessage.style.display = 'none';
-        eventMessage.style.display = 'none';
-        eventLoginForm.reset(); // Limpia el formulario de login
-        createEventForm.reset(); // Limpia el formulario de creación de eventos
-        eventImageFile.value = ''; // Limpia el input de archivo para la imagen
-        eventImageURLInput.value = ''; // Limpia el campo oculto de la URL de la imagen
-        eventImageURLDisplay.style.display = 'none'; // Oculta el display de la URL
-        eventImageLinkText.textContent = ''; // Limpia el texto del display
-        CONFIG.currentUserEvent = null; // Reinicia el usuario logueado para este modal
-
-        showModal('eventModal'); // Muestra el modal de eventos
-    });
-}
-
-// --- Lógica del Formulario de Login de Eventos ---
-if (eventLoginForm) {
-    eventLoginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // Acceder a los valores de usuario y contraseña por sus IDs específicos
-        const username = document.getElementById('eventUsername').value;
-        const password = document.getElementById('eventPassword').value;
-
-        eventLoginMessage.style.display = 'none'; // Oculta mensajes anteriores
-
-        const user = CONFIG.USERS[username]; // Obtener el usuario de la configuración
-
-        if (user && user.password === password) {
-            // Verificar si el rol tiene permiso para crear eventos
-            if (['administrator', 'editor'].includes(user.role)) {
-                CONFIG.currentUserEvent = user; // Almacenar el usuario logueado
-                displayMessage(eventLoginMessage, `¡Bienvenido, ${user.name}! Acceso concedido.`, 'success');
-
-                // Simular una pequeña demora para mejor UX antes de mostrar el formulario de creación
-                setTimeout(() => {
-                    eventLoginFormContainer.style.display = 'none'; // Oculta el login
-                    eventCreationFormContainer.style.display = 'block'; // Muestra el formulario de creación
-                    eventMessage.style.display = 'none'; // Asegura que el mensaje del formulario de creación esté oculto
-                }, 1000); // 1 segundo
-            } else {
-                displayMessage(eventLoginMessage, 'Tu rol no tiene permisos para crear eventos.', 'danger');
-            }
-        } else {
-            displayMessage(eventLoginMessage, 'Usuario o contraseña incorrectos.', 'danger');
-        }
-    });
-}
-
-// --- Lógica del Formulario de Creación de Eventos ---
-if (createEventForm) {
-    createEventForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        eventMessage.style.display = 'none'; // Oculta mensajes anteriores
-
-        // Verificar permisos del usuario logueado
-        if (!CONFIG.currentUserEvent || !['administrator', 'editor'].includes(CONFIG.currentUserEvent.role)) {
-            displayMessage(eventMessage, 'No tienes permisos para crear eventos.', 'danger');
-            return;
-        }
-
-        const formData = new FormData(createEventForm);
-        const imageFile = eventImageFile.files[0]; // Obtener el archivo de imagen
-
-        // Validación de fechas: La fecha de fin no puede ser anterior a la fecha de inicio
-        const eventStartDate = formData.get('eventDate');
-        const eventEndDate = formData.get('eventEndDate');
-        if (eventEndDate && eventStartDate && new Date(eventEndDate) < new Date(eventStartDate)) {
-            displayMessage(eventMessage, 'La fecha de fin no puede ser anterior a la fecha de inicio.', 'danger');
-            return;
-        }
-
-        displayMessage(eventMessage, 'Procesando evento...', 'info');
-
-        let imageUrl = ''; // Variable para almacenar la URL de la imagen
-
-        // *** Refactorización: Subida de imagen integrada en el POST principal del evento ***
-        // Convertir imagen a Base64 si existe
-        if (imageFile) {
-            const base64Image = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = reject;
-                reader.readAsDataURL(imageFile);
-            });
-            formData.append('imageContent', base64Image);
-            formData.append('imageName', imageFile.name);
-            formData.append('imageType', imageFile.type);
-        }
-
-        // Remover el File object original del formData para evitar errores con la API
-        formData.delete('eventImageFile');
-
-        // Llama a la función que enviará los datos del evento, incluyendo la imagen en Base64
-        await sendEventData(formData, eventMessage);
-    });
-}
-
-// Función para enviar los datos del evento (incluyendo la imagen en Base64)
-async function sendEventData(formData, messageElement) {
-    // Añadir el parámetro de acción para el Apps Script
-    formData.append('action', 'addEvent');
-    // Puedes añadir más datos del usuario logueado si lo necesitas en el Apps Script
-    formData.append('username', CONFIG.currentUserEvent.name);
-    formData.append('role', CONFIG.currentUserEvent.role);
-
-    try {
-        displayMessage(messageElement, 'Guardando datos del evento en Google Sheet...', 'info');
-
-        // Usamos fetch para enviar los datos como una solicitud POST
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: formData // FormData puede ser enviado directamente, fetch lo codificará como multipart/form-data
-        });
-
-        const result = await response.json(); // Parsea la respuesta JSON del Apps Script
-
-        if (result.status === 'success') {
-            displayMessage(messageElement, result.message, 'success');
-            createEventForm.reset(); // Limpia el formulario
-            eventImageFile.value = ''; // Limpia el input de archivo
-            eventImageURLInput.value = ''; // Limpia el campo oculto de URL (si aplica)
-            eventImageURLDisplay.style.display = 'none'; // Oculta el feedback
-            eventImageLinkText.textContent = ''; // Limpia el texto del feedback
-
-            // Cierra el modal después de un breve retraso para que el usuario lea el mensaje
-            setTimeout(() => {
-                hideModal('eventModal');
-                // Opcional: Recargar la lista de eventos para ver el nuevo
-                // loadEvents();
-            }, 2000);
-        } else {
-            displayMessage(messageElement, `Error al guardar: ${result.message}`, 'danger');
-        }
-    } catch (error) {
-        console.error('Error al enviar los datos del evento:', error);
-        displayMessage(messageElement, 'Ocurrió un error inesperado al guardar los datos del evento. Revisa tu conexión.', 'danger');
-    }
-}
-
-
-// --- Función para cargar eventos (fetch) ---
-// Esta es la versión para que tu `index.html` en GitHub traiga los eventos
-async function loadEvents() {
-    const eventsGrid = document.querySelector('.events-grid'); // Asegúrate de tener este contenedor en tu HTML
-    if (!eventsGrid) return;
-
-    eventsGrid.innerHTML = '<p class="text-center text-muted-dark">Cargando eventos...</p>';
-
-    try {
-        // Solicitud GET para obtener los eventos
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=getEvents`);
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            const events = result.events;
-            eventsGrid.innerHTML = ''; // Limpia el mensaje de carga
-
-            if (events.length === 0) {
-                eventsGrid.innerHTML = '<p class="text-center text-muted-dark">No hay eventos disponibles en este momento.</p>';
-                return;
+            // --- Funciones Auxiliares (Asegúrate de que estas también estén en tu script o enlazadas) ---
+            // Función para mostrar/ocultar el modal (ejemplo básico, adapta a tu framework CSS si usas Bootstrap, etc.)
+            function showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'block';
+                    modal.classList.add('show'); // Para Bootstrap u otros que usen esta clase
+                    modal.setAttribute('aria-modal', 'true');
+                    modal.setAttribute('role', 'dialog');
+                    document.body.classList.add('modal-open'); // Para ocultar scroll del body
+                }
             }
 
-            // Ordenar por fecha (más reciente primero)
-            events.sort((a, b) => new Date(b.date) - new Date(a.date));
+            // Función para ocultar el modal
+            function hideModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                    modal.classList.remove('show');
+                    modal.removeAttribute('aria-modal');
+                    modal.removeAttribute('role');
+                    document.body.classList.remove('modal-open');
+                }
+            }
 
-            events.forEach(event => {
-                const eventCard = document.createElement('div');
-                eventCard.classList.add('event-card'); // Ajusta esta clase si es diferente en tu CSS
-                eventCard.innerHTML = `
+            // Función para mostrar mensajes de estado
+            function displayMessage(element, message, type) {
+                if (element) {
+                    element.textContent = message;
+                    // Limpia las clases de tipo de alerta anteriores y añade la nueva
+                    element.className = 'alert mt-3 text-center';
+                    element.classList.add(`alert-${type}`); // Ej: 'alert-success', 'alert-danger', 'alert-info'
+                    element.style.display = 'block';
+                }
+            }
+
+            // --- Lógica del Botón "Agregar Evento" ---
+            if (addEventBtn) {
+                addEventBtn.addEventListener('click', () => {
+                    // Reiniciar la visibilidad de los formularios y los mensajes
+                    eventLoginFormContainer.style.display = 'flex'; // Muestra el formulario de login inicialmente
+                    eventCreationFormContainer.style.display = 'none'; // Oculta el formulario de creación
+                    eventLoginMessage.style.display = 'none';
+                    eventMessage.style.display = 'none';
+                    eventLoginForm.reset(); // Limpia el formulario de login
+                    createEventForm.reset(); // Limpia el formulario de creación de eventos
+                    eventImageFile.value = ''; // Limpia el input de archivo para la imagen
+                    eventImageURLInput.value = ''; // Limpia el campo oculto de la URL de la imagen
+                    eventImageURLDisplay.style.display = 'none'; // Oculta el display de la URL
+                    eventImageLinkText.textContent = ''; // Limpia el texto del display
+                    CONFIG.currentUserEvent = null; // Reinicia el usuario logueado para este modal
+
+                    showModal('eventModal'); // Muestra el modal de eventos
+                });
+            }
+
+            // --- Lógica del Formulario de Login de Eventos ---
+            if (eventLoginForm) {
+                eventLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Acceder a los valores de usuario y contraseña por sus IDs específicos
+                    const username = document.getElementById('eventUsername').value;
+                    const password = document.getElementById('eventPassword').value;
+
+                    eventLoginMessage.style.display = 'none'; // Oculta mensajes anteriores
+
+                    const user = CONFIG.USERS[username]; // Obtener el usuario de la configuración
+
+                    if (user && user.password === password) {
+                        // Verificar si el rol tiene permiso para crear eventos
+                        if (['administrator', 'editor'].includes(user.role)) {
+                            CONFIG.currentUserEvent = user; // Almacenar el usuario logueado
+                            displayMessage(eventLoginMessage, `¡Bienvenido, ${user.name}! Acceso concedido.`, 'success');
+
+                            // Simular una pequeña demora para mejor UX antes de mostrar el formulario de creación
+                            setTimeout(() => {
+                                eventLoginFormContainer.style.display = 'none'; // Oculta el login
+                                eventCreationFormContainer.style.display = 'block'; // Muestra el formulario de creación
+                                eventMessage.style.display = 'none'; // Asegura que el mensaje del formulario de creación esté oculto
+                            }, 1000); // 1 segundo
+                        } else {
+                            displayMessage(eventLoginMessage, 'Tu rol no tiene permisos para crear eventos.', 'danger');
+                        }
+                    } else {
+                        displayMessage(eventLoginMessage, 'Usuario o contraseña incorrectos.', 'danger');
+                    }
+                });
+            }
+
+            // --- Lógica del Formulario de Creación de Eventos ---
+            if (createEventForm) {
+                createEventForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    eventMessage.style.display = 'none'; // Oculta mensajes anteriores
+
+                    // Verificar permisos del usuario logueado
+                    if (!CONFIG.currentUserEvent || !['administrator', 'editor'].includes(CONFIG.currentUserEvent.role)) {
+                        displayMessage(eventMessage, 'No tienes permisos para crear eventos.', 'danger');
+                        return;
+                    }
+
+                    const formData = new FormData(createEventForm);
+                    const imageFile = eventImageFile.files[0]; // Obtener el archivo de imagen
+
+                    // Validación de fechas: La fecha de fin no puede ser anterior a la fecha de inicio
+                    const eventStartDate = formData.get('eventDate');
+                    const eventEndDate = formData.get('eventEndDate');
+                    if (eventEndDate && eventStartDate && new Date(eventEndDate) < new Date(eventStartDate)) {
+                        displayMessage(eventMessage, 'La fecha de fin no puede ser anterior a la fecha de inicio.', 'danger');
+                        return;
+                    }
+
+                    displayMessage(eventMessage, 'Procesando evento...', 'info');
+
+                    let imageUrl = ''; // Variable para almacenar la URL de la imagen
+
+                    // *** Refactorización: Subida de imagen integrada en el POST principal del evento ***
+                    // Convertir imagen a Base64 si existe
+                    if (imageFile) {
+                        const base64Image = await new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                            reader.onerror = reject;
+                            reader.readAsDataURL(imageFile);
+                        });
+                        formData.append('imageContent', base64Image);
+                        formData.append('imageName', imageFile.name);
+                        formData.append('imageType', imageFile.type);
+                    }
+
+                    // Remover el File object original del formData para evitar errores con la API
+                    formData.delete('eventImageFile');
+
+                    // Llama a la función que enviará los datos del evento, incluyendo la imagen en Base64
+                    await sendEventData(formData, eventMessage);
+                });
+            }
+
+            // Función para enviar los datos del evento (incluyendo la imagen en Base64)
+            async function sendEventData(formData, messageElement) {
+                // Añadir el parámetro de acción para el Apps Script
+                formData.append('action', 'addEvent');
+                // Puedes añadir más datos del usuario logueado si lo necesitas en el Apps Script
+                formData.append('username', CONFIG.currentUserEvent.name);
+                formData.append('role', CONFIG.currentUserEvent.role);
+
+                try {
+                    displayMessage(messageElement, 'Guardando datos del evento en Google Sheet...', 'info');
+
+                    // Usamos fetch para enviar los datos como una solicitud POST
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: formData // FormData puede ser enviado directamente, fetch lo codificará como multipart/form-data
+                    });
+
+                    const result = await response.json(); // Parsea la respuesta JSON del Apps Script
+
+                    if (result.status === 'success') {
+                        displayMessage(messageElement, result.message, 'success');
+                        createEventForm.reset(); // Limpia el formulario
+                        eventImageFile.value = ''; // Limpia el input de archivo
+                        eventImageURLInput.value = ''; // Limpia el campo oculto de URL (si aplica)
+                        eventImageURLDisplay.style.display = 'none'; // Oculta el feedback
+                        eventImageLinkText.textContent = ''; // Limpia el texto del feedback
+
+                        // Cierra el modal después de un breve retraso para que el usuario lea el mensaje
+                        setTimeout(() => {
+                            hideModal('eventModal');
+                            // Opcional: Recargar la lista de eventos para ver el nuevo
+                            // loadEvents();
+                        }, 2000);
+                    } else {
+                        displayMessage(messageElement, `Error al guardar: ${result.message}`, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error al enviar los datos del evento:', error);
+                    displayMessage(messageElement, 'Ocurrió un error inesperado al guardar los datos del evento. Revisa tu conexión.', 'danger');
+                }
+            }
+
+
+            // --- Función para cargar eventos (fetch) ---
+            // Esta es la versión para que tu `index.html` en GitHub traiga los eventos
+            async function loadEvents() {
+                const eventsGrid = document.querySelector('.events-grid'); // Asegúrate de tener este contenedor en tu HTML
+                if (!eventsGrid) return;
+
+                eventsGrid.innerHTML = '<p class="text-center text-muted-dark">Cargando eventos...</p>';
+
+                try {
+                    // Solicitud GET para obtener los eventos
+                    const response = await fetch(`${APPS_SCRIPT_URL}?action=getEvents`);
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        const events = result.events;
+                        eventsGrid.innerHTML = ''; // Limpia el mensaje de carga
+
+                        if (events.length === 0) {
+                            eventsGrid.innerHTML = '<p class="text-center text-muted-dark">No hay eventos disponibles en este momento.</p>';
+                            return;
+                        }
+
+                        // Ordenar por fecha (más reciente primero)
+                        events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                        events.forEach(event => {
+                            const eventCard = document.createElement('div');
+                            eventCard.classList.add('event-card'); // Ajusta esta clase si es diferente en tu CSS
+                            eventCard.innerHTML = `
                     <img src="${event.imageURL || 'img/eventos/default-event.jpg'}" alt="Imagen de ${event.title}" class="img-fluid">
                     <div class="event-card-content">
                         <h4>${event.title || 'Sin Título'}</h4>
@@ -6061,20 +6055,20 @@ async function loadEvents() {
                         <button class="btn btn-outline btn-sm mt-3" data-event-id="${event.id}">Ver Evento</button>
                     </div>
                 `;
-                eventsGrid.appendChild(eventCard);
+                            eventsGrid.appendChild(eventCard);
 
-                // Asume que tienes una función showEventModal para mostrar los detalles del evento
-                eventCard.querySelector('.btn').addEventListener('click', () => showEventModal(event));
-            });
-        } else {
-            eventsGrid.innerHTML = `<p class="text-center text-danger">Error al cargar eventos: ${result.message}</p>`;
-            console.error('Error al obtener eventos:', result.message);
-        }
-    } catch (error) {
-        eventsGrid.innerHTML = `<p class="text-center text-danger">Error de conexión al cargar eventos: ${error.message}</p>`;
-        console.error('Error en loadEvents (fetch):', error);
-    }
-}
+                            // Asume que tienes una función showEventModal para mostrar los detalles del evento
+                            eventCard.querySelector('.btn').addEventListener('click', () => showEventModal(event));
+                        });
+                    } else {
+                        eventsGrid.innerHTML = `<p class="text-center text-danger">Error al cargar eventos: ${result.message}</p>`;
+                        console.error('Error al obtener eventos:', result.message);
+                    }
+                } catch (error) {
+                    eventsGrid.innerHTML = `<p class="text-center text-danger">Error de conexión al cargar eventos: ${error.message}</p>`;
+                    console.error('Error en loadEvents (fetch):', error);
+                }
+            }
 
 
             // --- Sermon Upload Login/Form Logic ---
@@ -6554,30 +6548,35 @@ async function loadEvents() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
 
-            const fileInput = form.sermonFile;
+            const fileInput = form.fileUrlArchivo;
             const file = fileInput?.files[0];
 
             // ✅ Función que construye y envía formData (con o sin base64 de archivo)
             const enviarFormulario = async (base64File = null) => {
                 const formData = new URLSearchParams();
+                formData.append("action", "addSermon");
 
-                formData.append("title", form.title.value);
-                formData.append("date", form.date.value);
-                formData.append("preacher", form.preacher.value);
-                formData.append("area", form.area.value);
-                formData.append("objetivo", form.objetivo.value);
-                formData.append("description1", form.description1.value);
-                formData.append("description2", form.description2.value);
-                formData.append("description3", form.description3.value);
-                formData.append("finalConclusion", form.finalConclusion.value);
-                formData.append("targetAudience", form.targetAudience.value);
-                formData.append("link", form.link.value);
+                formData.append("title", form.querySelector('[name="title"]')?.value || "");
+                formData.append("date", form.querySelector('[name="date"]')?.value || "");
+                formData.append("preacher", form.querySelector('[name="preacher"]')?.value || "");
+                formData.append("area", form.querySelector('[name="area"]')?.value || "");
+                formData.append("objetivo", form.querySelector('[name="objetivo"]')?.value || "");
+                formData.append("description1", form.querySelector('[name="description1"]')?.value || "");
+                formData.append("description2", form.querySelector('[name="description2"]')?.value || "");
+                formData.append("description3", form.querySelector('[name="description3"]')?.value || "");
+                formData.append("finalConclusion", form.querySelector('[name="finalConclusion"]')?.value || "");
+                formData.append("targetAudience", form.querySelector('[name="targetAudience"]')?.value || "");
+                formData.append("link", form.querySelector('[name="link"]')?.value || "");
 
                 // ✅ Imagen
-                const selectedImageOption = document.querySelector('input[name="imageChoice"]:checked').value;
-                if (selectedImageOption === 'url') {
-                    formData.append("imageUrl", form.imageUrl.value);
-                } else {
+                const imageFile = form.imageFile.files[0];
+                if (imageFile) {
+                    const base64 = await toBase64(imageFile);
+                    formData.append("imageContent", base64.split(',')[1]);
+                    formData.append("imageName", imageFile.name);
+                    formData.append("imageType", imageFile.type);
+                }
+                else {
                     const imageFile = form.imageFile.files[0];
                     if (imageFile) {
                         const base64 = await toBase64(imageFile);
