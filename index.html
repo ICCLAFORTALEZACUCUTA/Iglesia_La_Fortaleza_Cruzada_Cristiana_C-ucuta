@@ -6510,30 +6510,42 @@ async function sendToTelegram() {
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Asegúrate de que este ID exista en tu HTML
             const openModalButton = document.getElementById('openChurchModalBtn');
-            const popupContainer = document.getElementById('popupContainer'); // Esto NO debe ser null
+            const popupContainer = document.getElementById('popupContainer');
             let popupLoaded = false;
 
-            // Primero, validamos si los elementos existen antes de añadir listeners
+            // --- Nueva función para ejecutar scripts ---
+            function executeScripts(element) {
+                const scripts = element.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    // Crea un nuevo elemento script para que el navegador lo ejecute
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => {
+                        newScript.setAttribute(attr.name, attr.value);
+                    });
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            }
+            // --- Fin de la nueva función ---
+
             if (!openModalButton) {
                 console.error("Error: El botón con ID 'openChurchModalBtn' no se encontró en el DOM.");
-                return; // Salimos de la función si el botón no existe
+                return;
             }
             if (!popupContainer) {
                 console.error("Error: El contenedor con ID 'popupContainer' no se encontró en el DOM. Asegúrate de que esté en el HTML antes del script.");
-                return; // Salimos de la función si el contenedor no existe
+                return;
             }
 
             openModalButton.addEventListener('click', function(e) {
                 e.preventDefault();
+                console.log("Botón 'Revisar' clicado.");
 
                 if (!popupLoaded) {
-                    // Ruta a tu archivo HTML de popup
-                    fetch('popup.html') // ASEGÚRATE QUE ESTA RUTA ES CORRECTA
+                    fetch('modal_popup.html') // ASEGÚRATE QUE ESTA RUTA ES CORRECTA
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -6541,26 +6553,46 @@ async function sendToTelegram() {
                             return response.text();
                         })
                         .then(html => {
-                            popupContainer.innerHTML = html;
+                            // Temporalmente inyectamos el HTML para poder extraer los scripts
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = html;
+
+                            popupContainer.innerHTML = ''; // Limpiamos el contenedor antes de añadir el contenido
+                            popupContainer.appendChild(tempDiv); // Añadimos el contenido procesado
+
+                            // Ahora ejecutamos los scripts que estaban en el HTML inyectado
+                            executeScripts(popupContainer);
+
                             popupLoaded = true;
+                            console.log("HTML del popup inyectado y scripts ejecutados.");
+
                             // Llamar a la función expuesta por el script del popup
-                            if (window.openChurchModal) {
-                                window.openChurchModal();
-                            }
+                            // Damos un pequeño retraso para asegurar que el script del popup haya inicializado window.openChurchModal
+                            setTimeout(() => {
+                                if (window.openChurchModal) {
+                                    window.openChurchModal();
+                                    console.log("Función openChurchModal() llamada.");
+                                } else {
+                                    console.warn("Advertencia: window.openChurchModal no está definida. Esto no debería ocurrir si executeScripts funciona.");
+                                }
+                            }, 50); // Un pequeño retraso para asegurar que el script se cargue completamente
+
                         })
                         .catch(error => console.error('Error al cargar el popup:', error));
                 } else {
-                    // Si ya está cargado, solo lo mostramos llamando a la función global
+                    // Si el modal ya está cargado, simplemente lo mostramos y reseteamos su estado
                     if (window.openChurchModal) {
                         window.openChurchModal();
+                        console.log("Función openChurchModal() llamada (ya cargado).");
+                    } else {
+                         console.warn("Advertencia: window.openChurchModal no está definida (ya cargado). Esto no debería ocurrir.");
                     }
                 }
             });
 
             // --- Código para el contador (Si no lo tienes en otro JS global de tu sitio) ---
-            // Asegúrate que los IDs de los contadores no se dupliquen con los del modal si los pones en ambos.
             const counters = document.querySelectorAll('.counter');
-            const speed = 200; // La velocidad de la animación
+            const speed = 200;
 
             counters.forEach(counter => {
                 const updateCount = () => {
@@ -6580,11 +6612,11 @@ async function sendToTelegram() {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting && !counter.classList.contains('counted')) {
-                            counter.classList.add('counted'); // Marca como contado para no repetir
+                            counter.classList.add('counted');
                             updateCount();
                         }
                     });
-                }, { threshold: 0.5 }); // Inicia cuando el 50% del elemento es visible
+                }, { threshold: 0.5 });
 
                 observer.observe(counter);
             });
