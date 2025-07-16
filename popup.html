@@ -525,7 +525,7 @@
                     <h3><i class="fas fa-church"></i> La Vcitoria Cruzada Cristiana - Principal</h3>
                     <div class="info-grid">
                         <div class="info-item"><i class="fa-sharp-duotone fa-solid fa-user"></i><p><strong>Pastores:</strong> Rodrigo Castrillón y Rosalba Perez</p></div>
-                        <div class="info-item"><i class="fa-solid fa-route"></i><p><strong>Dirección:</strong> (La Victoria).</p></div>
+                        <div class="info-item"><i class="fa-solid fa-route"></i><p><strong>Dirección:</strong> Av7 #3 - 80 (La Victoria).</p></div>
                         <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Ciudad:</strong> Cúcuta, Norte de Santander.</p></div>
                         <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7890</p></div>
                         <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
@@ -535,8 +535,8 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/rHUqEgJNxtZVz8fp9" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-aeropuerto" class="map-container"></div>
+                    <a href="https://maps.app.goo.gl/KLdE18eimYx5ykQZ6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <div id="map-victoria" class="map-container"></div>
                 </div>
 
                 <div class="church-details" data-id="fortaleza">
@@ -553,8 +553,8 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/T4hsoWE4er25iTku6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-atalaya" class="map-container"></div>
+                    <a href="https://maps.app.goo.gl/rRagrEuArHkDXYJT6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <div id="map-fortaleza" class="map-container"></div>
                 </div>
 
                 <div class="church-details" data-id="belen">
@@ -720,8 +720,8 @@
         // Datos de las sedes con COORDENADAS REALES y URLs de Google Maps  
         // ¡IMPORTANTE! Reemplaza estas latitudes y longitudes con las REALES de tus sedes.
         const sedes = [
-            { id: 'victoria', name: 'La Vcitoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Mz C Lt 1 Urbanización Oasis de Sevilla. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/rHUqEgJNxtZVz8fp9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567'},
-            { id: 'fortaleza', name: 'La Fortaleza Cruzada Cristiana', lat: 7.902643058045286, lng: -72.55504307641618, address: 'Mz AN lote 20 - B (La Fortaleza). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/T4hsoWE4er25iTku6', horarios: ['Domingos: 8:00 A.M.', 'Miércoles: 6:00 P.M.'], phone: '(+57) 3202106461' },
+            { id: 'victoria', name: 'La Vcitoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Av7 #3 - 80. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/KLdE18eimYx5ykQZ6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567'},
+            { id: 'fortaleza', name: 'La Fortaleza Cruzada Cristiana', lat: 7.902643058045286, lng: -72.55504307641618, address: 'Mz AN lote 20 - B (La Fortaleza). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/rRagrEuArHkDXYJT6', horarios: ['Domingos: 8:00 A.M.', 'Miércoles: 6:00 P.M.'], phone: '(+57) 3202106461' },
             { id: 'belen', name: ' Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569' },
             { id: 'colinas', name: ' Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570' },
             { id: 'donanidia', name: ' Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571' },
@@ -1020,7 +1020,7 @@
                 }
                 if (churchModal) { 
                     churchModal.onclick = function(event) {
-                        if (event.target === localChurchModal) {
+                        if (event.target === churchModal) {
                             window.closeChurchModal();
                         }
                     };
