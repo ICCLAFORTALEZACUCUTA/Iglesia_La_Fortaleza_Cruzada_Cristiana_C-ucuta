@@ -6545,7 +6545,7 @@ async function sendToTelegram() {
                 console.log("Botón 'Revisar' clicado.");
 
                 if (!popupLoaded) {
-                    fetch('modal_popup.html') // ASEGÚRATE QUE ESTA RUTA ES CORRECTA
+                    fetch('popup.html') // ASEGÚRATE QUE ESTA RUTA ES CORRECTA
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! status: ${response.status}`);
