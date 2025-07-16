@@ -1,148 +1,383 @@
-<script>
-    // --- FUNCIONES GLOBALES (ACCESIBLES INMEDIATAMENTE) ---
-
-    // Datos de las sedes. AJUSTA ESTA LISTA y los data-id en el HTML para que coincidan.
-    // Declaramos 'sedes' aquí para que sea accesible por initializeSedeSelector
-    const sedes = [
-        { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto' },
-        { id: 'atalaya', name: 'Centro Cristiano Atalaya' },
-        { id: 'belen', name: 'Centro Cristiano Belén' },
-        { id: 'colinas', name: 'Centro Cristiano Colinas' },
-        { id: 'donanidia', name: 'Centro Cristiano Doña Nidia' },
-        { id: 'libertad', name: 'Centro Cristiano Libertad' },
-        { id: 'lospinos', name: 'Centro Cristiano Los Pinos' },
-        { id: 'prados', name: 'Centro Cristiano Prados del Este' },
-        { id: 'sanmartin', name: 'Centro Cristiano San Martín' },
-        { id: 'tucunare', name: 'Centro Cristiano Tucunaré' },
-        { id: 'vallesther', name: 'Centro Cristiano Vallesther' }
-    ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente
-
-    // Función global para rellenar el selector de sedes
-    // Ahora es una función independiente y global
-    window.initializeSedeSelector = function() {
-        console.log("popup.html: Inicializando selector de sedes.");
-        const sedeSelector = document.getElementById('sede-selector');
-        if (sedeSelector) {
-            sedeSelector.innerHTML = ''; // Limpiar opciones existentes
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Selecciona una Sede...';
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            sedeSelector.appendChild(defaultOption);
-
-            sedes.forEach(sede => {
-                const option = document.createElement('option');
-                option.value = sede.id;
-                option.textContent = sede.name;
-                sedeSelector.appendChild(option);
-            });
-            console.log("popup.html: Selector de sedes rellenado.");
-        } else {
-            console.error("popup.html ERROR: #sede-selector no encontrado para inicializar.");
-        }
-    };
-
-    // Función global para mostrar la sede seleccionada
-    // También la hacemos global para que esté disponible cuando se llame a initializeSedeSelector
-    window.showSelectedSede = function() {
-        const sedeSelector = document.getElementById('sede-selector');
-        const churchesContainer = document.getElementById('churches-container');
-
-        if (!sedeSelector || !churchesContainer) {
-            console.error("popup.html ERROR: Elementos de selector o contenedor no encontrados para showSelectedSede.");
-            return;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sedes de la Iglesia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Estilos básicos para el modal overlay */
+        .modal-overlay {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            display: flex; /* Usamos flexbox para centrar el contenido */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Asegura que esté por encima de otros elementos */
+            overflow-y: auto; /* Permite desplazamiento si el contenido es muy largo */
+            padding: 20px; /* Espacio alrededor del modal */
+            box-sizing: border-box; /* Incluye padding en el tamaño */
         }
 
-        const selectedId = sedeSelector.value;
-        console.log(`popup.html: Sede seleccionada en el dropdown: ${selectedId}`);
+        /* Estilos para el contenido del modal */
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-height: 90vh; /* Altura máxima para permitir desplazamiento */
+            overflow-y: auto; /* Permite desplazamiento dentro del contenido */
+        }
+
+        /* Botón de cierre */
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Estilos para el selector de sedes */
+        .form-select {
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para los detalles de cada iglesia */
+        .church-details {
+            display: none; /* Oculto por defecto */
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .church-details.active {
+            display: block; /* Muestra el detalle activo */
+        }
         
-        const churchDetailsElements = churchesContainer.querySelectorAll('.church-details');
-        churchDetailsElements.forEach(churchElement => {
-            if (churchElement.getAttribute('data-id') === selectedId) {
-                churchElement.classList.add('active'); // Muestra la sede seleccionada
-                console.log(`popup.html: Mostrando detalles de la sede: ${selectedId}`);
+        .church-details h3 {
+            color: var(--primary-color, #007bff); /* Puedes definir --primary-color en tu CSS principal */
+            margin-bottom: 15px;
+        }
+
+        .church-details p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .church-details p strong {
+            color: #555;
+        }
+
+        .church-details .map-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary-color, #007bff);
+            text-decoration: none;
+        }
+
+        .church-details .map-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="churchModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button">&times;</button>
+            <h2>Nuestras Sedes</h2>
+
+            <div class="mb-3">
+                <label for="sede-selector" class="form-label">Selecciona una Sede:</label>
+                <select id="sede-selector" class="form-select"></select>
+            </div>
+
+            <div id="churches-container">
+                <div class="church-details" data-id="aeropuerto">
+                    <h3>Centro Cristiano Aeropuerto</h3>
+                    <p><strong>Dirección:</strong> Mz C Lt 1 Urbanización Oasis de Sevilla. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/TUQ3eH6V2w1D6X9G6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="atalaya">
+                    <h3>Centro Cristiano Atalaya</h3>
+                    <p><strong>Dirección:</strong> Cll 15 # 3-10 Los Alpes (Atalaya 1 etapa). Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/kX31sH8x4b5R4xY48" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="belen">
+                    <h3>Centro Cristiano Belén</h3>
+                    <p><strong>Dirección:</strong> Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/3X8M6hY6y8D8Y6K66" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="colinas">
+                    <h3>Centro Cristiano Colinas</h3>
+                    <p><strong>Dirección:</strong> Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/M4Y2L6kK8fQ2X8E4A" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="donanidia">
+                    <h3>Centro Cristiano Doña Nidia</h3>
+                    <p><strong>Dirección:</strong> Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/D7A8V8cR8bK8fG9L7" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="libertad">
+                    <h3>Centro Cristiano Libertad</h3>
+                    <p><strong>Dirección:</strong> Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/P8Z9cT3eM5y2N7hK6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="lospinos">
+                    <h3>Centro Cristiano Los Pinos</h3>
+                    <p><strong>Dirección:</strong> Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/V3F7K9hT1pA5jX2G9" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="prados">
+                    <h3>Centro Cristiano Prados del Este</h3>
+                    <p><strong>Dirección:</strong> Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/B6Z5G9hL7kJ9pT1e" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="sanmartin">
+                    <h3>Centro Cristiano San Martín</h3>
+                    <p><strong>Dirección:</strong> Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/C2X4Z6hT8yK9pL1f" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="tucunare">
+                    <h3>Centro Cristiano Tucunaré</h3>
+                    <p><strong>Dirección:</strong> Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/Q5R7T9hY2xV3cD5F4" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                <div class="church-details" data-id="vallesther">
+                    <h3>Centro Cristiano Vallesther</h3>
+                    <p><strong>Dirección:</strong> Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.</p>
+                    <p><strong>Horarios:</strong></p>
+                    <ul>
+                        <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
+                        <li>Miércoles: 6:00 PM</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/F8J2L4nP6kM9hY1e" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-map-marker-alt"></i></a>
+                </div>
+
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FUNCIONES GLOBALES (ACCESIBLES INMEDIATAMENTE) ---
+
+        // Datos de las sedes. Es crucial que los 'id' de aquí coincidan con los 'data-id' en el HTML.
+        const sedes = [
+            { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto' },
+            { id: 'atalaya', name: 'Centro Cristiano Atalaya' },
+            { id: 'belen', name: 'Centro Cristiano Belén' },
+            { id: 'colinas', name: 'Centro Cristiano Colinas' },
+            { id: 'donanidia', name: 'Centro Cristiano Doña Nidia' },
+            { id: 'libertad', name: 'Centro Cristiano Libertad' },
+            { id: 'lospinos', name: 'Centro Cristiano Los Pinos' },
+            { id: 'prados', name: 'Centro Cristiano Prados del Este' },
+            { id: 'sanmartin', name: 'Centro Cristiano San Martín' },
+            { id: 'tucunare', name: 'Centro Cristiano Tucunaré' },
+            { id: 'vallesther', name: 'Centro Cristiano Vallesther' }
+        ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente
+
+        // Función global para rellenar el selector de sedes.
+        window.initializeSedeSelector = function() {
+            console.log("popup.htmlL: Inicializando selector de sedes.");
+            const sedeSelector = document.getElementById('sede-selector');
+            if (sedeSelector) {
+                sedeSelector.innerHTML = ''; // Limpiar opciones existentes
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Selecciona una Sede...';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                sedeSelector.appendChild(defaultOption);
+
+                sedes.forEach(sede => {
+                    const option = document.createElement('option');
+                    option.value = sede.id;
+                    option.textContent = sede.name;
+                    sedeSelector.appendChild(option);
+                });
+                console.log("popup.htmlL: Selector de sedes rellenado.");
             } else {
-                churchElement.classList.remove('active'); // Oculta las demás
+                console.error("popup.htmlL ERROR: #sede-selector no encontrado para inicializar.");
+            }
+        };
+
+        // Función global para mostrar la sede seleccionada.
+        window.showSelectedSede = function() {
+            const sedeSelector = document.getElementById('sede-selector');
+            const churchesContainer = document.getElementById('churches-container');
+
+            if (!sedeSelector || !churchesContainer) {
+                console.error("popup.htmlL ERROR: Elementos de selector o contenedor no encontrados para showSelectedSede.");
+                return;
+            }
+
+            const selectedId = sedeSelector.value;
+            console.log(`popup.htmlL: Sede seleccionada en el dropdown: ${selectedId}`);
+            
+            const churchDetailsElements = churchesContainer.querySelectorAll('.church-details');
+            churchDetailsElements.forEach(churchElement => {
+                if (churchElement.getAttribute('data-id') === selectedId) {
+                    churchElement.classList.add('active'); // Muestra la sede seleccionada
+                    console.log(`popup.htmlL: Mostrando detalles de la sede: ${selectedId}`);
+                } else {
+                    churchElement.classList.remove('active'); // Oculta las demás
+                }
+            });
+        };
+
+        // Función global para abrir el modal (llamada desde index.html).
+        // Esta es la función principal que expone el popup al script de tu página principal.
+        window.openChurchModal = function() {
+            console.log("popup.htmlL: Función 'openChurchModal' llamada desde el exterior.");
+            const churchModal = document.getElementById('churchModal');
+            if (churchModal) {
+                churchModal.style.display = 'flex'; // Hace visible el modal
+                console.log(`popup.htmlL: 'churchModal' display establecido a: ${churchModal.style.display}`);
+                
+                // Re-inicializar el selector y ocultar todas las sedes al abrir para un estado limpio.
+                window.initializeSedeSelector(); 
+                const churchesContainer = document.getElementById('churches-container');
+                if (churchesContainer) {
+                    churchesContainer.querySelectorAll('.church-details').forEach(el => el.classList.remove('active')); // Oculta todos los detalles de sede
+                    const sedeSelector = document.getElementById('sede-selector');
+                    if (sedeSelector) {
+                        sedeSelector.value = ''; // Resetea a la opción "Selecciona una Sede..."
+                    }
+                    console.log("popup.htmlL: Selector y sedes reseteados al abrir.");
+                } else {
+                     console.warn("popup.htmlL ADVERTENCIA: Contenedor de iglesias no encontrado al abrir el modal.");
+                }
+            } else {
+                console.error("popup.htmlL ERROR: #churchModal no se encontró al intentar abrir el modal.");
+            }
+        };
+
+        // --- LÓGICA DE EVENTOS (se ejecuta una vez que el DOM del popup esté completamente cargado) ---
+        // Este bloque se asegura de que los listeners se adjunten DESPUÉS de que el HTML del popup esté listo.
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("popup.htmlL: DOMContentLoaded - Script del popup cargado.");
+
+            const churchModal = document.getElementById('churchModal');
+            const closeModalButton = churchModal ? churchModal.querySelector('.close-button') : null;
+            const sedeSelector = document.getElementById('sede-selector');
+            
+            // Validaciones para elementos que deben existir para adjuntar listeners.
+            if (!churchModal) {
+                console.error("popup.htmlL ERROR: No se encontró '#churchModal' para adjuntar listeners.");
+                return; 
+            }
+            if (!closeModalButton) {
+                console.warn("popup.htmlL ADVERTENCIA: No se encontró el botón de cierre '.close-button' para adjuntar listener.");
+            }
+            if (!sedeSelector) {
+                console.error("popup.htmlL ERROR: No se encontró el selector de sede '#sede-selector' para adjuntar listener.");
+            }
+            console.log("popup.htmlL: Elementos principales del modal encontrados para listeners.");
+
+            // --- Event Listeners del modal ---
+            // Estos listeners ahora funcionan porque churchModal, closeModalButton, y sedeSelector
+            // se obtienen DESPUÉS de que el DOM del popup está listo.
+            if (closeModalButton) {
+                closeModalButton.addEventListener('click', function() {
+                    churchModal.style.display = 'none';
+                    console.log("popup.htmlL: Modal cerrado por clic en botón 'x'.");
+                });
+            }
+
+            if (churchModal) { 
+                churchModal.addEventListener('click', function(event) {
+                    // Solo si el clic es directamente en el overlay y no en el contenido del modal.
+                    if (event.target === churchModal) { 
+                        churchModal.style.display = 'none';
+                        console.log("popup.htmlL: Modal cerrado por clic en el overlay.");
+                    }
+                });
+            }
+
+            if (sedeSelector) {
+                // El event listener para 'change' llama a la función global showSelectedSede.
+                sedeSelector.addEventListener('change', window.showSelectedSede);
             }
         });
-    };
-
-    // Función global para abrir el modal (llamada desde index.html)
-    window.openChurchModal = function() {
-        console.log("popup.html: Función 'openChurchModal' llamada desde el exterior.");
-        const churchModal = document.getElementById('churchModal');
-        if (churchModal) {
-            churchModal.style.display = 'flex'; // Hace visible el modal
-            console.log(`popup.html: 'churchModal' display establecido a: ${churchModal.style.display}`);
-            
-            // Re-inicializar el selector y ocultar todas las sedes al abrir para un estado limpio
-            // Las funciones initializeSedeSelector y showSelectedSede son ahora globales (window.)
-            window.initializeSedeSelector(); 
-            const churchesContainer = document.getElementById('churches-container');
-            if (churchesContainer) {
-                churchesContainer.querySelectorAll('.church-details').forEach(el => el.classList.remove('active')); // Oculta todos los detalles de sede
-                // Opcional: seleccionar la primera sede por defecto si no hay ninguna seleccionada
-                const sedeSelector = document.getElementById('sede-selector');
-                if (sedeSelector && sedeSelector.options.length > 1) {
-                    sedeSelector.value = ''; // Resetea a la opción "Selecciona una Sede..."
-                    // Si quisieras que la primera sede de la lista se muestre automáticamente:
-                    // sedeSelector.value = sedes[0].id; // Asume que 'sedes' está disponible
-                    // window.showSelectedSede();
-                }
-                console.log("popup.html: Selector y sedes reseteados al abrir.");
-            } else {
-                 console.warn("popup.html ADVERTENCIA: Contenedor de iglesias no encontrado al abrir el modal.");
-            }
-        } else {
-            console.error("popup.html ERROR: #churchModal no se encontró al intentar abrir el modal.");
-        }
-    };
-
-    // --- LÓGICA DE EVENTOS (se ejecuta después de que el DOM del popup esté completamente cargado) ---
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("popup.html: DOMContentLoaded - Script del popup cargado.");
-
-        const churchModal = document.getElementById('churchModal');
-        const closeModalButton = churchModal ? churchModal.querySelector('.close-button') : null;
-        const sedeSelector = document.getElementById('sede-selector');
-        //const churchesContainer = document.getElementById('churches-container'); // Ya lo tenemos en global context
-
-        // Validaciones iniciales para elementos del popup (útil para depuración)
-        if (!churchModal) {
-            console.error("popup.html ERROR: No se encontró '#churchModal'. El modal podría no funcionar.");
-            return; 
-        }
-        if (!closeModalButton) {
-            console.warn("popup.html ADVERTENCIA: No se encontró el botón de cierre '.close-button'.");
-        }
-        if (!sedeSelector) {
-            console.error("popup.html ERROR: No se encontró el selector de sede '#sede-selector'.");
-        }
-        // if (!churchesContainer) { ... ya se chequea arriba ... }
-        console.log("popup.html: Elementos principales del modal encontrados para listeners.");
-
-        // --- Event Listeners del modal ---
-        if (closeModalButton) {
-            closeModalButton.addEventListener('click', function() {
-                churchModal.style.display = 'none';
-                console.log("popup.html: Modal cerrado por clic en botón 'x'.");
-            });
-        }
-
-        if (churchModal) { 
-            churchModal.addEventListener('click', function(event) {
-                if (event.target === churchModal) { // Solo si el clic es en el overlay y no en el contenido
-                    churchModal.style.display = 'none';
-                    console.log("popup.html: Modal cerrado por clic en el overlay.");
-                }
-            });
-        }
-
-        if (sedeSelector) {
-            // El event listener para 'change' llama a la función global showSelectedSede
-            sedeSelector.addEventListener('change', window.showSelectedSede);
-        }
-    });
-</script>
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
