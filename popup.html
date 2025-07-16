@@ -255,7 +255,7 @@
 
         // Función global para rellenar el selector de sedes.
         window.initializeSedeSelector = function() {
-            console.log("popup.html: Inicializando selector de sedes.");
+            console.log("MODAL_POPUP.HTML: Inicializando selector de sedes.");
             const sedeSelector = document.getElementById('sede-selector');
             if (sedeSelector) {
                 sedeSelector.innerHTML = ''; // Limpiar opciones existentes
@@ -273,31 +273,31 @@
                     option.textContent = sede.name;
                     sedeSelector.appendChild(option);
                 });
-                console.log("popup.html: Selector de sedes rellenado.");
+                console.log("MODAL_POPUP.HTML: Selector de sedes rellenado.");
             } else {
-                console.error("popup.html ERROR: #sede-selector no encontrado para inicializar.");
+                console.error("MODAL_POPUP.HTML ERROR: #sede-selector no encontrado para inicializar.");
             }
         };
 
         // Función global para mostrar la sede seleccionada.
         window.showSelectedSede = function() {
-            console.log("popup.html: showSelectedSede llamada.");
+            console.log("MODAL_POPUP.HTML: showSelectedSede llamada.");
             const sedeSelector = document.getElementById('sede-selector');
             const churchesContainer = document.getElementById('churches-container');
 
             if (!sedeSelector || !churchesContainer) {
-                console.error("popup.html ERROR: Elementos de selector o contenedor no encontrados para showSelectedSede.");
+                console.error("MODAL_POPUP.HTML ERROR: Elementos de selector o contenedor no encontrados para showSelectedSede.");
                 return;
             }
 
             const selectedId = sedeSelector.value;
-            console.log(`popup.html: Sede seleccionada en el dropdown: ${selectedId}`);
+            console.log(`MODAL_POPUP.HTML: Sede seleccionada en el dropdown: ${selectedId}`);
             
             const churchDetailsElements = churchesContainer.querySelectorAll('.church-details');
             churchDetailsElements.forEach(churchElement => {
                 if (churchElement.getAttribute('data-id') === selectedId) {
                     churchElement.classList.add('active'); // Muestra la sede seleccionada
-                    console.log(`popup.html: Mostrando detalles de la sede: ${selectedId}`);
+                    console.log(`MODAL_POPUP.HTML: Mostrando detalles de la sede: ${selectedId}`);
                 } else {
                     churchElement.classList.remove('active'); // Oculta las demás
                 }
@@ -310,11 +310,11 @@
 
         // Función global para abrir el modal (llamada desde index.html).
         window.openChurchModal = function() {
-            console.log("popup.html: Función 'openChurchModal' llamada desde el exterior.");
+            console.log("MODAL_POPUP.HTML: Función 'openChurchModal' llamada desde el exterior.");
             const churchModal = document.getElementById('churchModal');
             if (churchModal) {
                 churchModal.style.display = 'flex'; // Hace visible el modal
-                console.log(`popup.html: 'churchModal' display establecido a: ${churchModal.style.display}`);
+                console.log(`MODAL_POPUP.HTML: 'churchModal' display establecido a: ${churchModal.style.display}`);
                 
                 // Re-inicializar el selector y ocultar todas las sedes al abrir para un estado limpio.
                 window.initializeSedeSelector(); 
@@ -328,18 +328,18 @@
                     sedeSelector.value = ''; // Asegura que el selector no tenga una opción preseleccionada
                     window.showSelectedSede(); // Llama para ocultar cualquier detalle si el selector está vacío
                     
-                    console.log("popup.html: Selector y sedes reseteados al abrir.");
+                    console.log("MODAL_POPUP.HTML: Selector y sedes reseteados al abrir.");
                 } else {
-                     console.warn("popup.html ADVERTENCIA: Elementos de selector/contenedor no encontrados al abrir el modal.");
+                     console.warn("MODAL_POPUP.HTML ADVERTENCIA: Elementos de selector/contenedor no encontrados al abrir el modal.");
                 }
             } else {
-                console.error("popup.html ERROR: #churchModal no se encontró al intentar abrir el modal.");
+                console.error("MODAL_POPUP.HTML ERROR: #churchModal no se encontró al intentar abrir el modal.");
             }
         };
 
         // --- LÓGICA DE EVENTOS (se ejecuta una vez que el DOM del popup esté completamente cargado) ---
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("popup.html: DOMContentLoaded - Script del popup cargado.");
+            console.log("MODAL_POPUP.HTML: DOMContentLoaded - Script del popup cargado.");
 
             // Asegurarse de obtener las referencias AQUI, cuando el DOM ya está listo.
             const churchModal = document.getElementById('churchModal');
@@ -347,37 +347,37 @@
             const sedeSelector = document.getElementById('sede-selector');
             
             if (!churchModal) {
-                console.error("popup.html ERROR: No se encontró '#churchModal' para adjuntar listeners.");
+                console.error("MODAL_POPUP.HTML ERROR: No se encontró '#churchModal' para adjuntar listeners.");
                 return; 
             }
-            console.log("popup.html: Elementos principales del modal encontrados para listeners.");
+            console.log("MODAL_POPUP.HTML: Elementos principales del modal encontrados para listeners.");
 
             // --- Event Listeners del modal ---
             if (closeModalButton) {
                 closeModalButton.addEventListener('click', function() {
                     churchModal.style.display = 'none';
-                    console.log("popup.html: Modal cerrado por clic en botón 'x'.");
+                    console.log("MODAL_POPUP.HTML: Modal cerrado por clic en botón 'x'.");
                 });
-                console.log("popup.html: Listener para botón de cierre adjuntado.");
+                console.log("MODAL_POPUP.HTML: Listener para botón de cierre adjuntado.");
             } else {
-                console.warn("popup.html ADVERTENCIA: No se encontró el botón de cierre '.close-button' para adjuntar listener.");
+                console.warn("MODAL_POPUP.HTML ADVERTENCIA: No se encontró el botón de cierre '.close-button' para adjuntar listener.");
             }
 
             if (churchModal) { 
                 churchModal.addEventListener('click', function(event) {
                     if (event.target === churchModal) { 
                         churchModal.style.display = 'none';
-                        console.log("popup.html: Modal cerrado por clic en el overlay.");
+                        console.log("MODAL_POPUP.HTML: Modal cerrado por clic en el overlay.");
                     }
                 });
-                console.log("popup.html: Listener para clic en overlay adjuntado.");
+                console.log("MODAL_POPUP.HTML: Listener para clic en overlay adjuntado.");
             }
 
             if (sedeSelector) {
                 sedeSelector.addEventListener('change', window.showSelectedSede);
-                console.log("popup.html: Listener para selector de sedes adjuntado.");
+                console.log("MODAL_POPUP.HTML: Listener para selector de sedes adjuntado.");
             } else {
-                console.warn("popup.html ADVERTENCIA: No se encontró el selector de sede '#sede-selector' para adjuntar listener.");
+                console.warn("MODAL_POPUP.HTML ADVERTENCIA: No se encontró el selector de sede '#sede-selector' para adjuntar listener.");
             }
         });
     </script>
