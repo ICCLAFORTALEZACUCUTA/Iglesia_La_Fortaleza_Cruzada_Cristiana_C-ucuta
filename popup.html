@@ -359,33 +359,77 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elementos del DOM del popup (buscados directamente dentro del documento actual)
-            const churchModal = document.getElementById('churchModal');
-            const closeModalButton = churchModal.querySelector('.close-button');
+<script>
+    // La función global para abrir el modal debe estar fuera de DOMContentLoaded
+    // para que pueda ser accedida y llamada inmediatamente desde el script de index.html
+    window.openChurchModal = function() {
+        console.log("popup.html: Función 'openChurchModal' llamada desde el exterior.");
+        const churchModal = document.getElementById('churchModal');
+        if (churchModal) {
+            churchModal.style.display = 'flex'; // Hace visible el modal
+            console.log(`popup.html: 'churchModal' display establecido a: ${churchModal.style.display}`);
+            
+            // Re-inicializar el selector y ocultar todas las sedes al abrir para un estado limpio
             const sedeSelector = document.getElementById('sede-selector');
             const churchesContainer = document.getElementById('churches-container');
-            const churchDetailsElements = churchesContainer.querySelectorAll('.church-details');
+            if (sedeSelector && churchesContainer) {
+                 initializeSedeSelector(); // Llama a la función para rellenar el selector
+                 churchesContainer.querySelectorAll('.church-details').forEach(el => el.classList.remove('active')); // Oculta todos los detalles de sede
+                 console.log("popup.html: Selector y sedes reseteados al abrir.");
+            } else {
+                 console.warn("popup.html ADVERTENCIA: Elementos del selector/contenedor no encontrados al abrir el modal.");
+            }
+        } else {
+            console.error("popup.html ERROR: #churchModal no se encontró al intentar abrir el modal.");
+        }
+    };
 
-            // Datos de las sedes. AJUSTA ESTA LISTA y los data-id en el HTML para que coincidan.
-            const sedes = [
-                { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto' },
-                { id: 'atalaya', name: 'Centro Cristiano Atalaya' },
-                { id: 'belen', name: 'Centro Cristiano Belén' },
-                { id: 'colinas', name: 'Centro Cristiano Colinas' },
-                { id: 'donanidia', name: 'Centro Cristiano Doña Nidia' },
-                { id: 'libertad', name: 'Centro Cristiano Libertad' },
-                { id: 'lospinos', name: 'Centro Cristiano Los Pinos' },
-                { id: 'prados', name: 'Centro Cristiano Prados del Este' },
-                { id: 'sanmartin', name: 'Centro Cristiano San Martín' },
-                { id: 'tucunare', name: 'Centro Cristiano Tucunaré' },
-                { id: 'vallesther', name: 'Centro Cristiano Vallesther' }
-                // Añade o elimina objetos de sede aquí. El 'id' debe ser único y coincidir con 'data-id' en el HTML.
-            ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente para el dropdown
+    // Todo lo demás, incluyendo la lógica interna del popup y sus event listeners,
+    // se puede ejecutar de forma segura una vez que el DOM del popup esté cargado.
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("popup.html: DOMContentLoaded - Script del popup cargado.");
 
-            // Función para rellenar el selector
-            function initializeSedeSelector() {
+        const churchModal = document.getElementById('churchModal');
+        const closeModalButton = churchModal ? churchModal.querySelector('.close-button') : null;
+        const sedeSelector = document.getElementById('sede-selector');
+        const churchesContainer = document.getElementById('churches-container');
+        // Validaciones iniciales para elementos del popup (útil para depuración)
+        if (!churchModal) {
+            console.error("popup.html ERROR: No se encontró '#churchModal'. El modal podría no funcionar.");
+            return; 
+        }
+        if (!closeModalButton) {
+            console.warn("popup.html ADVERTENCIA: No se encontró el botón de cierre '.close-button'.");
+        }
+        if (!sedeSelector) {
+            console.error("popup.html ERROR: No se encontró el selector de sede '#sede-selector'.");
+        }
+        if (!churchesContainer) {
+            console.error("popup.html ERROR: No se encontró el contenedor de iglesias '#churches-container'.");
+        }
+        console.log("popup.html: Elementos principales del modal encontrados.");
+
+        // Datos de las sedes. AJUSTA ESTA LISTA y los data-id en el HTML para que coincidan.
+        const sedes = [
+            { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto' },
+            { id: 'atalaya', name: 'Centro Cristiano Atalaya' },
+            { id: 'belen', name: 'Centro Cristiano Belén' },
+            { id: 'colinas', name: 'Centro Cristiano Colinas' },
+            { id: 'donanidia', name: 'Centro Cristiano Doña Nidia' },
+            { id: 'libertad', name: 'Centro Cristiano Libertad' },
+            { id: 'lospinos', name: 'Centro Cristiano Los Pinos' },
+            { id: 'prados', name: 'Centro Cristiano Prados del Este' },
+            { id: 'sanmartin', name: 'Centro Cristiano San Martín' },
+            { id: 'tucunare', name: 'Centro Cristiano Tucunaré' },
+            { id: 'vallesther', name: 'Centro Cristiano Vallesther' }
+        ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente para el dropdown
+
+        // Función para rellenar el selector de sedes
+        // Se declara aquí para que initializeSedeSelector() pueda ser llamada desde window.openChurchModal
+        // y también dentro de este DOMContentLoaded si fuera necesario (aunque ya no lo es aquí).
+        window.initializeSedeSelector = function() { // Hacemos esta función global también por si acaso
+            console.log("popup.html: Inicializando selector de sedes...");
+            if (sedeSelector) {
                 sedeSelector.innerHTML = ''; // Limpiar opciones existentes
 
                 const defaultOption = document.createElement('option');
@@ -401,53 +445,50 @@
                     option.textContent = sede.name;
                     sedeSelector.appendChild(option);
                 });
+                console.log("popup.html: Selector de sedes rellenado.");
             }
+        };
 
-            // Función para mostrar la sede seleccionada
-            function showSelectedSede() {
-                const selectedId = sedeSelector.value;
-
-                churchDetailsElements.forEach(churchElement => {
-                    if (churchElement.getAttribute('data-id') === selectedId) {
-                        churchElement.classList.add('active'); // Muestra la sede seleccionada
-                    } else {
-                        churchElement.classList.remove('active'); // Oculta las demás
-                    }
-                });
-            }
-
-            // --- Event Listeners para el popup ---
-            // Los elementos openModalButton y el código del contador NO están en este archivo,
-            // sino en tu página principal si la cargas via iframe.
-            // Si cargas este archivo directamente en el <body> de tu index.html,
-            // necesitarás un botón en tu index.html con id="openChurchModalBtn".
-
-            // Para que este popup pueda ser controlado desde un archivo padre (tu index.html)
-            // exponemos una función global.
-            window.openChurchModal = function() {
-                churchModal.style.display = 'flex'; // Muestra el modal
-                initializeSedeSelector(); // Rellena y resetea el selector
-                churchDetailsElements.forEach(el => el.classList.remove('active')); // Oculta todas las sedes
-            };
-
-            // Cerrar el modal con el botón 'x'
-            closeModalButton.addEventListener('click', function() {
-                churchModal.style.display = 'none';
-            });
-
-            // Cerrar el modal haciendo clic fuera del contenido del modal
-            churchModal.addEventListener('click', function(event) {
-                if (event.target === churchModal) {
-                    churchModal.style.display = 'none';
+        // Función para mostrar la sede seleccionada
+        function showSelectedSede() {
+            const selectedId = sedeSelector.value;
+            console.log(`popup.html: Sede seleccionada en el dropdown: ${selectedId}`);
+            
+            const churchDetailsElements = churchesContainer ? churchesContainer.querySelectorAll('.church-details') : [];
+            churchDetailsElements.forEach(churchElement => {
+                if (churchElement.getAttribute('data-id') === selectedId) {
+                    churchElement.classList.add('active'); // Muestra la sede seleccionada
+                    console.log(`popup.html: Mostrando detalles de la sede: ${selectedId}`);
+                } else {
+                    churchElement.classList.remove('active'); // Oculta las demás
                 }
             });
+        }
 
-            // Manejar la selección en el dropdown
+        // --- Event Listeners del modal ---
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', function() {
+                churchModal.style.display = 'none';
+                console.log("popup.html: Modal cerrado por clic en botón 'x'.");
+            });
+        }
+
+        if (churchModal) { 
+            churchModal.addEventListener('click', function(event) {
+                if (event.target === churchModal) { // Solo si el clic es en el overlay y no en el contenido
+                    churchModal.style.display = 'none';
+                    console.log("popup.html: Modal cerrado por clic en el overlay.");
+                }
+            });
+        }
+
+        if (sedeSelector) {
             sedeSelector.addEventListener('change', showSelectedSede);
+        }
 
-            // Inicializar el selector al cargar el popup
-            initializeSedeSelector();
-        });
-    </script>
+        // Ya no llamamos initializeSedeSelector() aquí porque se hace desde window.openChurchModal() al abrir.
+        // initializeSedeSelector(); 
+    });
+</script>
 </body>
 </html>
