@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sedes de la Iglesia - Fortaleza Cruzada Cristiana</title>
+    <title>Sedes de la Iglesia Cruzada Cristiana</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
@@ -21,118 +21,128 @@
             --shadow-light: rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilos generales del modal overlay */
+        /* -------------------------- */
+        /* ESTILOS GENERALES Y LAYOUT */
+        /* -------------------------- */
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color-dark);
+            background-color: var(--bg-light); /* Para previsualización si se abre directamente */
+        }
+
+        /* Estilos del modal overlay */
         .modal-overlay {
-            display: none; /* Inicialmente oculto */
+            display: flex; /* Siempre flex para centrado, hidden con visibility */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro más intenso */
-            display: flex;
+            background-color: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
-            z-index: 1050; /* Z-index alto para asegurar visibilidad */
+            z-index: 1050;
             overflow-y: auto;
             padding: 20px;
             box-sizing: border-box;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease-out, visibility 0.4s ease-out; /* Transición para un fade-in/out suave */
+            visibility: hidden; /* Oculto por defecto, pero mantiene el layout */
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out; /* Transición más rápida */
+            pointer-events: none; /* No interactuable cuando está oculto */
         }
 
         .modal-overlay.show {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto; /* Interactuable cuando está visible */
         }
 
         /* Estilos del contenido del modal */
         .modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%); /* Degradado sutil */
-            padding: 40px;
-            border-radius: 15px; /* Más redondeado */
-            max-width: 950px; /* Más ancho para mayor contenido */
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+            padding: 30px; /* Un poco menos de padding para pantallas pequeñas */
+            border-radius: 15px;
+            max-width: 950px;
             width: 100%;
-            box-shadow: 0 15px 40px var(--shadow-strong); /* Sombra más dramática */
+            box-shadow: 0 15px 40px var(--shadow-strong);
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
-            transform: translateY(-50px) scale(0.95); /* Efecto de entrada más pronunciado */
-            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
-            border: 1px solid var(--border-color); /* Borde sutil */
+            transform: translateY(-20px) scale(0.98); /* Transición más sutil y rápida */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            border: 1px solid var(--border-color);
         }
 
         .modal-overlay.show .modal-content {
-            transform: translateY(0) scale(1); /* Posición final y escala normal */
+            transform: translateY(0) scale(1);
         }
 
         /* Botón de cierre */
         .close-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: none;
             border: none;
-            font-size: 2.2rem; /* Tamaño prominente */
+            font-size: 2rem; /* Tamaño prominente */
             cursor: pointer;
             color: var(--text-color-dark);
-            transition: color 0.3s ease, transform 0.2s ease;
-            outline: none; /* Elimina el contorno al hacer clic */
+            transition: color 0.2s ease, transform 0.2s ease;
+            outline: none;
+            padding: 5px; /* Área de clic más grande */
         }
         .close-button:hover {
-            color: var(--accent-color); /* Cambio de color al pasar el ratón */
-            transform: rotate(90deg); /* Animación de rotación */
+            color: var(--accent-color);
+            transform: rotate(90deg) scale(1.1); /* Animación de rotación y ligero aumento */
         }
 
         /* Título del modal */
         .modal-content h2 {
             color: var(--primary-color);
-            margin-bottom: 30px;
+            margin-bottom: 25px; /* Reducido un poco */
             text-align: center;
-            font-weight: 800; /* Más audaz */
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            font-weight: 800;
+            letter-spacing: 0.5px; /* Ajuste para fluidez */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.03);
+            font-size: 2.2rem; /* Tamaño base */
         }
 
-        /* Controles de selección y ubicación */
+        /* -------------------------- */
+        /* CONTROLES (SELECT Y BOTÓN) */
+        /* -------------------------- */
         .modal-controls {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 2px solid var(--border-color); /* Borde más grueso */
+            flex-direction: column; /* Columna por defecto para móviles */
+            gap: 15px; /* Espaciado reducido */
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
         }
-        @media (min-width: 768px) {
-            .modal-controls {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
+        
         .modal-controls .form-label {
             font-weight: 600;
             color: var(--text-color-dark);
             margin-bottom: 0;
-            white-space: nowrap; /* Evita que el texto se rompa */
+            white-space: nowrap;
+            flex-shrink: 0; /* Asegura que no se encoja */
         }
 
         .modal-controls .form-select {
             flex-grow: 1;
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 10px 15px; /* Padding ajustado */
+            border-radius: 8px; /* Un poco menos redondeado para fluidez */
             border: 1px solid var(--border-color);
             background-color: #fff;
-            font-size: 1.1rem;
+            font-size: 1rem; /* Tamaño base */
             color: var(--text-color-dark);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.03); /* Sombra más sutil */
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         .modal-controls .form-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2); /* Sombra de foco más suave */
             outline: none;
         }
 
@@ -141,43 +151,47 @@
             color: #fff;
             border: none;
             font-weight: 700;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            padding: 10px 20px; /* Padding ajustado */
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; /* Transiciones más rápidas */
             display: flex;
             align-items: center;
             gap: 8px;
             justify-content: center;
+            width: 100%; /* Ocupa todo el ancho en móviles */
         }
         .modal-controls .btn:hover {
-            background-color: #218838; /* Verde más oscuro */
-            transform: translateY(-2px); /* Pequeño levantamiento */
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            background-color: #218838;
+            transform: translateY(-1px); /* Menor levantamiento */
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2); /* Sombra más suave */
         }
         .modal-controls .btn:active {
             transform: translateY(0);
             box-shadow: none;
         }
         .modal-controls .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5; /* Más evidente que está deshabilitado */
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        /* Estilos para los detalles de cada iglesia */
+        /* -------------------------- */
+        /* DETALLES DE LA IGLESIA */
+        /* -------------------------- */
+
         .church-details {
             display: none;
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 30px;
-            margin-top: 30px;
-            animation: fadeInScale 0.6s ease-out; /* Animación de aparición con escala */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            overflow: hidden; /* Para contener el mapa redondeado */
+            padding: 25px; /* Padding ajustado */
+            margin-top: 25px; /* Margen ajustado */
+            animation: fadeInScale 0.4s ease-out; /* Animación más rápida */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06); /* Sombra más suave */
+            overflow: hidden;
         }
 
         .church-details.active {
@@ -186,45 +200,40 @@
         
         .church-details h3 {
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 18px; /* Margen ajustado */
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 1.6rem; /* Tamaño ajustado */
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px; /* Espaciado ajustado */
             border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 15px;
+            padding-bottom: 12px;
             margin-top: 0;
         }
         .church-details h3 i {
-            font-size: 1.5em;
+            font-size: 1.4em; /* Tamaño ajustado */
             color: var(--accent-color);
         }
 
         .church-details .info-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
+            grid-template-columns: 1fr; /* Una columna por defecto en móviles */
+            gap: 15px; /* Espaciado ajustado */
+            margin-bottom: 20px; /* Margen ajustado */
         }
-        @media (min-width: 768px) {
-            .info-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-        }
-
+        
         .church-details .info-item {
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 12px; /* Espaciado ajustado */
             color: var(--text-color-light);
-            font-size: 1.05rem;
+            font-size: 1rem; /* Tamaño ajustado */
         }
         .church-details .info-item i {
             color: var(--secondary-color);
-            font-size: 1.4rem;
-            flex-shrink: 0; /* Evita que el icono se encoja */
-            margin-top: 4px; /* Ajuste visual */
+            font-size: 1.2rem; /* Tamaño ajustado */
+            flex-shrink: 0;
+            margin-top: 3px;
         }
         .church-details .info-item p {
             margin-bottom: 0;
@@ -234,57 +243,59 @@
         }
 
         .church-details ul {
-            list-style: none; /* Elimina viñetas por defecto */
+            list-style: none;
             padding-left: 0;
-            margin-top: 10px;
+            margin-top: 8px; /* Margen ajustado */
         }
         .church-details ul li {
             position: relative;
-            padding-left: 25px;
-            margin-bottom: 8px;
+            padding-left: 22px; /* Padding ajustado */
+            margin-bottom: 6px; /* Margen ajustado */
             color: var(--text-color-dark);
+            font-size: 0.95rem; /* Tamaño ajustado */
         }
         .church-details ul li::before {
-            content: "\f017"; /* Icono de reloj de Font Awesome */
+            content: "\f017";
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
             left: 0;
             color: var(--accent-color);
-            font-size: 1rem;
+            font-size: 0.9em;
+            top: 2px; /* Ajuste vertical */
         }
 
         .church-details .map-link {
-            display: inline-flex; /* Para alinear icono y texto */
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 25px;
+            gap: 6px; /* Espaciado ajustado */
+            margin-top: 20px; /* Margen ajustado */
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
-            transition: color 0.2s ease, transform 0.2s ease;
+            font-size: 1rem; /* Tamaño ajustado */
+            transition: color 0.2s ease, transform 0.1s ease;
         }
 
         .church-details .map-link:hover {
             text-decoration: underline;
-            color: #0056b3; /* Azul más oscuro */
-            transform: translateX(5px); /* Pequeño desplazamiento al pasar el ratón */
+            color: #0056b3;
+            transform: translateX(3px); /* Menor desplazamiento */
         }
         .church-details .map-link i {
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         /* Estilo para el contenedor del mapa */
         .map-container {
             width: 100%;
-            height: 380px; /* Altura generosa para el mapa */
+            height: 300px; /* Altura más flexible */
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 30px;
+            margin-top: 25px; /* Margen ajustado */
             border: 2px solid var(--border-color);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            background-color: #e9ecef; /* Fondo claro mientras carga el mapa */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra más sutil */
+            background-color: #e9ecef;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -295,43 +306,199 @@
             content: "Cargando mapa...";
         }
 
-        /* Animación de fade-in y escala */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        /* -------------------------- */
+        /* MENSAJES DE GEOLOCALIZACIÓN */
+        /* -------------------------- */
 
-        /* Estilos para mensajes de error/info de geolocalización */
         .geolocation-message {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 15px; /* Margen ajustado */
+            padding: 12px; /* Padding ajustado */
             border-radius: 8px;
-            background-color: #fff3cd; /* Amarillo suave para info */
-            color: #856404; /* Marrón para texto de info */
-            border: 1px solid #ffeeba;
             display: none;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            animation: fadeIn 0.4s ease-out;
+            font-size: 0.9rem; /* Tamaño ajustado */
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-out; /* Animación más rápida */
+            display: flex; /* Para el icono y texto */
+            align-items: center;
+            gap: 10px;
         }
         .geolocation-message.show {
-            display: block;
+            display: flex;
         }
         .geolocation-message.error {
-            background-color: #f8d7da; /* Rojo suave para error */
-            color: #721c24; /* Rojo oscuro para texto de error */
+            background-color: #f8d7da;
+            color: #721c24;
             border-color: #f5c6cb;
         }
+        .geolocation-message.info {
+            background-color: #d1ecf1; /* Azul suave para info */
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
         .geolocation-message.success {
-            background-color: #d4edda; /* Verde suave para éxito */
-            color: #155724; /* Verde oscuro para texto de éxito */
+            background-color: #d4edda;
+            color: #155724;
             border-color: #c3e6cb;
+        }
+        .geolocation-message i {
+            font-size: 1.2em; /* Icono un poco más grande */
+        }
+
+        /* -------------------------- */
+        /* ANIMACIONES */
+        /* -------------------------- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* -------------------------- */
+        /* RESPONSIVIDAD */
+        /* -------------------------- */
+
+        /* Para pantallas pequeñas (móviles) - hasta 576px (extra small en Bootstrap) */
+        @media (max-width: 575.98px) {
+            .modal-content {
+                padding: 20px; /* Menos padding en pantallas muy pequeñas */
+                border-radius: 10px;
+                max-height: 95vh; /* Ocupa más espacio vertical */
+            }
+
+            .close-button {
+                font-size: 1.8rem;
+                top: 10px;
+                right: 10px;
+            }
+
+            .modal-content h2 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .modal-controls {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+
+            .modal-controls .form-select,
+            .modal-controls .btn {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+                border-radius: 6px;
+            }
+            .modal-controls .btn {
+                width: 100%; /* Asegura que el botón ocupe todo el ancho */
+            }
+
+            .church-details {
+                padding: 18px;
+                margin-top: 18px;
+                border-radius: 10px;
+            }
+
+            .church-details h3 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+                gap: 8px;
+            }
+            .church-details h3 i {
+                font-size: 1.3em;
+            }
+
+            .church-details .info-grid {
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .church-details .info-item {
+                font-size: 0.9rem;
+                gap: 8px;
+            }
+            .church-details .info-item i {
+                font-size: 1.1rem;
+            }
+
+            .church-details ul li {
+                font-size: 0.85rem;
+                padding-left: 20px;
+            }
+            .church-details ul li::before {
+                font-size: 0.8em;
+            }
+
+            .church-details .map-link {
+                font-size: 0.9rem;
+                margin-top: 15px;
+                gap: 5px;
+            }
+
+            .map-container {
+                height: 250px; /* Menos altura en pantallas muy pequeñas */
+                margin-top: 20px;
+            }
+
+            .geolocation-message {
+                font-size: 0.85rem;
+                padding: 10px;
+                gap: 8px;
+            }
+            .geolocation-message i {
+                font-size: 1.1em;
+            }
+        }
+
+        /* Para pantallas medianas (tablets y móviles grandes) - de 576px a 767.98px */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .modal-content {
+                padding: 25px;
+                max-width: 650px;
+            }
+            .modal-content h2 {
+                font-size: 2rem;
+            }
+            .modal-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .modal-controls .btn {
+                 width: 100%;
+            }
+            .church-details h3 {
+                font-size: 1.5rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr; /* Una columna para asegurar el stack */
+            }
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        /* Para pantallas grandes (desktops y laptops) - a partir de 768px */
+        @media (min-width: 768px) {
+            .modal-controls {
+                flex-direction: row; /* Vuelven a ser fila */
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 10px; /* Pequeño ajuste para alinear */
+                padding-right: 10px;
+            }
+             .modal-controls .btn {
+                width: auto; /* Ancho automático */
+                flex-shrink: 0; /* Evita que el botón se encoja */
+            }
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Dos columnas o más */
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -367,7 +534,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/TUQ3eH6V2w1D6X9G6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/Ejv5hGjP2T4U2Q8F6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-aeropuerto" class="map-container"></div>
                 </div>
 
@@ -384,7 +551,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/kX31sH8x4b5R4xY48" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/9xZ7FjR2X1P2H8A49" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-atalaya" class="map-container"></div>
                 </div>
 
@@ -401,7 +568,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/3X8M6hY6y8D8Y6K66" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/U2D3E4F5G6H7I8J90" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-belen" class="map-container"></div>
                 </div>
 
@@ -418,7 +585,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/M4Y2L6kK8fQ2X8E4A" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/V1W2X3Y4Z5A6B7C8D" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-colinas" class="map-container"></div>
                 </div>
 
@@ -435,7 +602,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/D7A8V8cR8bK8fG9L7" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/P9Q8R7S6T5U4V3W2X" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-donanidia" class="map-container"></div>
                 </div>
 
@@ -452,7 +619,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/P8Z9cT3eM5y2N7hK6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/M1N2O3P4Q5R6S7T8U" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-libertad" class="map-container"></div>
                 </div>
 
@@ -469,7 +636,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/V3F7K9hT1pA5jX2G9" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/Z9A8B7C6D5E4F3G2H" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-lospinos" class="map-container"></div>
                 </div>
 
@@ -486,7 +653,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/B6Z5G9hL7kJ9pT1e" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8O" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-prados" class="map-container"></div>
                 </div>
 
@@ -503,7 +670,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/C2X4Z6hT8yK9pL1f" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/A9S8D7F6G5H4J3K2L" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-sanmartin" class="map-container"></div>
                 </div>
 
@@ -520,7 +687,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/Q5R7T9hY2xV3cD5F4" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8K" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-tucunare" class="map-container"></div>
                 </div>
 
@@ -537,7 +704,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/F8J2L4nP6kM9hY1e" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+                    <a href="https://maps.app.goo.gl/P1O2I3U4Y5T6R7E8W" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-vallesther" class="map-container"></div>
                 </div>
 
@@ -549,29 +716,27 @@
         // --- FUNCIONES GLOBALES Y DATOS ---
 
         // Datos de las sedes con COORDENADAS REALES y URLs de Google Maps
-        // Reemplaza estas latitudes y longitudes con las REALES de tus sedes.
+        // ¡IMPORTANTE! Reemplaza estas latitudes y longitudes con las REALES de tus sedes.
         const sedes = [
-            { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto', lat: 7.915720, lng: -72.493920, address: 'Mz C Lt 1 Urbanización Oasis de Sevilla. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Ejv5hGjP2T4U2Q8F6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7890', email: 'aeropuerto@iglesia.com' },
-            { id: 'atalaya', name: 'Centro Cristiano Atalaya', lat: 7.904260, lng: -72.502840, address: 'Cll 15 # 3-10 Los Alpes (Atalaya 1 etapa). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/9xZ7FjR2X1P2H8A49', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7891', email: 'atalaya@iglesia.com' },
-            { id: 'belen', name: 'Centro Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/U2D3E4F5G6H7I8J90', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7892', email: 'belen@iglesia.com' },
-            { id: 'colinas', name: 'Centro Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/V1W2X3Y4Z5A6B7C8D', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7893', email: 'colinas@iglesia.com' },
-            { id: 'donanidia', name: 'Centro Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9Q8R7S6T5U4V3W2X', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7894', email: 'donanidia@iglesia.com' },
-            { id: 'libertad', name: 'Centro Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/M1N2O3P4Q5R6S7T8U', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7895', email: 'libertad@iglesia.com' },
-            { id: 'lospinos', name: 'Centro Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z9A8B7C6D5E4F3G2H', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7896', email: 'lospinos@iglesia.com' },
-            { id: 'prados', name: 'Centro Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8O', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7897', email: 'prados@iglesia.com' },
-            { id: 'sanmartin', name: 'Centro Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A9S8D7F6G5H4J3K2L', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7898', email: 'sanmartin@iglesia.com' },
-            { id: 'tucunare', name: 'Centro Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8K', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7899', email: 'tucunare@iglesia.com' },
-            { id: 'vallesther', name: 'Centro Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P1O2I3U4Y5T6R7E8W', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(123) 456-7900', email: 'vallesther@iglesia.com' }
+            { id: 'aeropuerto', name: 'Centro Cristiano Aeropuerto', lat: 7.915720, lng: -72.493920, address: 'Mz C Lt 1 Urbanización Oasis de Sevilla. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/EJ58zW8Y3B9V6JqG9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567', email: 'aeropuerto@iglesia.com' },
+            { id: 'atalaya', name: 'Centro Cristiano Atalaya', lat: 7.904260, lng: -72.502840, address: 'Cll 15 # 3-10 Los Alpes (Atalaya 1 etapa). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/G6L5Q7P2K9M8N0A1', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234568', email: 'atalaya@iglesia.com' },
+            { id: 'belen', name: 'Centro Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569', email: 'belen@iglesia.com' },
+            { id: 'colinas', name: 'Centro Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570', email: 'colinas@iglesia.com' },
+            { id: 'donanidia', name: 'Centro Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571', email: 'donanidia@iglesia.com' },
+            { id: 'libertad', name: 'Centro Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A1S2D3F4G5H6J7K8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234572', email: 'libertad@iglesia.com' },
+            { id: 'lospinos', name: 'Centro Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9O8I7U6Y5T4R3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234573', email: 'lospinos@iglesia.com' },
+            { id: 'prados', name: 'Centro Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234574', email: 'prados@iglesia.com' },
+            { id: 'sanmartin', name: 'Centro Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/F1G2H3J4K5L6M7N8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234575', email: 'sanmartin@iglesia.com' },
+            { id: 'tucunare', name: 'Centro Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2V3B4N5M6L7K8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234576', email: 'tucunare@iglesia.com' },
+            { id: 'vallesther', name: 'Centro Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/E1R2T3Y4U5I6O7P8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234577', email: 'vallesther@iglesia.com' }
         ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente
 
         let currentMaps = {}; // Objeto para almacenar instancias de mapas de Google
+        const googleMapsApiKey = 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44'; // <-- TU CLAVE API
 
         // Función para cargar dinámicamente el script de Google Maps API
         function loadGoogleMapsScript() {
-            const googleMapsApiKey = 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44'; // <-- TU CLAVE API AQUÍ
             const scriptId = 'googleMapsScript';
-            
-            // Si el script ya está cargado o en proceso, no hagas nada
             if (document.getElementById(scriptId)) {
                 console.log("MODAL_POPUP.HTML: Google Maps API script ya existe.");
                 return;
@@ -584,7 +749,7 @@
             script.id = scriptId;
             script.onerror = () => {
                 console.error("MODAL_POPUP.HTML ERROR: Fallo al cargar el script de Google Maps API. Revisa tu clave API y la configuración.");
-                showGeolocationMessage("Error: No se pudo cargar el mapa. Revisa tu conexión o clave API.", true);
+                showGeolocationMessage("Error: No se pudo cargar el mapa. Revisa tu conexión o clave API.", 'error');
             };
             document.head.appendChild(script);
             console.log("MODAL_POPUP.HTML: Intentando cargar el script de Google Maps API...");
@@ -603,7 +768,7 @@
         // Calcula la distancia entre dos coordenadas (Haversine formula)
         function haversineDistance(coords1, coords2) {
             const R = 6371e3; // Radio de la Tierra en metros
-            const φ1 = coords1.lat * Math.PI / 180; // φ, λ en radianes
+            const φ1 = coords1.lat * Math.PI / 180;
             const φ2 = coords2.lat * Math.PI / 180;
             const Δφ = (coords2.lat - coords1.lat) * Math.PI / 180;
             const Δλ = (coords2.lng - coords1.lng) * Math.PI / 180;
@@ -616,12 +781,12 @@
             return R * c; // Distancia en metros
         }
 
-        // Función global para rellenar el selector de sedes.
+        // Función para rellenar el selector de sedes.
         window.initializeSedeSelector = function() {
             console.log("MODAL_POPUP.HTML: Inicializando selector de sedes.");
             const sedeSelector = document.getElementById('sede-selector');
             if (sedeSelector) {
-                sedeSelector.innerHTML = ''; // Limpiar opciones existentes
+                sedeSelector.innerHTML = '';
 
                 const defaultOption = document.createElement('option');
                 defaultOption.value = '';
@@ -642,7 +807,7 @@
             }
         };
 
-        // Función global para mostrar la sede seleccionada e inicializar su mapa
+        // Función para mostrar la sede seleccionada e inicializar su mapa
         window.showSelectedSede = function() {
             console.log("MODAL_POPUP.HTML: showSelectedSede llamada.");
             const sedeSelector = document.getElementById('sede-selector');
@@ -662,75 +827,76 @@
                 const mapDiv = document.getElementById(mapContainerId);
 
                 if (churchElement.getAttribute('data-id') === selectedId) {
-                    churchElement.classList.add('active'); // Muestra la sede seleccionada
+                    churchElement.classList.add('active');
                     console.log(`MODAL_POPUP.HTML: Mostrando detalles de la sede: ${selectedId}`);
                     
-                    // Inicializar mapa para la sede seleccionada
                     const selectedSede = sedes.find(s => s.id === selectedId);
                     if (selectedSede) {
                         if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
                             if (mapDiv) {
-                                if (!currentMaps[selectedId]) { // Solo inicializa si no existe
+                                if (!currentMaps[selectedId]) {
                                     const mapOptions = {
                                         center: { lat: selectedSede.lat, lng: selectedSede.lng },
                                         zoom: 15,
-                                        clickableIcons: false, // Evita que se abran nuevas ventanas de GMaps al hacer clic en POIs
-                                        mapTypeId: 'roadmap' // Puedes cambiar a 'satellite', 'hybrid', 'terrain'
+                                        clickableIcons: false,
+                                        mapTypeId: 'roadmap',
+                                        disableDefaultUI: true, // Oculta algunos controles por defecto para un look más limpio
+                                        zoomControl: true // Pero mantiene el control de zoom
                                     };
                                     const map = new google.maps.Map(mapDiv, mapOptions);
                                     new google.maps.Marker({
                                         position: { lat: selectedSede.lat, lng: selectedSede.lng },
                                         map: map,
                                         title: selectedSede.name,
-                                        animation: google.maps.Animation.DROP // Animación de caída para el marcador
+                                        animation: google.maps.Animation.DROP
                                     });
-                                    currentMaps[selectedId] = map; // Guarda la instancia del mapa
+                                    currentMaps[selectedId] = map;
                                     console.log(`MODAL_POPUP.HTML: Mapa para ${selectedId} inicializado.`);
                                 } else {
-                                    // Si el mapa ya existe, solo recentra y actualiza si es necesario
                                     currentMaps[selectedId].setCenter({ lat: selectedSede.lat, lng: selectedSede.lng });
                                     currentMaps[selectedId].setZoom(15);
-                                    console.log(`MODAL_POPUP.HTML: Mapa para ${selectedId} re-centrado.`);
+                                    // Disparar el evento resize para asegurar que el mapa se renderice correctamente si estaba oculto
+                                    google.maps.event.trigger(currentMaps[selectedId], 'resize');
+                                    console.log(`MODAL_POPUP.HTML: Mapa para ${selectedId} re-centrado y redimensionado.`);
                                 }
-                                mapDiv.classList.remove('loading'); // Quita el mensaje de carga
+                                mapDiv.classList.remove('loading');
                             }
                         } else {
-                            console.warn("MODAL_POPUP.HTML ADVERTENCIA: Google Maps API aún no está disponible para inicializar el mapa. Retrying...");
-                            if (mapDiv) mapDiv.classList.add('loading'); // Muestra mensaje de carga
-                            // Reintentar cargar el mapa si la API está lista en el futuro (después de un pequeño retraso)
+                            console.warn("MODAL_POPUP.HTML ADVERTENCIA: Google Maps API aún no está disponible para inicializar el mapa.");
+                            if (mapDiv) mapDiv.classList.add('loading');
+                            // Intentar re-inicializar el mapa después de un breve retraso si la API se carga.
                             setTimeout(() => {
-                                if (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && mapDiv.classList.contains('active')) {
-                                    window.showSelectedSede(); // Llama de nuevo para intentar inicializar el mapa
+                                if (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && churchElement.classList.contains('active')) {
+                                    window.showSelectedSede();
                                 }
-                            }, 500); // Reintenta después de medio segundo
+                            }, 300); // Intenta más rápido
                         }
                     }
 
                 } else {
-                    churchElement.classList.remove('active'); // Oculta las demás
+                    churchElement.classList.remove('active');
                 }
             });
-            // Si no hay ninguna sede seleccionada (por ejemplo, la opción por defecto), oculta todo.
             if (!selectedId) {
                  churchDetailsElements.forEach(el => el.classList.remove('active'));
-                 // Borra cualquier mensaje de geolocalización al resetear
-                 document.getElementById('geolocationMessage').classList.remove('show', 'error', 'success');
+                 document.getElementById('geolocationMessage').classList.remove('show', 'error', 'info', 'success');
             }
         };
         
         // Función para mostrar mensajes de geolocalización
-        function showGeolocationMessage(message, type = 'info') { // type: 'info', 'error', 'success'
+        function showGeolocationMessage(message, type = 'info') {
             const msgDiv = document.getElementById('geolocationMessage');
             if (msgDiv) {
-                msgDiv.textContent = message;
-                msgDiv.className = `geolocation-message show ${type}`; // Reset y muestra con el tipo
+                msgDiv.innerHTML = message; // Usar innerHTML para permitir iconos
+                msgDiv.className = `geolocation-message show ${type}`;
             }
         }
 
         // Función para encontrar la sede más cercana
         window.findNearestSede = function() {
             console.log("MODAL_POPUP.HTML: Iniciando búsqueda de sede más cercana...");
-            showGeolocationMessage("<i class='fas fa-spinner fa-spin me-2'></i> Buscando tu ubicación...", 'info');
+            // Mensaje más directo al usuario para pedir permiso
+            showGeolocationMessage("<i class='fas fa-info-circle me-2'></i> Por favor, permite el acceso a tu ubicación.", 'info');
             const locateMeBtn = document.getElementById('locateMeBtn');
             if (locateMeBtn) locateMeBtn.disabled = true;
 
@@ -742,7 +908,7 @@
                             lng: position.coords.longitude
                         };
                         console.log("MODAL_POPUP.HTML: Ubicación del usuario:", userCoords);
-                        showGeolocationMessage("<i class='fas fa-check-circle me-2'></i> Ubicación encontrada. Calculando sede más cercana...", 'success');
+                        showGeolocationMessage("<i class='fas fa-check-circle me-2'></i> ¡Ubicación encontrada! Buscando la sede más cercana...", 'success');
 
                         let nearestSede = null;
                         let minDistance = Infinity;
@@ -750,7 +916,6 @@
                         sedes.forEach(sede => {
                             const sedeCoords = { lat: sede.lat, lng: sede.lng };
                             const distance = haversineDistance(userCoords, sedeCoords);
-                            console.log(`MODAL_POPUP.HTML: Distancia a ${sede.name}: ${(distance / 1000).toFixed(2)} km.`);
 
                             if (distance < minDistance) {
                                 minDistance = distance;
@@ -762,30 +927,29 @@
                             const sedeSelector = document.getElementById('sede-selector');
                             if (sedeSelector) {
                                 sedeSelector.value = nearestSede.id;
-                                window.showSelectedSede(); // Mostrar la sede más cercana
-                                showGeolocationMessage(`<i class='fas fa-map-pin me-2'></i> Sede más cercana: <strong>${nearestSede.name}</strong> (${(minDistance / 1000).toFixed(2)} km).`, 'success');
-                                console.log(`MODAL_POPUP.HTML: Sede más cercana seleccionada: ${nearestSede.name}`);
+                                window.showSelectedSede();
+                                showGeolocationMessage(`<i class='fas fa-map-pin me-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong> (${(minDistance / 1000).toFixed(2)} km).`, 'success');
                             }
                         } else {
-                            showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> No se encontraron sedes cercanas.", 'error');
+                            showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> No se encontraron sedes cercanas a tu ubicación.", 'error');
                         }
                         if (locateMeBtn) locateMeBtn.disabled = false;
                     },
                     (error) => {
                         console.error("MODAL_POPUP.HTML ERROR de geolocalización:", error);
-                        let errorMessage = "<i class='fas fa-exclamation-circle me-2'></i> Error al obtener la ubicación: ";
+                        let errorMessage = "<i class='fas fa-exclamation-circle me-2'></i> Error de ubicación: ";
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                errorMessage += "Permiso denegado. Por favor, permite el acceso a la ubicación para usar esta función.";
+                                errorMessage += "Necesitas permitir el acceso a la ubicación para usar esta función.";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                errorMessage += "Ubicación no disponible.";
+                                errorMessage += "Tu ubicación no está disponible en este momento. Intenta de nuevo.";
                                 break;
                             case error.TIMEOUT:
-                                errorMessage += "Tiempo de espera agotado al obtener la ubicación. Intenta de nuevo.";
+                                errorMessage += "Tiempo de espera agotado al obtener la ubicación. La conexión podría ser lenta.";
                                 break;
                             case error.UNKNOWN_ERROR:
-                                errorMessage += "Error desconocido.";
+                                errorMessage += "Un error inesperado ocurrió al buscar tu ubicación.";
                                 break;
                         }
                         showGeolocationMessage(errorMessage, 'error');
@@ -793,12 +957,12 @@
                     },
                     {
                         enableHighAccuracy: true,
-                        timeout: 15000, // Aumentar el tiempo de espera
+                        timeout: 10000, // Mantener un timeout razonable
                         maximumAge: 0
                     }
                 );
             } else {
-                showGeolocationMessage("<i class='fas fa-ban me-2'></i> Tu navegador no soporta la geolocalización.", 'error');
+                showGeolocationMessage("<i class='fas fa-ban me-2'></i> Tu navegador no soporta la función de geolocalización.", 'error');
                 if (locateMeBtn) locateMeBtn.disabled = false;
             }
         };
@@ -807,95 +971,73 @@
         window.closeChurchModal = function() {
             const churchModal = document.getElementById('churchModal');
             if (churchModal) {
-                churchModal.classList.remove('show'); // Inicia la transición de salida
+                churchModal.classList.remove('show');
                 console.log("MODAL_POPUP.HTML: Iniciando cierre del modal y redirección...");
-                setTimeout(() => {
-                    churchModal.style.display = 'none'; // Oculta el modal completamente después de la transición
-                    // Redirige a la página de inicio (asumiendo que es index.html en la misma raíz)
-                    window.location.href = 'index.html'; 
-                }, 400); // Coincide con la duración de la transición CSS
+                // Usamos requestAnimationFrame para la máxima fluidez antes de la redirección
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        churchModal.style.display = 'none';
+                        // Redirige a la página de inicio
+                        window.location.href = 'index.html'; 
+                    }, 300); // Coincide con la duración de la transición CSS
+                });
             }
         };
 
         // Función global para abrir el modal (llamada desde index.html).
         window.openChurchModal = function() {
-            console.log("MODAL_POPUP.HTML: Función 'openChurchModal' llamada desde el exterior.");
+            console.log("MODAL_POPUP.HTML: Función 'openChurchModal' llamada.");
             const churchModal = document.getElementById('churchModal');
             if (churchModal) {
-                churchModal.style.display = 'flex'; // Hace visible el modal inmediatamente para la transición
-                churchModal.classList.add('show'); // Añade clase 'show' para la transición CSS
-                console.log(`MODAL_POPUP.HTML: 'churchModal' display establecido a: flex`);
+                churchModal.style.display = 'flex'; // Hace visible el modal para la transición
+                requestAnimationFrame(() => { // Usar requestAnimationFrame para asegurar que el display se aplique antes de la clase 'show'
+                    churchModal.classList.add('show');
+                });
                 
-                // Re-inicializar el selector y ocultar todas las sedes al abrir para un estado limpio.
                 window.initializeSedeSelector(); 
-
                 const sedeSelector = document.getElementById('sede-selector');
-                
                 if (sedeSelector) {
-                    sedeSelector.value = ''; // Asegura que el selector comience en la opción "Selecciona una Sede..."
-                    window.showSelectedSede(); // Llama para asegurar que no se muestre ningún detalle inicialmente.
-                    
-                    console.log("MODAL_POPUP.HTML: Selector y sedes reseteados al abrir.");
-                } else {
-                     console.warn("MODAL_POPUP.HTML ADVERTENCIA: Elementos de selector/contenedor no encontrados al abrir el modal.");
+                    sedeSelector.value = '';
+                    window.showSelectedSede();
                 }
 
-                // *** IMPORTANTE: AJUNTAR LISTENERS DESPUÉS DE UN PEQUEÑO RETRASO ***
-                // Esto es crucial para asegurar que los elementos estén completamente disponibles
-                setTimeout(() => {
-                    const localChurchModal = document.getElementById('churchModal');
-                    const localCloseButton = document.getElementById('closeModalButton');
-                    const localSedeSelector = document.getElementById('sede-selector');
-                    const localLocateMeBtn = document.getElementById('locateMeBtn');
+                // Eliminamos y re-adjuntamos los listeners para evitar duplicados
+                const localCloseButton = document.getElementById('closeModalButton');
+                const localSedeSelector = document.getElementById('sede-selector');
+                const localLocateMeBtn = document.getElementById('locateMeBtn');
 
-                    // Primero, eliminamos cualquier listener previo para evitar duplicados al reabrir el modal
-                    if (localCloseButton) localCloseButton.onclick = null;
-                    if (localChurchModal) localChurchModal.onclick = null;
-                    if (localSedeSelector) localSedeSelector.onchange = null;
-                    if (localLocateMeBtn) localLocateMeBtn.onclick = null;
+                // Limpiar listeners existentes
+                if (localCloseButton) localCloseButton.onclick = null;
+                if (churchModal) churchModal.onclick = null; // Clic en overlay
+                if (localSedeSelector) localSedeSelector.onchange = null;
+                if (localLocateMeBtn) localLocateMeBtn.onclick = null;
 
-                    // Adjuntamos los nuevos listeners
-                    if (localCloseButton) {
-                        localCloseButton.onclick = window.closeChurchModal;
-                        console.log("MODAL_POPUP.HTML: Listener para botón de cierre adjuntado.");
-                    } else {
-                        console.warn("MODAL_POPUP.HTML ADVERTENCIA: No se encontró el botón de cierre para adjuntar listener.");
-                    }
-
-                    if (localChurchModal) { 
-                        localChurchModal.onclick = function(event) {
-                            if (event.target === localChurchModal) { // Solo cierra si se hace clic en el overlay, no en el contenido
-                                window.closeChurchModal();
-                            }
-                        };
-                        console.log("MODAL_POPUP.HTML: Listener para clic en overlay adjuntado.");
-                    }
-
-                    if (localSedeSelector) {
-                        localSedeSelector.onchange = window.showSelectedSede;
-                        console.log("MODAL_POPUP.HTML: Listener para selector de sedes adjuntado.");
-                    } else {
-                        console.warn("MODAL_POPUP.HTML ADVERTENCIA: No se encontró el selector de sede para adjuntar listener.");
-                    }
-
-                    if (localLocateMeBtn) {
-                        localLocateMeBtn.onclick = window.findNearestSede;
-                        console.log("MODAL_POPUP.HTML: Listener para botón 'Ubicarme' adjuntado.");
-                    } else {
-                        console.warn("MODAL_POPUP.HTML ADVERTENCIA: No se encontró el botón 'Ubicarme' para adjuntar listener.");
-                    }
-                }, 100); // Pequeño retraso de 100ms para asegurar que el DOM esté listo
+                // Adjuntar nuevos listeners
+                if (localCloseButton) {
+                    localCloseButton.onclick = window.closeChurchModal;
+                }
+                if (churchModal) { 
+                    churchModal.onclick = function(event) {
+                        if (event.target === localChurchModal) {
+                            window.closeChurchModal();
+                        }
+                    };
+                }
+                if (localSedeSelector) {
+                    localSedeSelector.onchange = window.showSelectedSede;
+                }
+                if (localLocateMeBtn) {
+                    localLocateMeBtn.onclick = window.findNearestSede;
+                }
                 
-                // Carga la API de Google Maps cuando el modal se abre
+                // Carga la API de Google Maps
                 loadGoogleMapsScript();
 
             } else {
-                console.error("MODAL_POPUP.HTML ERROR: #churchModal no se encontró al intentar abrir el modal.");
+                console.error("MODAL_POPUP.HTML ERROR: #churchModal no se encontró.");
             }
         };
 
-        // DOMContentLoaded no es tan crítico para la funcionalidad principal debido a los setTimeout,
-        // pero se mantiene para confirmación de carga inicial.
         document.addEventListener('DOMContentLoaded', function() {
             console.log("MODAL_POPUP.HTML: DOMContentLoaded - Script del popup cargado.");
         });
