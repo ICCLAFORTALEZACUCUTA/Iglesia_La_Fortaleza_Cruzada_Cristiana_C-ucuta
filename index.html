@@ -1588,6 +1588,58 @@
         #sermonModalKeyVerseList {
             list-style-type: disc;
         }
+        .airplane-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden; /* Asegura que el avión no se vea antes de iniciar */
+    display: none; /* Por defecto está oculto */
+    justify-content: center; /* Centra el contenido cuando esté activo */
+    align-items: center; /* Centra el contenido cuando esté activo */
+}
+
+.airplane-overlay.active {
+    display: flex; /* Muestra el overlay cuando está activo */
+}
+
+.plane {
+    position: absolute;
+    font-size: 5rem; /* Un poco más grande para mayor impacto */
+    color: #007bff; /* Color azul para el avión */
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.4); /* Sombra más pronunciada */
+    animation: flyPowerful 4s ease-in-out forwards; /* Aumentamos la duración a 4 segundos */
+}
+
+@keyframes flyPowerful {
+    0% {
+        transform: translate(-20vw, 120vh) rotate(90deg) scale(0.3); /* Inicia abajo-izquierda, rotado como despegando, pequeño */
+        opacity: 0;
+    }
+    15% {
+        transform: translate(0vw, 80vh) rotate(70deg) scale(0.6); /* Sube y se endereza un poco, más grande */
+        opacity: 1;
+    }
+    30% {
+        transform: translate(20vw, 40vh) rotate(45deg) scale(0.9); /* Sigue subiendo, ganando tamaño */
+        opacity: 1;
+    }
+    50% {
+        transform: translate(50vw, 0vh) rotate(360deg) scale(1.5); /* Llega al centro, da una vuelta completa, muy grande */
+        opacity: 1;
+    }
+    75% {
+        transform: translate(80vw, -40vh) rotate(450deg) scale(1.0); /* Se aleja, reduciendo tamaño, sigue rotando */
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(150vw, -100vh) rotate(540deg) scale(0.2); /* Sale por arriba-derecha, pequeña, desvanecida */
+        opacity: 0;
+    }
+}
     </style>
 </head>
 
@@ -1661,11 +1713,12 @@
                             <p class="text-muted-dark">Martes: 6:30 PM </p>
                         </div>
                         <div class="text-center p-3 mt-4 mt-md-0">
-                            <i class="fas fa-phone-alt fa-3x mb-3" style="color: var(--primary-color);"></i>
-                            <h4 class="text-primary-dark mb-2">Contáctanos</h4>
-                            <p class="text-muted-dark">Iglesialafortalezacruzadacristiana@gmail.com</p>
-                            <a href="#contacto" class="btn btn-primary btn-sm mt-2 nav-link-internal">Escríbenos <i
-                                    class="fas fa-envelope ms-2"></i></a>
+                            <i class="fa-solid fa-thumbtack fa-3x" style="color: var(--primary-color);"></i>
+                            <h4 class="text-primary-dark mb-23">Nuestras Sedes</h4>
+                            <p class="text-muted-dark">Echa un vistazo a nuestras sedes</p>
+                            <button type="button" id="openChurchModalBtn" class="btn btn-primary btn-sm mt-2 nav-link-internal">
+                                Revisar <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2270,7 +2323,7 @@
                                 class="img-fluid rounded shadow-sm history-image mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6 order-md-1 text-left">
-                            <p class="text-muted-dark">Nacimos en Cúcuta/La Fortaleza con un llamado claro: ser una
+                            <p class="text-muted-dark">Nacida en Asentamiento Urbano La Fortaleza con un llamado claro: ser una
                                 iglesia en plantación con el corazón ardiente por el evangelismo. En 2018, un puñado de
                                 creyentes se lanzó con la visión de llevar las buenas nuevas a cada rincón, sabiendo que
                                 no sería fácil. Al principio, nos enfrentamos a los desafíos propios de plantar una
@@ -2532,7 +2585,7 @@
                 <p class="text-muted-dark mb-5">Participa en nuestras actividades y fortalece tu fe.</p>
                 <div class="events-grid">
                     <div class="event-card glass-card" data-event-id="conferenciaAnual">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/513871511_1119895793689508_1624337610483579564_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEQzFLb1bGvsdMy0VXyGcEV514voBIZ6-fnXi-gEhnr500y_o1p7ZQDrDSvdjzqMPPqeoSXsU0Enu6vPKtEmnIU&_nc_ohc=0fV7pDS7LIYQ7kNvwHIgtmg&_nc_oc=AdlUoLZ4HKs4iHhEuYxZ1GXCIJVxWndaqPX1bt-vZYaxVYDzQ8lXr4D2VdUOasakqxE&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fEl5aWGgWaRw_iZ8xT3hIA&oh=00_AfNj7WLV6EC20U5GVN5wg9I1U9YjcPvYONLGxXd-lh0XeQ&oe=686B233A"
+                        <img src="img/evan.png"
                             alt="Conferencia Anual">
                         <div class="event-card-content">
                             <h4 class="text-primary-dark">Evangelización</h4>
@@ -2545,7 +2598,7 @@
                         </div>
                     </div>
                     <div class="event-card glass-card" data-event-id="nochePelicula">
-                        <img src="https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/514266111_1120620086950412_1991781583269445555_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGAQmcv6IS1jSWLAf9irJQcNA-IBHPD2mo0D4gEc8PaagCtJ5txlubc-kxWAYi5QvWTHKnVdhMAaXNWiG86YZ8k&_nc_ohc=DC3_XVcVsZsQ7kNvwG0PlaG&_nc_oc=AdmdE7oDcdI0SHP8f9CJh_oRjdcfHWLqecvkpaW5md0ypZ6_jxaPu0lysAsN_LtQ2FI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=eIK6V0sxqyoCVe5cKOBgvQ&oh=00_AfP5G2vH0Q5dGwko6CrqYjzTZ41ooPIWnN3ehEf-imPUUg&oe=686B39EB"
+                        <img src="img/amigo.png"
                             alt="Dia del Amigo">
                         <div class="event-card-content">
                             <h4 class="text-primary-dark">Dia del Amigo</h4>
@@ -2555,15 +2608,15 @@
                                 película inspiradora para toda la familia.</p>
                             <button class="btn btn-primary btn-sm view-event-btn">Más Info</button>
                         </div>
-                    </div>
-                    <div class="event-card glass-card" data-event-id="voluntariado">
-                        <img src="https://picsum.photos/id/113/400/250" alt="Voluntariado Comunitario">
+                    </div> 
+                    <div class="event-card glass-card" data-event-id="congreso">
+                        <img src="img/pre.png" alt="Congreso">
                         <div class="event-card-content">
-                            <h4 class="text-primary-dark">Jornada de Voluntariado Comunitario</h4>
-                            <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> 12 Agosto 2025 | <i
-                                    class="fas fa-map-marker-alt"></i> Parque Central</p>
-                            <p class="text-muted-dark">Únete a nosotros para servir a nuestra comunidad y marcar la
-                                diferencia en las vidas de otros.</p>
+                            <h4 class="text-primary-dark">Congreso Juvenil</h4>
+                            <p class="meta text-muted-dark"><i class="fas fa-calendar-alt"></i> Agosto 2025 | <i
+                                    class="fas fa-map-marker-alt"></i> Iglesia La Victoria Cruzada Cristiana</p>
+                            <p class="text-muted-dark">Ven y Disfruta de un Congreso Juvenil 2025 espectacular y grandioso,
+                                donde encontraras el amor de Dios para con nosotros.</p>
                             <button class="btn btn-primary btn-sm view-event-btn">Más Info</button>
                         </div>
                     </div>
@@ -4010,9 +4063,21 @@
                                     <input type="text" id="name" name="name" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email:</label>
-                                    <input type="email" id="email" name="email" required>
+                                    <label for="phone">Celular:</label>
+                                    <input 
+                                        type="tel" 
+                                        id="phone" 
+                                        name="phone" 
+                                        class="form-control"
+                                        pattern="3[0-9]{9}" 
+                                        maxlength="10"
+                                        minlength="10"
+                                        required 
+                                        placeholder="Ej: 3001234567"
+                                        title="Ingresa un número colombiano válido de 10 dígitos que inicie con 3"
+                                    >
                                 </div>
+                                
                                 <div class="form-group">
                                     <label for="subject">Asunto:</label>
                                     <input type="text" id="subject" name="subject" required>
@@ -4025,6 +4090,7 @@
                             </form>
                         </div>
                     </div>
+                    
                     <div class="col-md-6 mb-4">
                         <div class="glass-card h-100">
                             <h3 class="text-dark">Nuestra Ubicación y Horarios</h3>
@@ -4088,6 +4154,11 @@
             <p>Diseñado con <i class="fas fa-heart text-danger"></i> por Joel Pineda</p>
         </div>
     </footer>
+
+    <!-- Avión animado -->
+<div id="airplaneAnimation" class="airplane-overlay">
+    <div class="plane">🛫</div>
+</div>
 
     <div id="fullScreenLoadingOverlay" class="full-screen-loading-overlay">
         <div class="spinner-container">
@@ -5046,8 +5117,8 @@
             alabanza: {
                 name: "Ministerio de Alabanza",
                 photo: "img/ministerios/alabanza.jpg",
-                description: "El Ministerio de Alabanza y Adoración 'Linaje Escogido' de nuestra iglesia busca guiar a la congregación en una experiencia profunda de adoración a Dios a través de la música y el canto. No solo elevamos nuestra voz, sino también nuestros corazones, creando un ambiente donde la presencia de Dios se manifiesta. Si tienes talento musical y un corazón para adorar, ¡te invitamos a unirte!",
-                info: "<p><strong>Líderes:</strong> Raines Lara</p><p><strong>Ensayos:</strong> Lunes y Jueves 6:00 p.m. y Sábados 5:00 p.m.</p><p><strong>Contacto:</strong> alabanza@iglesiaejemplo.com</p>",
+                description: "Ministerio de Alabanza y Adoración: 'Linaje Escogido' El Ministerio de Alabanza y Adoración, conocido como 'Linaje Escogido', tiene la profunda misión de guiar a nuestra congregación en una experiencia genuina y transformadora de adoración a Dios. A través de la música y el canto, no solo elevamos nuestras voces, sino que también preparamos nuestros corazones para recibir y glorificar Su presencia. Nuestro propósito es crear un ambiente sagrado donde cada nota y cada palabra inviten a una manifestación palpable del Espíritu Santo.Si sientes el llamado a servir con tu talento musical y posees un corazón apasionado por la adoración, te extendemos una cordial invitación a unirte a este linaje de adoradores. Juntos, buscaremos ser instrumentos que eleven el nombre de Dios y acerquen a Su pueblo a Su trono de gracia.",
+                info: "<p><strong>Líder:</strong> Raines Lara</p><p><strong>Ensayos:</strong> Lunes y Jueves 6:00 p.m. y Sábados 5:00 p.m.</p><p>",
                 integrantes: { // Changed to an object for categorized members
                     bateria: ["Raines Isaac", "Manuel Santiago"],
                     bajo: ["Joel Steven", "Marcos Eduardo", "Dorianny Daniela"],
@@ -5059,32 +5130,32 @@
             ninos: {
                 name: "Ministerio de Niños",
                 photo: "img/ministerios/niños.jpg",
-                description: "El Ministerio de Niños, conocido como 'Salon Kids', se dedica a enseñar la Palabra de Dios a nuestros hijos de una manera divertida, creativa y relevante. Creemos que los niños no son la iglesia del futuro, ¡sino la iglesia de hoy! Nuestro objetivo es sembrar la fe en sus corazones desde temprana edad, equipándolos con principios bíblicos para sus vidas.",
-                info: "<p><strong>Edades:</strong> 3-12 años</p><p><strong>Actividades:</strong> Domingos durante el servicio principal, Martes durante el servicio de Oración y eventos especiales</p><p><strong>Contacto:</strong> ninos@iglesiaejemplo.com</p>"
+                description: "El Ministerio de Niños, conocido como 'Salón Kids', es un espacio vibrante y lleno de vida donde la fe cobra color para nuestros pequeños. Nos dedicamos a enseñar la Palabra de Dios de una manera que cautiva sus corazones: divertida, creativa y relevante para su mundo.En 'Salón Kids', creemos firmemente que los niños no son solo la promesa del mañana, sino la Iglesia poderosa de hoy. Nuestra misión es sembrar profundas raíces de fe en sus corazones desde temprana edad, equipándolos con principios bíblicos sólidos que los guiarán y fortalecerán durante toda su vida. Aquí, cada lección es una aventura, cada actividad una oportunidad para crecer en el amor de Jesús.",
+                info: "<p><strong>Líder:</strong> Brenda Pereira</p><p><strong>Edades:</strong> 3 - 12 años</p><p><strong>Actividades:</strong> Domingos durante el servicio principal, Martes durante el servicio de Oración y eventos especiales</p><p>"
             },
             jovenes: {
                 name: "Ministerio de Jóvenes",
                 photo: "img/ministerios/jovenes.jpg",
-                description: "Nuestro Ministerio de Jóvenes, 'Generación En-fuego', está diseñado para conectar a adolescentes y jóvenes adultos en un ambiente de comunidad, crecimiento espiritual y diversión. Abordamos temas relevantes para su etapa de vida desde una perspectiva bíblica, fomentando el liderazgo y el servicio. Ven y sé parte de una generación apasionada por Cristo.",
-                info: "<p><strong>Edades:</strong> 13-25 años</p><p><strong>Reuniones:</strong> Domingos 9:00.a.m. y Sabados 4:00.p.m cada quince dias</p><p><strong>Contacto:</strong> jovenes@iglesiaejemplo.com</p>"
+                description: "Jóvenes en Misión (JEM) es más que un nombre; es un llamado profético a una generación emergente, escogida y apartada para manifestar el Reino de Dios en la Tierra. Somos una cohorte de jóvenes consagrados, cuyo latido es el eco del corazón de Cristo: hacer discipulados.Nuestra misión es clara y trascendente: levantar una generación santa y radicalmente diferente en medio de un mundo que clama por verdad y esperanza. Nos comprometemos a ser vasos puros, donde el Espíritu Santo fluya sin reservas, capacitándonos en la Verdad que es la Palabra de Dios",
+                info: "<p><strong>Líder:</strong> Fabian Leal</p><p><strong>Edades:</strong> 13-25 años</p><p><strong>Reuniones:</strong> Domingos 9:00.a.m. y Sabados 4:00.p.m cada quince dias</p><p>"
             },
             mujeres: {
                 name: "Ministerio de Mujeres",
                 photo: "img/ministerios/damas.jpg",
                 description: "El Ministerio de Mujeres 'Mujeres de Fe' busca empoderar a cada mujer en nuestra congregación y comunidad para que descubran su propósito en Dios. A través de estudios bíblicos, conferencias, retiros y momentos de compañerismo, cultivamos un ambiente de apoyo, crecimiento y amistad. Creemos que una mujer empoderada por Dios puede transformar su hogar y su entorno.",
-                info: "<p><strong>Actividades:</strong> Reuniones mensuales, estudios de grupos pequeños, retiros</p><p><strong>Contacto:</strong> mujeres@iglesiaejemplo.com</p>"
+                info: "<p><strong>Actividades:</strong> Reuniones mensuales, estudios de grupos pequeños, retiros</p><p>"
             },
             danza: {
                 name: "Ministerio de Danza",
                 photo: "img/ministerios/danza.png",
-                description: "El Ministerio de Danza 'Danza de Fe' busca empoderar a cada mujer en nuestra congregación y comunidad para que descubran su propósito en Dios. A través de estudios bíblicos, conferencias, retiros y momentos de compañerismo, cultivamos un ambiente de apoyo, crecimiento y amistad. Creemos que una mujer empoderada por Dios puede transformar su hogar y su entorno.",
-                info: "<p><strong>Actividades:</strong> Reuniones mensuales, estudios de grupos pequeños, retiros</p><p><strong>Contacto:</strong> mujeres@iglesiaejemplo.com</p>"
+                description: "Ministerio de Danza: 'Lienzo Vivo' El Ministerio de Danza, ahora conocido como 'Lienzo Vivo', es un espacio inspirador donde cada joven descubre que es una obra de arte en las manos de Dios. Creemos que cada movimiento es una pincelada de adoración y cada expresión, un reflejo del diseño divino.En 'Lienzo Vivo', nos dedicamos a empoderar a cada mujer para que discierna y manifieste su propósito único en Dios. A través de la danza como forma de alabanza, junto con estudios bíblicos, momentos de crecimiento y un genuino compañerismo, cultivamos un ambiente vibrante de apoyo y amistad. Aquí, no solo perfeccionamos pasos, sino que cultivamos un carácter forjado en la fe. Reconocemos que una mujer joven, empoderada por la gracia de Dios, tiene el potencial transformador para impactar su hogar, su comunidad y cada esfera de su vida. Ven y sé parte de este lienzo en constante creación, donde tu vida y tu danza glorifican al Artista supremo.",
+                info: "<p><strong>Líder:</strong> Rosana Rodriguez</p><p><strong>Actividades:</strong> Reuniones mensuales, estudios de grupos pequeños, retiros</p><p>"
             },
             servidores: {
                 name: "Ministerio de Servidores",
                 photo: "img/ministerios/servidores.jpg",
-                description: "El Ministerio de Servidores 'Servicio Fiel' busca empoderar a cada miembro de nuestro equipo en la congregación y comunidad para que descubran su propósito en Dios a través del servicio. A través de capacitaciones específicas, momentos de discipulado y compañerismo, cultivamos un ambiente de apoyo, crecimiento y unidad. Creemos que un servidor empoderado por Dios puede transformar el funcionamiento de nuestro ministerio y toda la iglesia.",
-                info: "<p><strong>Actividades:</strong> Reuniones quincenales, ensayos semanales </p><p><strong>Contacto:</strong> mujeres@iglesiaejemplo.com</p>"
+                description: "El Ministerio de Servidores, conocido como 'Gracia en Acción', es el corazón palpable de nuestra comunidad, dedicado a empoderar a cada miembro de nuestro equipo para que descubran y vivan su propósito en Dios a través del servicio. Creemos que cada acto de servicio es una manifestación tangible de la gracia divina que obra a través de nosotros. En 'Gracia en Acción', cultivamos un ambiente vibrante de apoyo, crecimiento espiritual y unidad profunda. A través de capacitaciones específicas, momentos de discipulado transformador y un compañerismo que edifica, equipamos a nuestros servidores para que cada tarea, desde la más visible hasta la más discreta, se convierta en una expresión poderosa de fe y amor.",
+                info: "<p><strong>Líder:</strong> Jefferson Bermudez</p><p><strong>Actividades:</strong> Reuniones quincenales, ensayos semanales </p><p>"
             }
         };
 
@@ -5092,71 +5163,37 @@
             {
                 id: "conferenciaAnual",
                 name: "Evangelización",
-                photo: "https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/513871511_1119895793689508_1624337610483579564_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEQzFLb1bGvsdMy0VXyGcEV514voBIZ6-fnXi-gEhnr500y_o1p7ZQDrDSvdjzqMPPqeoSXsU0Enu6vPKtEmnIU&_nc_ohc=0fV7pDS7LIYQ7kNvwHIgtmg&_nc_oc=AdlUoLZ4HKs4iHhEuYxZ1GXCIJVxWndaqPX1bt-vZYaxVYDzQ8lXr4D2VdUOasakqxE&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=fEl5aWGgWaRw_iZ8xT3hIA&oh=00_AfNj7WLV6EC20U5GVN5wg9I1U9YjcPvYONLGxXd-lh0XeQ&oe=686B233A",
+                photo: "img/evan.png",
                 date: "2025-06-20", // YYYY-MM-DD
                 location: "Cancha La Fortaleza",
                 description: "¡Prepárate para nuestra Evangelizacion! Una tarde de adoración intensa, enseñanzas profundas y experiencias transformadoras con oradores invitados de renombre nacional e internacional. Este es un tiempo para renovar tu fe, recibir dirección divina y ser equipado para un mayor impacto. No te lo puedes perder. ¡Regístrate con anticipación!",
                 links: [
-                    { text: "Registrarse Ahora", url: "#", type: "primary" }
+                    { text: "Nuestro Gran Servicio", url: "https://www.facebook.com/share/p/1FjsySqH1W/", type: "primary" }
                 ]
             },
             {
                 id: "nochePelicula",
                 name: "Dia del Amigo",
-                photo: "https://scontent.fcuc2-1.fna.fbcdn.net/v/t39.30808-6/514266111_1120620086950412_1991781583269445555_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGAQmcv6IS1jSWLAf9irJQcNA-IBHPD2mo0D4gEc8PaagCtJ5txlubc-kxWAYi5QvWTHKnVdhMAaXNWiG86YZ8k&_nc_ohc=DC3_XVcVsZsQ7kNvwG0PlaG&_nc_oc=AdmdE7oDcdI0SHP8f9CJh_oRjdcfHWLqecvkpaW5md0ypZ6_jxaPu0lysAsN_LtQ2FI&_nc_zt=23&_nc_ht=scontent.fcuc2-1.fna&_nc_gid=eIK6V0sxqyoCVe5cKOBgvQ&oh=00_AfP5G2vH0Q5dGwko6CrqYjzTZ41ooPIWnN3ehEf-imPUUg&oe=686B39EB",
+                photo: "img/amigo.png",
                 date: "2025-06-29",
                 location: "Iglesia La Fortaleza Cruzada Cristiana",
                 description: "Invita a toda tu familia y amigos para un grandioso dia de paz y edificante. Disfrutaremos de una película inspiradora, palomitas de maíz y un ambiente de compañerismo. Ideal para todas las edades. ¡Te esperamos para compartir juntos!",
                 links: [
-                    { text: "Ver Tráiler", url: "#", type: "outline" }
+                    { text: "Ve Nuestras Publicaciones", url: "https://www.facebook.com/share/v/19TWQdmfRK/", type: "outline" }
                 ]
             },
             {
-                id: "voluntariado",
-                name: "Jornada de Voluntariado Comunitario",
-                photo: "https://picsum.photos/id/113/800/500",
+                id: "congreso",
+                name: "Congreso Juvenil 2025",
+                photo: "img/pre.png",
                 date: "2025-08-12",
-                location: "Parque Central [Nombre de la Ciudad]",
-                description: "Únete a nosotros en nuestra jornada de voluntariado para servir a nuestra comunidad. Ayudaremos en la limpieza del parque, distribución de alimentos y otras actividades que beneficien a nuestros vecinos. Es una excelente oportunidad para poner tu fe en acción y ser una bendición para otros.",
+                location: "Iglesia La Vcitoria Cruzada Cristiana",
+                description: "¿Estás listo para una experiencia que transformará tu vida? Te invitamos al Congreso Maravilloso de Jóvenes, un evento diseñado para inspirarte, conectarte y fortalecer tu Fe.               Te Esperamos ¡No Faltes!",
                 links: [
-                    { text: "Inscríbete Aquí", url: "#", type: "primary" }
+                    { text: "Ubicacion", url: "https://maps.app.goo.gl/jJeiU8gtEcaqFGzbA", type: "primary" },
+                    { text: "Mira", url: "https://www.facebook.com/share/r/1Bx423r9HH/", type: "primary" }
                 ]
             },
-            {
-                id: "estudioBiblico",
-                name: "Lanzamiento Nuevo Estudio Bíblico",
-                photo: "https://picsum.photos/id/114/800/500",
-                date: "2025-07-10",
-                location: "Salón de Estudios Bíblicos (Iglesia)",
-                description: "Comenzamos un nuevo estudio bíblico profundo sobre el libro de [Nombre del Libro]. Aprende a aplicar las verdades bíblicas a tu vida diaria en un ambiente de grupo pequeño. ¡No se requiere experiencia previa, solo ganas de aprender!",
-                links: [
-                    { text: "Más Detalles", url: "#", type: "outline" }
-                ]
-            },
-            {
-                id: "retiroJovenes",
-                name: "Retiro de Jóvenes: Conectados",
-                photo: "https://picsum.photos/id/115/800/500",
-                date: "2025-10-25",
-                endDate: "2025-10-27",
-                location: "Campamento Cristiano 'La Esperanza'",
-                description: "Un fin de semana lleno de actividades, enseñanzas dinámicas y momentos de adoración para nuestros jóvenes. 'Conectados' es un tiempo para fortalecer su relación con Dios y con otros jóvenes. ¡Inscríbete ya, los cupos son limitados!",
-                links: [
-                    { text: "Inscripción", url: "#", type: "primary" }
-                ]
-            },
-            {
-                id: "retiroJovenes",
-                name: "Retiro de Alabanza: Conectados",
-                photo: "https://picsum.photos/id/115/800/500",
-                date: "2025-12-30",
-                endDate: "2025-12-31",
-                location: "Campamento Cristiano 'La Esperanza'",
-                description: "Un fin de semana lleno de actividades, enseñanzas dinámicas y momentos de adoración para nuestros jóvenes. 'Conectados' es un tiempo para fortalecer su relación con Dios y con otros jóvenes. ¡Inscríbete ya, los cupos son limitados!",
-                links: [
-                    { text: "Inscripción", url: "#", type: "primary" }
-                ]
-            }
         ].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort events by date
 
 
@@ -5889,66 +5926,91 @@
             }
 
 
-            // --- CONTACTO TELEGRAM ---
-            const contactForm = document.getElementById('contactForm');
-            if (contactForm) {
-                contactForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    showFullScreenLoading(true);
 
-                    // Datos del formulario
-                    const name = document.getElementById("name").value.trim();
-                    const email = document.getElementById("email").value.trim();
-                    const subject = document.getElementById("subject").value.trim();
-                    const message = document.getElementById("message").value.trim();
+// Muestra avión animado
+function showAirplaneAnimation() {
+    const airplaneOverlay = document.getElementById("airplaneAnimation");
+    if (!airplaneOverlay) return Promise.resolve(); // Si no existe, resuelve la promesa inmediatamente
 
-                    // Token y chat ID de tu bot de Telegram
-                    const botToken = '7694164211:AAGhkcA10IvhJ0ovgTx79nLwKMvAAYoDaaE'; // ← Reemplaza con tu token real
-                    const chatId = '6210869667'; // ← Reemplaza con tu ID o el del grupo
+    airplaneOverlay.classList.add("active");
 
-                    // Mensaje a enviar
-                    const telegramMessage = `
-✉️ *Nuevo mensaje desde el sitio web*:
+    const plane = airplaneOverlay.querySelector(".plane");
+    // Reiniciar la animación para que siempre se ejecute
+    plane.style.animation = "none";
+    plane.offsetHeight; // Forzar reflow para reiniciar la animación
+    plane.style.animation = "flyPowerful 4s ease-in-out forwards"; // Usar la nueva animación y duración
+
+    // Devolvemos una promesa que se resuelve cuando la animación termina
+    return new Promise(resolve => {
+        // La duración del setTimeout debe coincidir con la duración de la animación CSS
+        setTimeout(() => {
+            airplaneOverlay.classList.remove("active");
+            resolve(); // Resuelve la promesa, indicando que la animación ha terminado
+        }, 4000); // 4000 milisegundos = 4 segundos (igual que la duración de la animación CSS)
+    });
+}
+
+// Envío del formulario
+document.addEventListener("DOMContentLoaded", () => {
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+        contactForm.addEventListener("submit", async (e) => {
+            e.preventDefault(); // Previene el envío por defecto del formulario
+
+            // 1. Mostrar la animación y esperar a que termine
+            await showAirplaneAnimation(); 
+
+            // 2. Una vez que la animación ha terminado, enviar el mensaje a Telegram
+            await sendToTelegram(); 
+        });
+    }
+});
+
+// Función para enviar a Telegram (sin cambios, úsala como la tienes)
+async function sendToTelegram() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const subject = document.getElementById("subject").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    const botToken = "7607540473:AAFU7avNm_WWyn9CrR99gBPAwYClFUnqr5I"; // Asegúrate de que este token sea el correcto
+    const chatId = "6210869667"; // Asegúrate de que este ID sea el correcto
+
+    const telegramMessage = `
+✉️ *Nuevo mensaje desde el sitio web ICC LA FORTALEZA*:
 👤 *Nombre:* ${name}
-📧 *Email:* ${email}
+📞 *Número:* ${phone}
 📝 *Asunto:* ${subject}
 💬 *Mensaje:* ${message}
-`;
+    `;
 
-                    // Enviar a Telegram
-                    try {
-                        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                chat_id: chatId,
-                                text: telegramMessage,
-                                parse_mode: 'Markdown'
-                            })
-                        });
-
-                        const result = await response.json();
-                        showFullScreenLoading(false);
-
-                        if (result.ok) {
-                            showMessageModal('Mensaje Enviado', 'Gracias por contactarnos. Te responderemos pronto.', 'success');
-                            contactForm.reset();
-                        } else {
-                            console.error("Telegram error:", result);
-                            showMessageModal('Error al Enviar', 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.', 'danger');
-                        }
-                    } catch (err) {
-                        showFullScreenLoading(false);
-                        console.error("Fetch error:", err);
-                        showMessageModal('Error de conexión', 'No se pudo contactar con Telegram.', 'danger');
-                    }
-                });
-            }
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: telegramMessage,
+                parse_mode: "Markdown"
+            })
         });
 
+        const result = await response.json();
 
+        if (result.ok) {
+            // Mostrar mensaje de éxito solo después de la animación y el envío a Telegram
+            alert("✅ Mensaje enviado correctamente.");
+            document.getElementById("contactForm").reset(); // Limpia el formulario
+        } else {
+            console.error("Error de Telegram:", result);
+            alert("❌ Error al enviar el mensaje.");
+        }
+    } catch (err) {
+        console.error("Error de conexión o de red:", err);
+        alert("❌ Error de conexión.");
+    }
+}
+});
 
         // Mostrar cualquier modal por ID
         function showModal(id) {
@@ -6446,6 +6508,69 @@
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const openModalButton = document.getElementById('openChurchModalBtn');
+        const popupContainer = document.getElementById('popupContainer');
+        let popupLoaded = false;
+
+        openModalButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            if (!popupLoaded) {
+                fetch('./popup.html') // ASEGÚRATE QUE ESTA RUTA ES CORRECTA
+                    .then(response => response.text())
+                    .then(html => {
+                        popupContainer.innerHTML = html;
+                        popupLoaded = true;
+                        // Llamar a la función expuesta por el script del popup
+                        if (window.openChurchModal) {
+                            window.openChurchModal();
+                        }
+                    })
+                    .catch(error => console.error('Error al cargar el popup:', error));
+            } else {
+                // Si ya está cargado, solo lo mostramos llamando a la función global
+                if (window.openChurchModal) {
+                    window.openChurchModal();
+                }
+            }
+        });
+
+        // --- Código para el contador (Si no lo tienes en otro JS global de tu sitio) ---
+        // Asegúrate que los IDs de los contadores no se dupliquen con los del modal si los pones en ambos.
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // La velocidad de la animación
+
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+
+                const inc = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !counter.classList.contains('counted')) {
+                        counter.classList.add('counted'); // Marca como contado para no repetir
+                        updateCount();
+                    }
+                });
+            }, { threshold: 0.5 }); // Inicia cuando el 50% del elemento es visible
+
+            observer.observe(counter);
+        });
+    });
+</script>
 </body>
 
 </html>
