@@ -242,6 +242,30 @@
             color: var(--text-color-dark);
         }
 
+        /* Estilos para la información de distancia y tiempo */
+        .church-details .route-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .church-details .route-info p {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--text-color-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .church-details .route-info p i {
+            color: var(--primary-color);
+            font-size: 1.1em;
+        }
+        .church-details .route-info .loading-text {
+            color: var(--text-color-light);
+            font-style: italic;
+        }
+
         .church-details ul {
             list-style: none;
             padding-left: 0;
@@ -535,6 +559,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-victoria">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/KLdE18eimYx5ykQZ6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-victoria" class="map-container"></div>
                 </div>
@@ -553,6 +580,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-fortaleza">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/rRagrEuArHkDXYJT6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-fortaleza" class="map-container"></div>
                 </div>
@@ -569,6 +599,9 @@
                                 <li>Miércoles: 6:00 PM</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="route-info" id="route-info-belen">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
                     </div>
                     <a href="https://maps.app.goo.gl/U2D3E4F5G6H7I8J90" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-belen" class="map-container"></div>
@@ -587,6 +620,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-colinas">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/V1W2X3Y4Z5A6B7C8D" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-colinas" class="map-container"></div>
                 </div>
@@ -603,6 +639,9 @@
                                 <li>Miércoles: 6:00 PM</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="route-info" id="route-info-donanidia">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
                     </div>
                     <a href="https://maps.app.goo.gl/P9Q8R7S6T5U4V3W2X" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-donanidia" class="map-container"></div>
@@ -621,6 +660,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-libertad">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/M1N2O3P4Q5R6S7T8U" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-libertad" class="map-container"></div>
                 </div>
@@ -637,6 +679,9 @@
                                 <li>Miércoles: 6:00 PM</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="route-info" id="route-info-lospinos">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
                     </div>
                     <a href="https://maps.app.goo.gl/Z9A8B7C6D5E4F3G2H" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-lospinos" class="map-container"></div>
@@ -655,6 +700,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-prados">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8O" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-prados" class="map-container"></div>
                 </div>
@@ -671,6 +719,9 @@
                                 <li>Miércoles: 6:00 PM</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="route-info" id="route-info-sanmartin">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
                     </div>
                     <a href="https://maps.app.goo.gl/A9S8D7F6G5H4J3K2L" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-sanmartin" class="map-container"></div>
@@ -689,6 +740,9 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="route-info" id="route-info-tucunare">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
+                    </div>
                     <a href="https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8K" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-tucunare" class="map-container"></div>
                 </div>
@@ -705,6 +759,9 @@
                                 <li>Miércoles: 6:00 PM</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="route-info" id="route-info-vallesther">
+                        <p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>
                     </div>
                     <a href="https://maps.app.goo.gl/P1O2I3U4Y5T6R7E8W" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
                     <div id="map-vallesther" class="map-container"></div>
@@ -735,6 +792,7 @@
 
         let currentMaps = {}; // Objeto para almacenar instancias de mapas de Google
         const googleMapsApiKey = 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44'; // <-- TU CLAVE API
+        let userCurrentLocation = null; // Almacenará la ubicación actual del usuario
 
         // Función para cargar dinámicamente el script de Google Maps API
         function loadGoogleMapsScript() {
@@ -767,7 +825,7 @@
             }
         };
 
-        // Calcula la distancia entre dos coordenadas (Haversine formula)
+        // Calcula la distancia entre dos coordenadas (Haversine formula) - No se usará para ruta, solo para 'más cercano'
         function haversineDistance(coords1, coords2) {
             const R = 6371e3; // Radio de la Tierra en metros
             const φ1 = coords1.lat * Math.PI / 180;
@@ -809,6 +867,56 @@
             }
         };
 
+        // Función para obtener y mostrar las direcciones
+        async function getAndDisplayDirections(origin, destination, sedeId) {
+            console.log(`MODAL_POPUP.HTML: Calculando direcciones para ${sedeId} desde el usuario.`);
+            const routeInfoDiv = document.getElementById(`route-info-${sedeId}`);
+            if (!routeInfoDiv) {
+                console.error(`MODAL_POPUP.HTML ERROR: No se encontró el div de información de ruta para ${sedeId}.`);
+                return;
+            }
+
+            routeInfoDiv.innerHTML = '<p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Calculando distancia y tiempo...</p>';
+
+            try {
+                // Calcular ruta en carro
+                const driveResult = await maps_navigation.findDirections({
+                    travelMode: "DRIVING",
+                    origin: { lat: origin.lat, lng: origin.lng },
+                    destination: { lat: destination.lat, lng: destination.lng }
+                });
+
+                // Calcular ruta a pie
+                const walkResult = await maps_navigation.findDirections({
+                    travelMode: "WALKING",
+                    origin: { lat: origin.lat, lng: origin.lng },
+                    destination: { lat: destination.lat, lng: destination.lng }
+                });
+
+                let driveInfo = '<p><i class="fas fa-car"></i> En carro: No disponible</p>';
+                if (driveResult && driveResult.routes && driveResult.routes.length > 0) {
+                    const leg = driveResult.routes[0].legs[0];
+                    driveInfo = `<p><i class="fas fa-car"></i> En carro: <strong>${leg.distance.text}</strong>, tiempo: <strong>${leg.duration.text}</strong></p>`;
+                } else {
+                    console.warn(`MODAL_POPUP.HTML ADVERTENCIA: No se pudo obtener la ruta en carro para ${sedeId}.`, driveResult);
+                }
+
+                let walkInfo = '<p><i class="fas fa-walking"></i> A pie: No disponible</p>';
+                if (walkResult && walkResult.routes && walkResult.routes.length > 0) {
+                    const leg = walkResult.routes[0].legs[0];
+                    walkInfo = `<p><i class="fas fa-walking"></i> A pie: <strong>${leg.distance.text}</strong>, tiempo: <strong>${leg.duration.text}</strong></p>`;
+                } else {
+                    console.warn(`MODAL_POPUP.HTML ADVERTENCIA: No se pudo obtener la ruta a pie para ${sedeId}.`, walkResult);
+                }
+
+                routeInfoDiv.innerHTML = driveInfo + walkInfo;
+
+            } catch (error) {
+                console.error("MODAL_POPUP.HTML ERROR al obtener direcciones:", error);
+                routeInfoDiv.innerHTML = '<p class="text-danger"><i class="fas fa-exclamation-triangle"></i> Error al calcular la ruta. Intenta de nuevo más tarde.</p>';
+            }
+        }
+
         // Función para mostrar la sede seleccionada e inicializar su mapa
         window.showSelectedSede = function() {
             console.log("MODAL_POPUP.HTML: showSelectedSede llamada.");
@@ -827,6 +935,7 @@
             churchDetailsElements.forEach(churchElement => {
                 const mapContainerId = `map-${churchElement.getAttribute('data-id')}`;
                 const mapDiv = document.getElementById(mapContainerId);
+                const routeInfoDiv = document.getElementById(`route-info-${churchElement.getAttribute('data-id')}`);
 
                 if (churchElement.getAttribute('data-id') === selectedId) {
                     churchElement.classList.add('active');
@@ -873,10 +982,19 @@
                                 }
                             }, 300); // Intenta más rápido
                         }
+
+                        // Si tenemos la ubicación del usuario, calculamos las direcciones
+                        if (userCurrentLocation) {
+                            getAndDisplayDirections(userCurrentLocation, { lat: selectedSede.lat, lng: selectedSede.lng }, selectedId);
+                        } else {
+                            if (routeInfoDiv) routeInfoDiv.innerHTML = '<p class="text-info"><i class="fas fa-info-circle"></i> Permite tu ubicación para calcular la ruta.</p>';
+                        }
                     }
 
                 } else {
                     churchElement.classList.remove('active');
+                    // Limpiar información de ruta cuando no está activa
+                    if (routeInfoDiv) routeInfoDiv.innerHTML = '<p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>';
                 }
             });
             if (!selectedId) {
@@ -905,11 +1023,11 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const userCoords = {
+                        userCurrentLocation = { // Guardar la ubicación en la variable global
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         };
-                        console.log("MODAL_POPUP.HTML: Ubicación del usuario:", userCoords);
+                        console.log("MODAL_POPUP.HTML: Ubicación del usuario:", userCurrentLocation);
                         showGeolocationMessage("<i class='fas fa-check-circle me-2'></i> ¡Ubicación encontrada! Buscando la sede más cercana...", 'success');
 
                         let nearestSede = null;
@@ -917,7 +1035,8 @@
 
                         sedes.forEach(sede => {
                             const sedeCoords = { lat: sede.lat, lng: sede.lng };
-                            const distance = haversineDistance(userCoords, sedeCoords);
+                            // Usar la fórmula Haversine para encontrar la sede más cercana, es más rápido que la API para este propósito.
+                            const distance = haversineDistance(userCurrentLocation, sedeCoords);
 
                             if (distance < minDistance) {
                                 minDistance = distance;
@@ -929,8 +1048,8 @@
                             const sedeSelector = document.getElementById('sede-selector');
                             if (sedeSelector) {
                                 sedeSelector.value = nearestSede.id;
-                                window.showSelectedSede();
-                                showGeolocationMessage(`<i class='fas fa-map-pin me-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong> (${(minDistance / 1000).toFixed(2)} km).`, 'success');
+                                window.showSelectedSede(); // Esto ahora activará el cálculo de ruta
+                                showGeolocationMessage(`<i class='fas fa-map-pin me-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong> (${(minDistance / 1000).toFixed(2)} km de distancia recta).`, 'success');
                             }
                         } else {
                             showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> No se encontraron sedes cercanas a tu ubicación.", 'error');
@@ -1000,8 +1119,14 @@
                 const sedeSelector = document.getElementById('sede-selector');
                 if (sedeSelector) {
                     sedeSelector.value = '';
-                    window.showSelectedSede();
+                    window.showSelectedSede(); // Llama para limpiar y asegurar que no hay sede activa al abrir
                 }
+
+                // Limpiar mensajes y estados anteriores
+                document.getElementById('geolocationMessage').classList.remove('show', 'error', 'info', 'success');
+                document.querySelectorAll('.route-info').forEach(div => {
+                    div.innerHTML = '<p class="loading-text"><i class="fas fa-info-circle"></i> Calculando ruta...</p>';
+                });
 
                 // Eliminamos y re-adjuntamos los listeners para evitar duplicados
                 const localCloseButton = document.getElementById('closeModalButton');
