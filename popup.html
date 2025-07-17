@@ -718,15 +718,15 @@
 
             console.log(`Sede seleccionada en el dropdown: ${selectedId}`);
             
-            // Actualizar el título del modal con el nombre de la sede
-            modalTitle.innerHTML = `<i class="fas fa-church me-3"></i> ${selectedSede.name}`;
+            // NO ACTUALIZAR EL TÍTULO DEL MODAL AQUÍ, SE MANTIENE FIJO "Nuestras Sedes"
+            // modalTitle.innerHTML = `<i class="fas fa-church me-3"></i> ${selectedSede.name}`; // ELIMINADO/COMENTADO
             
             // Construir el HTML dinámico para la sede seleccionada
             const horariosHtml = selectedSede.horarios.map(h => `<li>${h}</li>`).join('');
             
             sedeDetailsDisplay.innerHTML = `
                 <div class="church-details active" data-id="${selectedSede.id}">
-                    <h3><i class="fas fa-info-circle"></i> Detalles de la Sede</h3>
+                    <h3><i class="fas fa-church"></i> ${selectedSede.name}</h3> <!-- Título de la sede dentro del bloque de detalles -->
                     <div class="info-grid">
                         <div class="info-item"><i class="fa-solid fa-user-tie"></i><p><strong>Pastores:</strong> ${selectedSede.pastores}</p></div>
                         <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> ${selectedSede.address}</p></div>
