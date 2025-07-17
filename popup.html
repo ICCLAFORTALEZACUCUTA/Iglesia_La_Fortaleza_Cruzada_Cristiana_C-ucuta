@@ -8,6 +8,497 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
   <style>
+            /* Variables CSS para una personalización sencilla de colores */
+        :root {
+            --primary-color: #007bff; /* Azul vibrante */
+            --secondary-color: #28a745; /* Verde de éxito */
+            --accent-color: #fd7e14; /* Naranja para detalles */
+            --text-color-dark: #212529;
+            --text-color-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --border-color: #dee2e6;
+            --shadow-strong: rgba(0, 0, 0, 0.2);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+        }
+
+        /* -------------------------- */
+        /* ESTILOS GENERALES Y LAYOUT */
+        /* -------------------------- */
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color-dark);
+            background-color: var(--bg-light); /* Para previsualización si se abre directamente */
+        }
+
+        /* Estilos del modal overlay */
+        .modal-overlay {
+            display: flex; /* Siempre flex para centrado, hidden con visibility */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden; /* Oculto por defecto, pero mantiene el layout */
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out; /* Transición más rápida */
+            pointer-events: none; /* No interactuable cuando está oculto */
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto; /* Interactuable cuando está visible */
+        }
+
+        /* Estilos del contenido del modal */
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+            padding: 30px; /* Un poco menos de padding para pantallas pequeñas */
+            border-radius: 15px;
+            max-width: 950px;
+            width: 100%;
+            box-shadow: 0 15px 40px var(--shadow-strong);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(-20px) scale(0.98); /* Transición más sutil y rápida */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Botón de cierre */
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2rem; /* Tamaño prominente */
+            cursor: pointer;
+            color: var(--text-color-dark);
+            transition: color 0.2s ease, transform 0.2s ease;
+            outline: none;
+            padding: 5px; /* Área de clic más grande */
+        }
+        .close-button:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg) scale(1.1); /* Animación de rotación y ligero aumento */
+        }
+
+        /* Título del modal */
+        .modal-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px; /* Reducido un poco */
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 0.5px; /* Ajuste para fluidez */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.03);
+            font-size: 2.2rem; /* Tamaño base */
+        }
+
+        /* -------------------------- */
+        /* CONTROLES (SELECT Y BOTÓN) */
+        /* -------------------------- */
+        .modal-controls {
+            display: flex;
+            flex-direction: column; /* Columna por defecto para móviles */
+            gap: 15px; /* Espaciado reducido */
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .modal-controls .form-label {
+            font-weight: 600;
+            color: var(--text-color-dark);
+            margin-bottom: 0;
+            white-space: nowrap;
+            flex-shrink: 0; /* Asegura que no se encoja */
+        }
+
+        .modal-controls .form-select {
+            flex-grow: 1;
+            padding: 10px 15px; /* Padding ajustado */
+            border-radius: 8px; /* Un poco menos redondeado para fluidez */
+            border: 1px solid var(--border-color);
+            background-color: #fff;
+            font-size: 1rem; /* Tamaño base */
+            color: var(--text-color-dark);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.03); /* Sombra más sutil */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .modal-controls .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2); /* Sombra de foco más suave */
+            outline: none;
+        }
+
+        .modal-controls .btn {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            padding: 10px 20px; /* Padding ajustado */
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; /* Transiciones más rápidas */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            width: 100%; /* Ocupa todo el ancho en móviles */
+        }
+        .modal-controls .btn:hover {
+            background-color: #218838;
+            transform: translateY(-1px); /* Menor levantamiento */
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2); /* Sombra más suave */
+        }
+        .modal-controls .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .modal-controls .btn:disabled {
+            opacity: 0.5; /* Más evidente que está deshabilitado */
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* -------------------------- */
+        /* DETALLES DE LA IGLESIA */
+        /* -------------------------- */
+
+        .church-details {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px; /* Padding ajustado */
+            margin-top: 25px; /* Margen ajustado */
+            animation: fadeInScale 0.4s ease-out; /* Animación más rápida */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06); /* Sombra más suave */
+            overflow: hidden;
+        }
+
+        .church-details.active {
+            display: block;
+        }
+        
+        .church-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 18px; /* Margen ajustado */
+            font-weight: 700;
+            font-size: 1.6rem; /* Tamaño ajustado */
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espaciado ajustado */
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+        .church-details h3 i {
+            font-size: 1.4em; /* Tamaño ajustado */
+            color: var(--accent-color);
+        }
+
+        .church-details .info-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Una columna por defecto en móviles */
+            gap: 15px; /* Espaciado ajustado */
+            margin-bottom: 20px; /* Margen ajustado */
+        }
+        
+        .church-details .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px; /* Espaciado ajustado */
+            color: var(--text-color-light);
+            font-size: 1rem; /* Tamaño ajustado */
+        }
+        .church-details .info-item i {
+            color: var(--secondary-color);
+            font-size: 1.2rem; /* Tamaño ajustado */
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        .church-details .info-item p {
+            margin-bottom: 0;
+        }
+        .church-details .info-item strong {
+            color: var(--text-color-dark);
+        }
+
+        .church-details ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px; /* Margen ajustado */
+        }
+        .church-details ul li {
+            position: relative;
+            padding-left: 22px; /* Padding ajustado */
+            margin-bottom: 6px; /* Margen ajustado */
+            color: var(--text-color-dark);
+            font-size: 0.95rem; /* Tamaño ajustado */
+        }
+        .church-details ul li::before {
+            content: "\f017";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 0.9em;
+            top: 2px; /* Ajuste vertical */
+        }
+
+        .church-details .map-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px; /* Espaciado ajustado */
+            margin-top: 20px; /* Margen ajustado */
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem; /* Tamaño ajustado */
+            transition: color 0.2s ease, transform 0.1s ease;
+        }
+
+        .church-details .map-link:hover {
+            text-decoration: underline;
+            color: #0056b3;
+            transform: translateX(3px); /* Menor desplazamiento */
+        }
+        .church-details .map-link i {
+            font-size: 1em;
+        }
+
+        /* Estilo para el contenedor del mapa */
+        .map-container {
+            width: 100%;
+            height: 300px; /* Altura más flexible */
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 25px; /* Margen ajustado */
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra más sutil */
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+        }
+        .map-container.loading::after {
+            content: "Cargando mapa...";
+        }
+
+        /* -------------------------- */
+        /* MENSAJES DE GEOLOCALIZACIÓN */
+        /* -------------------------- */
+
+        .geolocation-message {
+            margin-top: 15px; /* Margen ajustado */
+            padding: 12px; /* Padding ajustado */
+            border-radius: 8px;
+            display: none;
+            font-size: 0.9rem; /* Tamaño ajustado */
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-out; /* Animación más rápida */
+            display: flex; /* Para el icono y texto */
+            align-items: center;
+            gap: 10px;
+        }
+        .geolocation-message.show {
+            display: flex;
+        }
+        .geolocation-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .geolocation-message.info {
+            background-color: #d1ecf1; /* Azul suave para info */
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
+        .geolocation-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .geolocation-message i {
+            font-size: 1.2em; /* Icono un poco más grande */
+        }
+
+        /* -------------------------- */
+        /* ANIMACIONES */
+        /* -------------------------- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* -------------------------- */
+        /* RESPONSIVIDAD */
+        /* -------------------------- */
+
+        /* Para pantallas pequeñas (móviles) - hasta 576px (extra small en Bootstrap) */
+        @media (max-width: 575.98px) {
+            .modal-content {
+                padding: 20px; /* Menos padding en pantallas muy pequeñas */
+                border-radius: 10px;
+                max-height: 95vh; /* Ocupa más espacio vertical */
+            }
+
+            .close-button {
+                font-size: 1.8rem;
+                top: 10px;
+                right: 10px;
+            }
+
+            .modal-content h2 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .modal-controls {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+
+            .modal-controls .form-select,
+            .modal-controls .btn {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+                border-radius: 6px;
+            }
+            .modal-controls .btn {
+                width: 100%; /* Asegura que el botón ocupe todo el ancho */
+            }
+
+            .church-details {
+                padding: 18px;
+                margin-top: 18px;
+                border-radius: 10px;
+            }
+
+            .church-details h3 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+                gap: 8px;
+            }
+            .church-details h3 i {
+                font-size: 1.3em;
+            }
+
+            .church-details .info-grid {
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .church-details .info-item {
+                font-size: 0.9rem;
+                gap: 8px;
+            }
+            .church-details .info-item i {
+                font-size: 1.1rem;
+            }
+
+            .church-details ul li {
+                font-size: 0.85rem;
+                padding-left: 20px;
+            }
+            .church-details ul li::before {
+                font-size: 0.8em;
+            }
+
+            .church-details .map-link {
+                font-size: 0.9rem;
+                margin-top: 15px;
+                gap: 5px;
+            }
+
+            .map-container {
+                height: 250px; /* Menos altura en pantallas muy pequeñas */
+                margin-top: 20px;
+            }
+
+            .geolocation-message {
+                font-size: 0.85rem;
+                padding: 10px;
+                gap: 8px;
+            }
+            .geolocation-message i {
+                font-size: 1.1em;
+            }
+        }
+
+        /* Para pantallas medianas (tablets y móviles grandes) - de 576px a 767.98px */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .modal-content {
+                padding: 25px;
+                max-width: 650px;
+            }
+            .modal-content h2 {
+                font-size: 2rem;
+            }
+            .modal-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .modal-controls .btn {
+                 width: 100%;
+            }
+            .church-details h3 {
+                font-size: 1.5rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr; /* Una columna para asegurar el stack */
+            }
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        /* Para pantallas grandes (desktops y laptops) - a partir de 768px */
+        @media (min-width: 768px) {
+            .modal-controls {
+                flex-direction: row; /* Vuelven a ser fila */
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 10px; /* Pequeño ajuste para alinear */
+                padding-right: 10px;
+            }
+             .modal-controls .btn {
+                width: auto; /* Ancho automático */
+                flex-shrink: 0; /* Evita que el botón se encoja */
+            }
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Dos columnas o más */
+            }
+        }
+
   </style>
 </head>
 <body>
