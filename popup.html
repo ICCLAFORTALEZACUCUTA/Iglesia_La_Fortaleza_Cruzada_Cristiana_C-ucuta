@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sedes Cruzada Cristiana</title>
+    <title>Ubicación de Sedes</title>
     <!-- Carga de Tailwind CSS para estilos modernos y responsivos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Carga de Font Awesome para iconos -->
@@ -258,12 +258,13 @@
                 <p class="text-gray-700 mb-2"><strong class="text-gray-900">Dirección:</strong> <span id="sede-address"></span></p>
                 <p class="text-gray-700 mb-2"><strong class="text-gray-900">Horarios:</strong> <span id="sede-horarios"></span></p>
                 <p class="text-gray-700 mb-4"><strong class="text-gray-900">Teléfono:</strong> <span id="sede-phone"></span></p>
+                <p class="text-gray-700 mb-4"><strong class="text-gray-900">Pastores:</strong> <span id="sede-pastores"></span></p>
                 
                 <!-- Nuevos campos para distancia y tiempo de viaje -->
                 <div id="travel-info" class="mb-4 hidden">
                     <p class="text-gray-700 mb-2"><strong class="text-gray-900">Distancia desde tu ubicación:</strong> <span id="travel-distance"></span></p>
                     <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Caminando):</strong> <span id="travel-time-walking"></span></p>
-                    <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Vehículo):</strong> <span id="travel-time-driving"></span></p>
+                    <p class="text-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Vehículo):</strong> <span id="travel-time-driving"></span></p>
                 </div>
 
                 <a id="sede-gmaps-link" href="#" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">Ver en Google Maps</a>
@@ -282,17 +283,17 @@
         // Datos de las sedes con COORDENADAS REALES y URLs de Google Maps
         // ¡IMPORTANTE! Reemplaza estas latitudes y longitudes con las REALES de tus sedes.
         const sedes = [
-            { id: 'victoria', name: 'La Victoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Av7 #3 - 80. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/KLdE18eimYx5ykQZ6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567'},
-            { id: 'fortaleza', name: 'La Fortaleza Cruzada Cristiana', lat: 7.902643058045286, lng: -72.55504307641618, address: 'Mz AN lote 20 - B (La Fortaleza). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/rRagrEuArHkDXYJT6', horarios: ['Domingos: 8:00 A.M.', 'Miércoles: 6:00 P.M.'], phone: '(+57) 3202106461' },
-            { id: 'belen', name: 'Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569' },
-            { id: 'colinas', name: 'Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570' },
-            { id: 'donanidia', name: 'Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571' },
-            { id: 'libertad', name: 'Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A1S2D3F4G5H6J7K8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234572' },
-            { id: 'lospinos', name: 'Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9O8I7U6Y5T4R3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234573' },
-            { id: 'prados', name: 'Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234574' },
-            { id: 'sanmartin', name: 'Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/F1G2H3J4K5L6M7N8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234575'},
-            { id: 'tucunare', name: 'Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2V3B4N5M6L7K8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234576'},
-            { id: 'vallesther', name: 'Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/E1R2T3Y4U5I6O7P8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234577'}
+            { id: 'victoria', name: 'La Victoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Av7 #3 - 80. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/KLdE18eimYx5ykQZ6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567', pastores: 'Rodrigo Castrillón y Rosalba Perez'},
+            { id: 'fortaleza', name: 'La Fortaleza Cruzada Cristiana', lat: 7.902643058045286, lng: -72.55504307641618, address: 'Mz AN lote 20 - B (La Fortaleza). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/rRagrEuArHkDXYJT6', horarios: ['Domingos: 8:00 A.M.', 'Miércoles: 6:00 P.M.'], phone: '(+57) 3202106461', pastores: 'Miguel Bautista y Leidy Contreras' },
+            { id: 'belen', name: 'Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569', pastores: 'Ana María Gómez y Carlos Ruiz' },
+            { id: 'colinas', name: 'Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570', pastores: 'Javier Solano y Laura Torres' },
+            { id: 'donanidia', name: 'Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571', pastores: 'Sofía Vargas y Pedro López' },
+            { id: 'libertad', name: 'Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A1S2D3F4G5H6J7K8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234572', pastores: 'Ricardo Paz y Elena Soto' },
+            { id: 'lospinos', name: 'Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9O8I7U6Y5T4R3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234573', pastores: 'Gabriela Díaz y Andrés Castro' },
+            { id: 'prados', name: 'Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234574', pastores: 'Fernando Reyes y Patricia Mora' },
+            { id: 'sanmartin', name: 'Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/F1G2H3J4K5L6M7N8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234575', pastores: 'Daniela Vega y Pablo Cruz'},
+            { id: 'tucunare', name: 'Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2V3B4N5M6L7K8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234576', pastores: 'Isabel Torres y Marco Polo'},
+            { id: 'vallesther', name: 'Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/E1R2T3Y4U5I6O7P8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234577', pastores: 'Laura Quintero y Juan David'}
         ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente las sedes por nombre
 
         let currentMaps = {}; // Objeto para almacenar instancias de mapas de Google
@@ -402,6 +403,7 @@
                 document.getElementById('sede-address').textContent = selectedSede.address;
                 document.getElementById('sede-horarios').textContent = selectedSede.horarios.join(', ');
                 document.getElementById('sede-phone').textContent = selectedSede.phone;
+                document.getElementById('sede-pastores').textContent = selectedSede.pastores; // Mostrar pastores
                 document.getElementById('sede-gmaps-link').href = selectedSede.gmaps;
 
                 // Ocultar y limpiar la información de viaje por defecto
@@ -535,7 +537,30 @@
             }
         }
 
-        // Función para encontrar la sede más cercana
+        // Función para mostrar mensajes al usuario (reemplazo de alert/confirm)
+        function showMessage(message, type = 'info') {
+            const messageBox = document.createElement('div');
+            messageBox.className = `message-box ${type}`;
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+
+            // Hacer que el mensaje desaparezca después de 5 segundos
+            setTimeout(() => {
+                messageBox.style.opacity = '0'; // Iniciar la transición de desvanecimiento
+                setTimeout(() => messageBox.remove(), 500); // Eliminar el elemento después de la transición
+            }, 5000);
+        }
+
+        // Función para mostrar mensajes de geolocalización en el div específico
+        function showGeolocationMessage(message, type = 'info') {
+            const msgDiv = document.getElementById('geolocationMessage');
+            if (msgDiv) {
+                msgDiv.innerHTML = message; // Usar innerHTML para permitir iconos
+                msgDiv.className = `geolocation-message show ${type}`;
+            }
+        }
+
+        // Función para encontrar la sede más cercana y calcular distancias/tiempos de viaje
         async function findNearestSede() {
             console.log("Iniciando búsqueda de sede más cercana...");
             showGeolocationMessage("<i class='fas fa-info-circle mr-2'></i> Buscando tu ubicación...", 'info');
