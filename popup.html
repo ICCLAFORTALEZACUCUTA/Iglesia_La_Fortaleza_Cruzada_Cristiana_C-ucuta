@@ -528,7 +528,7 @@
     <div id="churchModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-button" id="closeModalButton" title="Cerrar Modal">×</button>
-            <h2><i class="fas fa-cross me-3"></i> Nuestras Sedes <i class="fas fa-cross ms-3"></i></h2>
+            <h2 id="modalTitle"><i class="fas fa-cross me-3"></i> Nuestras Sedes <i class="fas fa-cross ms-3"></i></h2>
 
             <div class="modal-controls">
                 <div class="d-flex align-items-center gap-3 w-100 flex-column flex-md-row">
@@ -693,9 +693,10 @@
             console.log("showSelectedSede llamada.");
             const sedeSelector = document.getElementById('sede-selector');
             const sedeDetailsDisplay = document.getElementById('sede-details-display');
+            const modalTitle = document.getElementById('modalTitle'); // Obtener el título del modal
 
-            if (!sedeSelector || !sedeDetailsDisplay) {
-                console.error("ERROR: Elementos de selector o contenedor de detalles no encontrados para showSelectedSede.");
+            if (!sedeSelector || !sedeDetailsDisplay || !modalTitle) {
+                console.error("ERROR: Elementos de selector, contenedor de detalles o título del modal no encontrados para showSelectedSede.");
                 return;
             }
 
@@ -705,18 +706,22 @@
             if (!selectedSede) {
                 sedeDetailsDisplay.innerHTML = '<p>Selecciona una sede o haz clic en "Ubicarme" para ver los detalles.</p>';
                 document.getElementById('geolocationMessage').classList.remove('show', 'error', 'info', 'success');
+                modalTitle.innerHTML = '<i class="fas fa-cross me-3"></i> Nuestras Sedes <i class="fas fa-cross ms-3"></i>'; // Restablecer título
                 console.log("Ninguna sede seleccionada o encontrada.");
                 return;
             }
 
             console.log(`Sede seleccionada en el dropdown: ${selectedId}`);
             
+            // Actualizar el título del modal con el nombre de la sede
+            modalTitle.innerHTML = `<i class="fas fa-church me-3"></i> ${selectedSede.name}`;
+            
             // Construir el HTML dinámico para la sede seleccionada
             const horariosHtml = selectedSede.horarios.map(h => `<li>${h}</li>`).join('');
             
             sedeDetailsDisplay.innerHTML = `
                 <div class="church-details active" data-id="${selectedSede.id}">
-                    <h3><i class="fas fa-church"></i> ${selectedSede.name}</h3>
+                    <h3><i class="fas fa-info-circle"></i> Detalles de la Sede</h3>
                     <div class="info-grid">
                         <div class="info-item"><i class="fa-solid fa-user-tie"></i><p><strong>Pastores:</strong> ${selectedSede.pastores}</p></div>
                         <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> ${selectedSede.address}</p></div>
@@ -767,6 +772,7 @@
                 return;
             }
 
+            // Si ya existe una instancia de mapa para esta sede, simplemente la re-centramos
             if (currentMaps[sede.id]) {
                 currentMaps[sede.id].setCenter({ lat: sede.lat, lng: sede.lng });
                 currentMaps[sede.id].setZoom(15);
@@ -795,19 +801,31 @@
                 clickableIcons: false,
                 mapTypeId: 'roadmap',
                 disableDefaultUI: true,
-                zoomControl: true
+                zoomControl: true,
+                // mapId: 'YOUR_MAP_ID_HERE' // Si tienes un ID de mapa para estilos basados en la nube, agrégalo aquí
             };
             const map = new google.maps.Map(mapDiv, mapOptions);
             
-            // Usar AdvancedMarkerElement (requiere v=beta en la carga de la API)
-            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-            new AdvancedMarkerElement({
-                position: { lat: sede.lat, lng: sede.lng },
-                map: map,
-                title: sede.name,
-                // Puedes personalizar el icono aquí si lo deseas
-                // content: document.createElement('div').innerHTML = '<i class="fas fa-map-marker-alt text-red-500 text-3xl"></i>'
-            });
+            // Usar AdvancedMarkerElement (requiere v=beta en la carga de la API y un Map ID si se usa Cloud-based Map Styling)
+            try {
+                const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+                new AdvancedMarkerElement({
+                    position: { lat: sede.lat, lng: sede.lng },
+                    map: map,
+                    title: sede.name,
+                    // Puedes personalizar el icono aquí si lo deseas
+                    // content: document.createElement('div').innerHTML = '<i class="fas fa-map-marker-alt text-red-500 text-3xl"></i>'
+                });
+            } catch (e) {
+                console.warn("No se pudo cargar AdvancedMarkerElement. Asegúrate de que la API se carga con v=beta y, si usas estilos personalizados, un Map ID válido.", e);
+                // Fallback a Marker si AdvancedMarkerElement falla (aunque no es recomendado a largo plazo)
+                new google.maps.Marker({
+                    position: { lat: sede.lat, lng: sede.lng },
+                    map: map,
+                    title: sede.name,
+                    animation: google.maps.Animation.DROP
+                });
+            }
 
             currentMaps[sede.id] = map;
             mapDiv.classList.remove('loading');
@@ -826,6 +844,7 @@
             const timeWalkingSpan = document.getElementById(`travel-time-walking-${destinationSede.id}`);
             const timeDrivingSpan = document.getElementById(`travel-time-driving-${destinationSede.id}`);
 
+            // Inicializar textos como "Calculando..."
             if (distanceSpan) distanceSpan.textContent = 'Calculando...';
             if (timeWalkingSpan) timeWalkingSpan.textContent = 'Calculando...';
             if (timeDrivingSpan) timeDrivingSpan.textContent = 'Calculando...';
@@ -839,14 +858,21 @@
                     unitSystem: google.maps.UnitSystem.METRIC,
                 });
 
-                const elementDriving = responseDriving.rows[0].elements[0];
-                if (elementDriving.status === 'OK') {
-                    if (distanceSpan) distanceSpan.textContent = elementDriving.distance.text;
-                    if (timeDrivingSpan) timeDrivingSpan.textContent = elementDriving.duration.text;
+                // Verificar si la respuesta y los elementos son válidos
+                if (responseDriving.rows && responseDriving.rows[0] && responseDriving.rows[0].elements && responseDriving.rows[0].elements[0]) {
+                    const elementDriving = responseDriving.rows[0].elements[0];
+                    if (elementDriving.status === 'OK') {
+                        if (distanceSpan) distanceSpan.textContent = elementDriving.distance.text;
+                        if (timeDrivingSpan) timeDrivingSpan.textContent = elementDriving.duration.text;
+                    } else {
+                        if (distanceSpan) distanceSpan.textContent = 'No disponible';
+                        if (timeDrivingSpan) timeDrivingSpan.textContent = 'No disponible';
+                        console.warn(`No se pudo obtener la ruta en vehículo para ${destinationSede.name}:`, elementDriving.status);
+                    }
                 } else {
                     if (distanceSpan) distanceSpan.textContent = 'No disponible';
                     if (timeDrivingSpan) timeDrivingSpan.textContent = 'No disponible';
-                    console.warn("No se pudo obtener la ruta en vehículo:", elementDriving.status);
+                    console.warn(`Respuesta inesperada para ruta en vehículo a ${destinationSede.name}.`);
                 }
 
                 // Solicitud para el tiempo caminando
@@ -857,13 +883,20 @@
                     unitSystem: google.maps.UnitSystem.METRIC,
                 });
 
-                const elementWalking = responseWalking.rows[0].elements[0];
-                if (elementWalking.status === 'OK') {
-                    if (timeWalkingSpan) timeWalkingSpan.textContent = elementWalking.duration.text;
+                // Verificar si la respuesta y los elementos son válidos
+                if (responseWalking.rows && responseWalking.rows[0] && responseWalking.rows[0].elements && responseWalking.rows[0].elements[0]) {
+                    const elementWalking = responseWalking.rows[0].elements[0];
+                    if (elementWalking.status === 'OK') {
+                        if (timeWalkingSpan) timeWalkingSpan.textContent = elementWalking.duration.text;
+                    } else {
+                        if (timeWalkingSpan) timeWalkingSpan.textContent = 'No disponible';
+                        console.warn(`No se pudo obtener la ruta a pie para ${destinationSede.name}:`, elementWalking.status);
+                    }
                 } else {
                     if (timeWalkingSpan) timeWalkingSpan.textContent = 'No disponible';
-                    console.warn("No se pudo obtener la ruta a pie:", elementWalking.status);
+                    console.warn(`Respuesta inesperada para ruta a pie a ${destinationSede.name}.`);
                 }
+
             } catch (error) {
                 console.error("Error al calcular distancias/tiempos:", error);
                 if (distanceSpan) distanceSpan.textContent = 'Error';
@@ -897,8 +930,7 @@
 
                 if (typeof google === 'undefined' || typeof google.maps === 'undefined' || typeof google.maps.DistanceMatrixService === 'undefined') {
                     showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> Google Maps API o Distance Matrix Service no están cargados. Intenta de nuevo en un momento.", 'error');
-                    if (locateMeBtn) locateMeBtn.disabled = false;
-                    return;
+                    return; // Salir si la API no está lista
                 }
 
                 const service = new google.maps.DistanceMatrixService();
@@ -912,7 +944,7 @@
                     unitSystem: google.maps.UnitSystem.METRIC,
                 });
 
-                if (responseDriving.rows[0].elements) {
+                if (responseDriving.rows && responseDriving.rows[0] && responseDriving.rows[0].elements) {
                     responseDriving.rows[0].elements.forEach((element, index) => {
                         if (element.status === 'OK') {
                             const sede = sedes[index];
@@ -924,6 +956,9 @@
                             }
                         }
                     });
+                } else {
+                    console.warn("Respuesta inesperada de Distance Matrix Service para DRIVING.");
+                    showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> No se pudieron obtener rutas en vehículo para encontrar la sede más cercana.", 'error');
                 }
 
                 if (nearestSede) {
@@ -949,12 +984,11 @@
             const churchModal = document.getElementById('churchModal');
             if (churchModal) {
                 churchModal.classList.remove('show');
-                console.log("Iniciando cierre del modal...");
+                console.log("Iniciando cierre del modal y refresco de página...");
                 requestAnimationFrame(() => {
                     setTimeout(() => {
                         churchModal.style.display = 'none';
-                        // Opcional: si quieres redirigir a una página específica al cerrar el modal
-                        // window.location.href = 'index.html'; 
+                        window.location.reload(); // Recarga la página al cerrar el modal
                     }, 300); // Coincide con la duración de la transición CSS
                 });
             }
@@ -972,11 +1006,14 @@
                 
                 window.initializeSedeSelector(); 
                 const sedeSelector = document.getElementById('sede-selector');
+                const modalTitle = document.getElementById('modalTitle');
+
                 if (sedeSelector) {
                     sedeSelector.value = ''; // Limpiar la selección inicial
                     // Mostrar un mensaje inicial o el contenido de "selecciona una sede"
                     document.getElementById('sede-details-display').innerHTML = '<p>Selecciona una sede o haz clic en "Ubicarme" para ver los detalles.</p>';
                     document.getElementById('geolocationMessage').classList.remove('show', 'error', 'info', 'success');
+                    modalTitle.innerHTML = '<i class="fas fa-cross me-3"></i> Nuestras Sedes <i class="fas fa-cross ms-3"></i>'; // Restablecer título
                 }
 
                 // Eliminamos y re-adjuntamos los listeners para evitar duplicados
