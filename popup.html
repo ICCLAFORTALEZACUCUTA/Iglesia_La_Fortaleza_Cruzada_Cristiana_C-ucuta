@@ -66,7 +66,7 @@
             background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
             padding: 30px; /* Un poco menos de padding para pantallas pequeñas */
             border-radius: 15px;
-            max-width: 950px;
+            max-width: 90vw; /* Ajuste para que el modal sea más responsivo */
             width: 100%;
             box-shadow: 0 15px 40px var(--shadow-strong);
             position: relative;
@@ -75,6 +75,13 @@
             transform: translateY(-20px) scale(0.98); /* Transición más sutil y rápida */
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             border: 1px solid var(--border-color);
+        }
+
+        /* Ajuste de max-width para pantallas más grandes */
+        @media (min-width: 992px) { /* Por ejemplo, para pantallas de desktop */
+            .modal-content {
+                max-width: 950px; /* Vuelve al ancho deseado para pantallas grandes */
+            }
         }
 
         .modal-overlay.show .modal-content {
@@ -196,7 +203,7 @@
         }
 
         .church-details {
-            display: none; /* Oculto por defecto, se muestra con JS */
+            display: block; /* Siempre visible dentro de #sede-details-display */
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -208,9 +215,7 @@
             width: 100%; /* Asegura que ocupe el ancho completo del contenedor padre */
         }
 
-        .church-details.active {
-            display: block; /* Se muestra cuando está activo */
-        }
+        /* No necesitamos .church-details.active ya que siempre se muestra el seleccionado */
         
         .church-details h3 {
             color: var(--primary-color);
@@ -375,7 +380,7 @@
         /* RESPONSIVIDAD */
         /* -------------------------- */
 
-        /* Para pantallas pequeñas (móviles) - hasta 576px (extra small en Bootstrap) */
+        /* Para pantallas pequeñas (móviles) - hasta 575.98px (extra small en Bootstrap) */
         @media (max-width: 575.98px) {
             .modal-content {
                 padding: 20px; /* Menos padding en pantallas muy pequeñas */
