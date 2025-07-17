@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubicación de Sedes</title>
+    <title>Sedes Cruzada Cristiana</title>
     <!-- Carga de Tailwind CSS para estilos modernos y responsivos -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Estilos generales para el cuerpo y la fuente */
         body {
@@ -17,6 +19,67 @@
             min-height: 100vh;
             background-color: #f0f4f8; /* Un fondo gris claro */
         }
+        /* Estilos del modal overlay */
+        .modal-overlay {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Asegura que esté por encima de otros elementos */
+            overflow-y: auto; /* Permite desplazamiento si el contenido es largo */
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex; /* Muestra el modal */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Estilos del contenido del modal */
+        .modal-content {
+            background-color: #ffffff; /* Fondo blanco para el contenido */
+            padding: 1.5rem;
+            border-radius: 1rem; /* Esquinas redondeadas */
+            max-width: 900px; /* Ancho máximo del modal */
+            width: 100%;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+            position: relative;
+            max-height: 90vh; /* Altura máxima para evitar desbordamiento */
+            overflow-y: auto; /* Permite desplazamiento dentro del contenido */
+            transform: translateY(-20px) scale(0.98);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Botón de cierre */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #4a5568;
+            transition: color 0.2s ease;
+        }
+        .close-button:hover {
+            color: #ef4444; /* Rojo al pasar el ratón */
+        }
+
         /* Contenedor principal de la aplicación */
         .container {
             max-width: 1200px;
@@ -38,6 +101,7 @@
             color: #4a5568; /* Color del texto de carga */
             font-size: 1.125rem; /* Tamaño de fuente del texto de carga */
             background-color: #e2e8f0; /* Fondo para el mapa mientras carga */
+            margin-top: 1.5rem; /* Margen superior para separar del contenido */
         }
         /* Estilos para las tarjetas de sede (si se usaran para listar, no en este ejemplo) */
         .sede-card {
@@ -159,44 +223,56 @@
     </style>
 </head>
 <body class="bg-gray-100 p-4">
-    <div class="container">
-        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Ubicación de Nuestras Sedes</h1>
 
-        <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
-            <div class="w-full md:w-auto flex-grow">
-                <label for="sede-select" class="block text-gray-700 text-sm font-bold mb-2">Selecciona una Sede:</label>
-                <select id="sede-select" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <!-- Las opciones se llenarán dinámicamente con JavaScript -->
-                </select>
-            </div>
-            <button id="locateMeBtn" class="btn mt-4 md:mt-0">
-                <i class="fas fa-location-crosshairs"></i> Ubicarme
-            </button>
-        </div>
+    <!-- Botón que abre el popup (este es el botón que mencionaste) -->
+    <div class="flex justify-center items-center h-screen">
+        <button type="button" id="openChurchModalBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg transition duration-300 ease-in-out flex items-center gap-2">
+            Revisar <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </div>
 
-        <!-- Mensaje de geolocalización -->
-        <div id="geolocationMessage" class="geolocation-message"></div>
+    <!-- El popup modal -->
+    <div id="churchModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeModalButton" title="Cerrar Modal">×</button>
+            <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Ubicación de Nuestras Sedes</h1>
 
-        <!-- Contenedor para mostrar los detalles de la sede seleccionada -->
-        <div id="sede-details" class="bg-white p-6 rounded-xl shadow-md mb-6 hidden">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4" id="sede-name"></h2>
-            <p class="text-gray-700 mb-2"><strong class="text-gray-900">Dirección:</strong> <span id="sede-address"></span></p>
-            <p class="text-gray-700 mb-2"><strong class="text-gray-900">Horarios:</strong> <span id="sede-horarios"></span></p>
-            <p class="text-gray-700 mb-4"><strong class="text-gray-900">Teléfono:</strong> <span id="sede-phone"></span></p>
-            
-            <!-- Nuevos campos para distancia y tiempo de viaje -->
-            <div id="travel-info" class="mb-4 hidden">
-                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Distancia desde tu ubicación:</strong> <span id="travel-distance"></span></p>
-                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Caminando):</strong> <span id="travel-time-walking"></span></p>
-                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Vehículo):</strong> <span id="travel-time-driving"></span></p>
+            <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
+                <div class="w-full md:w-auto flex-grow">
+                    <label for="sede-select" class="block text-gray-700 text-sm font-bold mb-2">Selecciona una Sede:</label>
+                    <select id="sede-select" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <!-- Las opciones se llenarán dinámicamente con JavaScript -->
+                    </select>
+                </div>
+                <button id="locateMeBtn" class="btn mt-4 md:mt-0">
+                    <i class="fas fa-location-crosshairs"></i> Ubicarme
+                </button>
             </div>
 
-            <a id="sede-gmaps-link" href="#" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">Ver en Google Maps</a>
-        </div>
+            <!-- Mensaje de geolocalización -->
+            <div id="geolocationMessage" class="geolocation-message"></div>
 
-        <!-- Contenedor donde se renderizará el mapa -->
-        <div id="map">
-            Cargando mapa...
+            <!-- Contenedor para mostrar los detalles de la sede seleccionada -->
+            <div id="sede-details" class="bg-white p-6 rounded-xl shadow-md mb-6 hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4" id="sede-name"></h2>
+                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Dirección:</strong> <span id="sede-address"></span></p>
+                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Horarios:</strong> <span id="sede-horarios"></span></p>
+                <p class="text-gray-700 mb-4"><strong class="text-gray-900">Teléfono:</strong> <span id="sede-phone"></span></p>
+                
+                <!-- Nuevos campos para distancia y tiempo de viaje -->
+                <div id="travel-info" class="mb-4 hidden">
+                    <p class="text-gray-700 mb-2"><strong class="text-gray-900">Distancia desde tu ubicación:</strong> <span id="travel-distance"></span></p>
+                    <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Caminando):</strong> <span id="travel-time-walking"></span></p>
+                    <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Vehículo):</strong> <span id="travel-time-driving"></span></p>
+                </div>
+
+                <a id="sede-gmaps-link" href="#" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">Ver en Google Maps</a>
+            </div>
+
+            <!-- Contenedor donde se renderizará el mapa -->
+            <div id="map">
+                Cargando mapa...
+            </div>
         </div>
     </div>
 
@@ -220,6 +296,7 @@
         ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente las sedes por nombre
 
         let currentMaps = {}; // Objeto para almacenar instancias de mapas de Google
+        let userCurrentLocation = null; // Almacena la última ubicación conocida del usuario
         // ¡IMPORTANTE! Reemplaza 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44' con tu clave API REAL de Google Maps.
         // Asegúrate de que tu clave API esté habilitada para la API de JavaScript de Google Maps
         // y que no haya caducado. Si tu clave no es válida, el mapa no se cargará.
@@ -231,7 +308,7 @@
             const scriptId = 'googleMapsScript';
             // Verifica si el script ya ha sido añadido al documento para evitar duplicados
             if (document.getElementById(scriptId)) {
-                console.log("MODAL_POPUP.HTML: El script de Google Maps API ya existe.");
+                console.log("El script de Google Maps API ya existe.");
                 return;
             }
 
@@ -245,16 +322,16 @@
             script.id = scriptId;
             // Manejo de errores en caso de que el script no se cargue correctamente
             script.onerror = () => {
-                console.error("MODAL_POPUP.HTML ERROR: Fallo al cargar el script de Google Maps API. Revisa tu clave API y la configuración.");
+                console.error("ERROR: Fallo al cargar el script de Google Maps API. Revisa tu clave API y la configuración.");
                 showMessage("Error: No se pudo cargar el mapa. Revisa tu conexión o clave API.", 'error');
             };
             document.head.appendChild(script);
-            console.log("MODAL_POPUP.HTML: Intentando cargar el script de Google Maps API...");
+            console.log("Intentando cargar el script de Google Maps API...");
         }
 
         // Función de inicialización del mapa, llamada automáticamente por el callback de la API de Google Maps
         function initMap() {
-            console.log("MODAL_POPUP.HTML: Google Maps API cargada exitosamente.");
+            console.log("Google Maps API cargada exitosamente.");
             // Obtener el elemento select para las sedes
             const sedeSelect = document.getElementById('sede-select');
             // Llenar el selector de sedes con las opciones disponibles
@@ -265,11 +342,6 @@
                 sedeSelect.appendChild(option);
             });
 
-            // Mostrar los detalles y el mapa de la primera sede por defecto al cargar
-            if (sedes.length > 0) {
-                showSelectedSede(sedes[0].id);
-            }
-
             // Añadir un listener para detectar cambios en la selección de la sede
             sedeSelect.addEventListener('change', (event) => {
                 showSelectedSede(event.target.value);
@@ -277,138 +349,209 @@
 
             // Añadir listener para el botón "Ubicarme"
             document.getElementById('locateMeBtn').addEventListener('click', findNearestSede);
+
+            // Intentar obtener la ubicación del usuario al cargar el mapa para futuros cálculos
+            getUserLocation();
+        }
+
+        // Función para obtener la ubicación actual del usuario
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userCurrentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        console.log("Ubicación del usuario obtenida:", userCurrentLocation);
+                        // Si ya hay una sede seleccionada, recalcular la distancia
+                        const selectedSedeId = document.getElementById('sede-select').value;
+                        if (selectedSedeId) {
+                            const selectedSede = sedes.find(s => s.id === selectedSedeId);
+                            if (selectedSede) {
+                                calculateAndDisplayTravelInfo(userCurrentLocation, selectedSede);
+                            }
+                        }
+                    },
+                    (error) => {
+                        console.error("Error al obtener la ubicación del usuario:", error);
+                        showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> No se pudo obtener tu ubicación. Algunas funciones pueden estar limitadas.", 'error');
+                        userCurrentLocation = null; // Asegurarse de que no hay una ubicación antigua
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                showGeolocationMessage("<i class='fas fa-ban mr-2'></i> Tu navegador no soporta la geolocalización.", 'error');
+                userCurrentLocation = null;
+            }
         }
 
         // Función para mostrar los detalles de la sede seleccionada y su mapa
         async function showSelectedSede(sedeId) {
-            console.log("MODAL_POPUP.HTML: showSelectedSede llamada.");
-            // Encontrar la sede seleccionada en el array de datos
+            console.log("showSelectedSede llamada.");
             const selectedSede = sedes.find(sede => sede.id === sedeId);
 
             if (selectedSede) {
-                console.log(`MODAL_POPUP.HTML: Sede seleccionada en el dropdown: ${selectedSede.id}`);
-                // Mostrar el contenedor de detalles de la sede
+                console.log(`Sede seleccionada: ${selectedSede.id}`);
                 document.getElementById('sede-details').classList.remove('hidden');
-                // Actualizar la información de la sede en la interfaz
                 document.getElementById('sede-name').textContent = selectedSede.name;
                 document.getElementById('sede-address').textContent = selectedSede.address;
                 document.getElementById('sede-horarios').textContent = selectedSede.horarios.join(', ');
                 document.getElementById('sede-phone').textContent = selectedSede.phone;
                 document.getElementById('sede-gmaps-link').href = selectedSede.gmaps;
 
-                // Ocultar la información de viaje por defecto
+                // Ocultar y limpiar la información de viaje por defecto
                 document.getElementById('travel-info').classList.add('hidden');
                 document.getElementById('travel-distance').textContent = '';
                 document.getElementById('travel-time-walking').textContent = '';
                 document.getElementById('travel-time-driving').textContent = '';
 
-                console.log(`MODAL_POPUP.HTML: Mostrando detalles de la sede: ${selectedSede.id}`);
-
-                // Inicializar o actualizar el mapa para la sede seleccionada
                 await initializeMapForSede(selectedSede);
+
+                // Si la ubicación del usuario está disponible, calcular y mostrar info de viaje
+                if (userCurrentLocation) {
+                    calculateAndDisplayTravelInfo(userCurrentLocation, selectedSede);
+                } else {
+                    showGeolocationMessage("<i class='fas fa-info-circle mr-2'></i> Permite el acceso a tu ubicación para ver distancias y tiempos de viaje.", 'info');
+                    // Intentar obtener la ubicación si no la tenemos
+                    getUserLocation();
+                }
             } else {
-                // Ocultar los detalles si no se encuentra la sede
                 document.getElementById('sede-details').classList.add('hidden');
-                console.log("MODAL_POPUP.HTML: No se encontró la sede seleccionada.");
+                console.log("No se encontró la sede seleccionada.");
             }
         }
 
         // Función para inicializar el mapa de Google para una sede específica
         async function initializeMapForSede(sede) {
             const mapContainer = document.getElementById('map');
-            const mapId = `map-${sede.id}`; // ID único para el contenedor del mapa de cada sede
+            const mapId = `map-${sede.id}`;
 
-            // Si ya existe una instancia de mapa para esta sede, simplemente la re-centramos
             if (currentMaps[mapId]) {
                 currentMaps[mapId].setCenter({ lat: sede.lat, lng: sede.lng });
-                currentMaps[mapId].setZoom(15); // Ajustar el zoom si es necesario
-                console.log(`MODAL_POPUP.HTML: Mapa para ${sede.id} ya existe, re-centrando.`);
+                currentMaps[mapId].setZoom(15);
+                console.log(`Mapa para ${sede.id} ya existe, re-centrando.`);
                 return;
             }
 
-            // Limpiar el contenedor del mapa antes de crear uno nuevo, para evitar superposiciones
-            mapContainer.innerHTML = '';
-
-            // Crear un nuevo div que contendrá el mapa específico de esta sede
+            mapContainer.innerHTML = ''; // Limpiar el contenedor
             const mapDiv = document.createElement('div');
             mapDiv.id = mapId;
             mapDiv.style.width = '100%';
             mapDiv.style.height = '100%';
             mapContainer.appendChild(mapDiv);
 
-            // Crear una nueva instancia del mapa de Google
             const map = new google.maps.Map(mapDiv, {
-                center: { lat: sede.lat, lng: sede.lng }, // Centrar el mapa en las coordenadas de la sede
-                zoom: 15, // Nivel de zoom inicial
-                // mapId: 'YOUR_MAP_ID_HERE' // Opcional: Reemplaza con tu ID de mapa si usas estilos personalizados de Cloud-based Map Styling
+                center: { lat: sede.lat, lng: sede.lng },
+                zoom: 15,
             });
 
-            // Crear un Advanced Marker (marcador avanzado) para la sede
-            // Este es el reemplazo recomendado para google.maps.Marker
             const marker = new google.maps.marker.AdvancedMarkerElement({
-                map: map, // Asociar el marcador a la instancia del mapa
-                position: { lat: sede.lat, lng: sede.lng }, // Posición del marcador
-                title: sede.name, // Título que aparece al pasar el ratón
+                map: map,
+                position: { lat: sede.lat, lng: sede.lng },
+                title: sede.name,
             });
 
-            // Opcional: Añadir un InfoWindow (ventana de información) al marcador
             const infoWindow = new google.maps.InfoWindow({
-                content: `<h3>${sede.name}</h3><p>${sede.address}</p>`, // Contenido HTML para la ventana
+                content: `<h3>${sede.name}</h3><p>${sede.address}</p>`,
             });
 
-            // Añadir un listener para abrir el InfoWindow cuando se haga clic en el marcador
             marker.addListener('click', () => {
                 infoWindow.open({
-                    anchor: marker, // Anclar la ventana al marcador
-                    map, // Asociar a la instancia del mapa
+                    anchor: marker,
+                    map,
                 });
             });
 
-            currentMaps[mapId] = map; // Almacenar la instancia del mapa para futuras referencias
-            console.log(`MODAL_POPUP.HTML: Mapa para ${sede.id} inicializado.`);
+            currentMaps[mapId] = map;
+            console.log(`Mapa para ${sede.id} inicializado.`);
         }
 
-        // Función para mostrar mensajes al usuario (reemplazo de alert/confirm)
-        function showMessage(message, type = 'info') {
-            const messageBox = document.createElement('div');
-            messageBox.className = `message-box ${type}`;
-            messageBox.textContent = message;
-            document.body.appendChild(messageBox);
+        // Función para calcular y mostrar la distancia y el tiempo de viaje
+        async function calculateAndDisplayTravelInfo(originCoords, destinationSede) {
+            if (!google || !google.maps || !google.maps.DistanceMatrixService) {
+                console.warn("Google Maps Distance Matrix Service no está cargado.");
+                return;
+            }
 
-            // Hacer que el mensaje desaparezca después de 5 segundos
-            setTimeout(() => {
-                messageBox.style.opacity = '0'; // Iniciar la transición de desvanecimiento
-                setTimeout(() => messageBox.remove(), 500); // Eliminar el elemento después de la transición
-            }, 5000);
-        }
+            const service = new google.maps.DistanceMatrixService();
+            const travelInfoDiv = document.getElementById('travel-info');
+            const distanceSpan = document.getElementById('travel-distance');
+            const timeWalkingSpan = document.getElementById('travel-time-walking');
+            const timeDrivingSpan = document.getElementById('travel-time-driving');
 
-        // Función para mostrar mensajes de geolocalización en el div específico
-        function showGeolocationMessage(message, type = 'info') {
-            const msgDiv = document.getElementById('geolocationMessage');
-            if (msgDiv) {
-                msgDiv.innerHTML = message; // Usar innerHTML para permitir iconos
-                msgDiv.className = `geolocation-message show ${type}`;
+            travelInfoDiv.classList.add('hidden'); // Ocultar mientras se calcula
+            distanceSpan.textContent = 'Calculando...';
+            timeWalkingSpan.textContent = 'Calculando...';
+            timeDrivingSpan.textContent = 'Calculando...';
+
+            try {
+                // Solicitud para el tiempo en vehículo
+                const responseDriving = await service.getDistanceMatrix({
+                    origins: [originCoords],
+                    destinations: [{ lat: destinationSede.lat, lng: destinationSede.lng }],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                });
+
+                const elementDriving = responseDriving.rows[0].elements[0];
+                if (elementDriving.status === 'OK') {
+                    distanceSpan.textContent = elementDriving.distance.text;
+                    timeDrivingSpan.textContent = elementDriving.duration.text;
+                } else {
+                    distanceSpan.textContent = 'No disponible';
+                    timeDrivingSpan.textContent = 'No disponible';
+                    console.warn("No se pudo obtener la ruta en vehículo:", elementDriving.status);
+                }
+
+                // Solicitud para el tiempo caminando
+                const responseWalking = await service.getDistanceMatrix({
+                    origins: [originCoords],
+                    destinations: [{ lat: destinationSede.lat, lng: destinationSede.lng }],
+                    travelMode: google.maps.TravelMode.WALKING,
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                });
+
+                const elementWalking = responseWalking.rows[0].elements[0];
+                if (elementWalking.status === 'OK') {
+                    timeWalkingSpan.textContent = elementWalking.duration.text;
+                } else {
+                    timeWalkingSpan.textContent = 'No disponible';
+                    console.warn("No se pudo obtener la ruta a pie:", elementWalking.status);
+                }
+
+                travelInfoDiv.classList.remove('hidden'); // Mostrar después de calcular
+            } catch (error) {
+                console.error("Error al calcular distancias/tiempos:", error);
+                distanceSpan.textContent = 'Error';
+                timeWalkingSpan.textContent = 'Error';
+                timeDrivingSpan.textContent = 'Error';
+                travelInfoDiv.classList.remove('hidden');
+                showMessage("Error al calcular distancias. Revisa tu conexión o clave API.", 'error');
             }
         }
 
-        // Función para encontrar la sede más cercana y calcular distancias/tiempos de viaje
+        // Función para encontrar la sede más cercana
         async function findNearestSede() {
-            console.log("MODAL_POPUP.HTML: Iniciando búsqueda de sede más cercana...");
-            showGeolocationMessage("<i class='fas fa-info-circle mr-2'></i> Por favor, permite el acceso a tu ubicación.", 'info');
+            console.log("Iniciando búsqueda de sede más cercana...");
+            showGeolocationMessage("<i class='fas fa-info-circle mr-2'></i> Buscando tu ubicación...", 'info');
             const locateMeBtn = document.getElementById('locateMeBtn');
             if (locateMeBtn) locateMeBtn.disabled = true;
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     async (position) => {
-                        const userCoords = {
+                        userCurrentLocation = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         };
-                        console.log("MODAL_POPUP.HTML: Ubicación del usuario:", userCoords);
-                        showGeolocationMessage("<i class='fas fa-check-circle mr-2'></i> ¡Ubicación encontrada! Calculando distancias...", 'success');
+                        console.log("Ubicación del usuario:", userCurrentLocation);
+                        showGeolocationMessage("<i class='fas fa-check-circle mr-2'></i> ¡Ubicación encontrada! Buscando la sede más cercana...", 'success');
 
-                        // Preparar destinos para la Distance Matrix API
                         const destinations = sedes.map(sede => ({ lat: sede.lat, lng: sede.lng }));
 
                         if (typeof google === 'undefined' || typeof google.maps === 'undefined' || typeof google.maps.DistanceMatrixService === 'undefined') {
@@ -420,15 +563,10 @@
                         const service = new google.maps.DistanceMatrixService();
                         let nearestSede = null;
                         let minTravelTimeDriving = Infinity;
-                        let minTravelTimeWalking = Infinity;
-                        let nearestDistance = '';
-                        let nearestTimeWalking = '';
-                        let nearestTimeDriving = '';
 
-                        // Realizar la solicitud para Driving
                         try {
                             const responseDriving = await service.getDistanceMatrix({
-                                origins: [userCoords],
+                                origins: [userCurrentLocation],
                                 destinations: destinations,
                                 travelMode: google.maps.TravelMode.DRIVING,
                                 unitSystem: google.maps.UnitSystem.METRIC,
@@ -438,87 +576,25 @@
                                 responseDriving.rows[0].elements.forEach((element, index) => {
                                     if (element.status === 'OK') {
                                         const sede = sedes[index];
-                                        const duration = element.duration.value; // Duración en segundos
+                                        const duration = element.duration.value;
 
                                         if (duration < minTravelTimeDriving) {
                                             minTravelTimeDriving = duration;
                                             nearestSede = sede;
-                                            nearestDistance = element.distance.text;
-                                            nearestTimeDriving = element.duration.text;
                                         }
                                     }
                                 });
                             }
                         } catch (error) {
-                            console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Driving):", error);
+                            console.error("ERROR al obtener matriz de distancias (Driving):", error);
                             showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> Error al calcular rutas en vehículo.", 'error');
                         }
-
-                        // Realizar la solicitud para Walking (solo si se encontró una sede para driving, o si no se encontró ninguna para driving)
-                        // Esto asegura que siempre intentamos encontrar la más cercana, incluso si no hay rutas de coche.
-                        if (nearestSede) { // If a nearest sede was found by driving, let's get its walking time
-                            try {
-                                const responseWalking = await service.getDistanceMatrix({
-                                    origins: [userCoords],
-                                    destinations: [{ lat: nearestSede.lat, lng: nearestSede.lng }], // Solo la sede más cercana
-                                    travelMode: google.maps.TravelMode.WALKING,
-                                    unitSystem: google.maps.UnitSystem.METRIC,
-                                });
-
-                                if (responseWalking.rows[0].elements && responseWalking.rows[0].elements[0].status === 'OK') {
-                                    nearestTimeWalking = responseWalking.rows[0].elements[0].duration.text;
-                                } else {
-                                    nearestTimeWalking = 'No disponible';
-                                }
-                            } catch (error) {
-                                console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Walking):", error);
-                                nearestTimeWalking = 'Error al calcular';
-                            }
-                        } else { // If no sede was found by driving, try finding the nearest by walking
-                             try {
-                                const responseWalkingAll = await service.getDistanceMatrix({
-                                    origins: [userCoords],
-                                    destinations: destinations,
-                                    travelMode: google.maps.TravelMode.WALKING,
-                                    unitSystem: google.maps.UnitSystem.METRIC,
-                                });
-
-                                if (responseWalkingAll.rows[0].elements) {
-                                    responseWalkingAll.rows[0].elements.forEach((element, index) => {
-                                        if (element.status === 'OK') {
-                                            const sede = sedes[index];
-                                            const duration = element.duration.value;
-
-                                            if (duration < minTravelTimeWalking) {
-                                                minTravelTimeWalking = duration;
-                                                nearestSede = sede;
-                                                nearestDistance = element.distance.text;
-                                                nearestTimeWalking = element.duration.text;
-                                                // If we find the nearest by walking, and driving wasn't successful, set driving time to N/A
-                                                if (nearestTimeDriving === '') nearestTimeDriving = 'No disponible';
-                                            }
-                                        }
-                                    });
-                                }
-                            } catch (error) {
-                                console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Walking All):", error);
-                                showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> Error al calcular rutas a pie.", 'error');
-                            }
-                        }
-
 
                         if (nearestSede) {
                             const sedeSelector = document.getElementById('sede-select');
                             if (sedeSelector) {
                                 sedeSelector.value = nearestSede.id;
-                                await showSelectedSede(nearestSede.id); // Usar await para asegurar que el mapa se cargue antes de actualizar info
-                                
-                                // Mostrar la información de viaje
-                                document.getElementById('travel-info').classList.remove('hidden');
-                                document.getElementById('travel-distance').textContent = nearestDistance;
-                                document.getElementById('travel-time-walking').textContent = nearestTimeWalking;
-                                document.getElementById('travel-time-driving').textContent = nearestTimeDriving;
-
+                                await showSelectedSede(nearestSede.id); // Llama a showSelectedSede para mostrar y calcular info
                                 showGeolocationMessage(`<i class='fas fa-map-pin mr-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong>.`, 'success');
                             }
                         } else {
@@ -527,7 +603,7 @@
                         if (locateMeBtn) locateMeBtn.disabled = false;
                     },
                     (error) => {
-                        console.error("MODAL_POPUP.HTML ERROR de geolocalización:", error);
+                        console.error("ERROR de geolocalización:", error);
                         let errorMessage = "<i class='fas fa-exclamation-circle mr-2'></i> Error de ubicación: ";
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
@@ -548,7 +624,7 @@
                     },
                     {
                         enableHighAccuracy: true,
-                        timeout: 10000, // Mantener un timeout razonable
+                        timeout: 10000,
                         maximumAge: 0
                     }
                 );
@@ -558,8 +634,63 @@
             }
         }
 
-        // Cargar el script de Google Maps cuando el DOM esté completamente cargado
-        document.addEventListener('DOMContentLoaded', loadGoogleMapsScript);
+        // Función global para abrir el modal (llamada desde el botón principal).
+        window.openChurchModal = function() {
+            console.log("Función 'openChurchModal' llamada.");
+            const churchModal = document.getElementById('churchModal');
+            if (churchModal) {
+                churchModal.style.display = 'flex'; // Hace visible el modal para la transición
+                requestAnimationFrame(() => {
+                    churchModal.classList.add('show');
+                });
+                
+                // Inicializar el selector de sedes y mostrar la primera sede por defecto
+                const sedeSelect = document.getElementById('sede-select');
+                if (sedeSelect && sedes.length > 0) {
+                    sedeSelect.value = sedes[0].id; // Seleccionar la primera sede
+                    showSelectedSede(sedes[0].id); // Mostrar sus detalles y mapa
+                }
+
+                // Adjuntar listeners (asegurando que no se dupliquen)
+                document.getElementById('closeModalButton').onclick = closeChurchModal;
+                churchModal.onclick = function(event) {
+                    if (event.target === churchModal) {
+                        closeChurchModal();
+                    }
+                };
+                document.getElementById('sede-select').onchange = (event) => showSelectedSede(event.target.value);
+                document.getElementById('locateMeBtn').onclick = findNearestSede;
+
+                // Cargar la API de Google Maps (si no está ya cargada)
+                loadGoogleMapsScript();
+
+            } else {
+                console.error("ERROR: #churchModal no se encontró.");
+            }
+        };
+
+        // Función global para cerrar el modal.
+        window.closeChurchModal = function() {
+            const churchModal = document.getElementById('churchModal');
+            if (churchModal) {
+                churchModal.classList.remove('show');
+                console.log("Iniciando cierre del modal...");
+                setTimeout(() => {
+                    churchModal.style.display = 'none';
+                }, 300); // Coincide con la duración de la transición CSS
+            }
+        };
+
+        // Listener para el botón que abre el modal
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOMContentLoaded - Script del popup cargado.");
+            const openModalBtn = document.getElementById('openChurchModalBtn');
+            if (openModalBtn) {
+                openModalBtn.addEventListener('click', window.openChurchModal);
+            } else {
+                console.error("ERROR: Botón #openChurchModalBtn no encontrado.");
+            }
+        });
     </script>
 </body>
 </html>
