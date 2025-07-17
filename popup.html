@@ -3,889 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iglesia Cruzada Cristiana</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+    <title>Ubicación de Sedes</title>
+    <!-- Carga de Tailwind CSS para estilos modernos y responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Variables CSS para una personalización sencilla de colores */
-        :root {
-            --primary-color: #007bff; /* Azul vibrante */
-            --secondary-color: #28a745; /* Verde de éxito */
-            --accent-color: #fd7e14; /* Naranja para detalles */
-            --text-color-dark: #212529;
-            --text-color-light: #6c757d;
-            --bg-light: #f8f9fa;
-            --border-color: #dee2e6;
-            --shadow-strong: rgba(0, 0, 0, 0.2);
-            --shadow-light: rgba(0, 0, 0, 0.1);
-        }
-
-        /* -------------------------- */
-        /* ESTILOS GENERALES Y LAYOUT */
-        /* -------------------------- */
-
+        /* Estilos generales para el cuerpo y la fuente */
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color-dark);
-            background-color: var(--bg-light); /* Para previsualización si se abre directamente */
-        }
-
-        /* Estilos del modal overlay */
-        .modal-overlay {
-            display: flex; /* Siempre flex para centrado, hidden con visibility */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1050;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-            opacity: 0;
-            visibility: hidden; /* Oculto por defecto, pero mantiene el layout */
-            transition: opacity 0.3s ease-out, visibility 0.3s ease-out; /* Transición más rápida */
-            pointer-events: none; /* No interactuable cuando está oculto */
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto; /* Interactuable cuando está visible */
-        }
-
-        /* Estilos del contenido del modal */
-        .modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-            padding: 30px; /* Un poco menos de padding para pantallas pequeñas */
-            border-radius: 15px;
-            max-width: 950px;
-            width: 100%;
-            box-shadow: 0 15px 40px var(--shadow-strong);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: translateY(-20px) scale(0.98); /* Transición más sutil y rápida */
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: translateY(0) scale(1);
-        }
-
-        /* Botón de cierre */
-        .close-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 2rem; /* Tamaño prominente */
-            cursor: pointer;
-            color: var(--text-color-dark);
-            transition: color 0.2s ease, transform 0.2s ease;
-            outline: none;
-            padding: 5px; /* Área de clic más grande */
-        }
-        .close-button:hover {
-            color: var(--accent-color);
-            transform: rotate(90deg) scale(1.1); /* Animación de rotación y ligero aumento */
-        }
-
-        /* Título del modal */
-        .modal-content h2 {
-            color: var(--primary-color);
-            margin-bottom: 25px; /* Reducido un poco */
-            text-align: center;
-            font-weight: 800;
-            letter-spacing: 0.5px; /* Ajuste para fluidez */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.03);
-            font-size: 2.2rem; /* Tamaño base */
-        }
-
-        /* -------------------------- */
-        /* CONTROLES (SELECT Y BOTÓN) */
-        /* -------------------------- */
-        .modal-controls {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column; /* Columna por defecto para móviles */
-            gap: 15px; /* Espaciado reducido */
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f4f8; /* Un fondo gris claro */
         }
-        
-        .modal-controls .form-label {
-            font-weight: 600;
-            color: var(--text-color-dark);
-            margin-bottom: 0;
-            white-space: nowrap;
-            flex-shrink: 0; /* Asegura que no se encoja */
+        /* Contenedor principal de la aplicación */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto; /* Centrar y añadir margen superior/inferior */
+            padding: 1.5rem;
+            background-color: #ffffff; /* Fondo blanco para el contenido */
+            border-radius: 1rem; /* Esquinas redondeadas */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
         }
-
-        .modal-controls .form-select {
-            flex-grow: 1;
-            padding: 10px 15px; /* Padding ajustado */
-            border-radius: 8px; /* Un poco menos redondeado para fluidez */
-            border: 1px solid var(--border-color);
-            background-color: #fff;
-            font-size: 1rem; /* Tamaño base */
-            color: var(--text-color-dark);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.03); /* Sombra más sutil */
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        /* Estilos para el contenedor del mapa */
+        #map {
+            height: 500px; /* Altura fija para el mapa */
+            width: 100%; /* Ocupa todo el ancho disponible */
+            border-radius: 0.75rem; /* Esquinas redondeadas */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para el mapa */
+            display: flex; /* Para centrar el texto de carga */
+            align-items: center;
+            justify-content: center;
+            color: #4a5568; /* Color del texto de carga */
+            font-size: 1.125rem; /* Tamaño de fuente del texto de carga */
+            background-color: #e2e8f0; /* Fondo para el mapa mientras carga */
         }
-        .modal-controls .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.2); /* Sombra de foco más suave */
-            outline: none;
+        /* Estilos para las tarjetas de sede (si se usaran para listar, no en este ejemplo) */
+        .sede-card {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-
-        .modal-controls .btn {
-            background-color: var(--secondary-color);
+        .sede-card h3 {
+            font-weight: bold;
+            color: #1a202c;
+        }
+        .sede-card p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        /* Estilo para el mensaje emergente */
+        .message-box {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            z-index: 1000;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .message-box.info {
+            background-color: #3b82f6; /* Azul */
+        }
+        .message-box.error {
+            background-color: #ef4444; /* Rojo */
+        }
+        .message-box.success {
+            background-color: #22c55e; /* Verde */
+        }
+        /* Estilos para el botón de Ubicarme */
+        #locateMeBtn {
+            background-color: #28a745; /* Verde de éxito */
             color: #fff;
             border: none;
             font-weight: 700;
-            padding: 10px 20px; /* Padding ajustado */
+            padding: 10px 20px;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; /* Transiciones más rápidas */
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
             display: flex;
             align-items: center;
             gap: 8px;
             justify-content: center;
             width: 100%; /* Ocupa todo el ancho en móviles */
         }
-        .modal-controls .btn:hover {
+        #locateMeBtn:hover {
             background-color: #218838;
-            transform: translateY(-1px); /* Menor levantamiento */
-            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2); /* Sombra más suave */
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2);
         }
-        .modal-controls .btn:active {
+        #locateMeBtn:active {
             transform: translateY(0);
             box-shadow: none;
         }
-        .modal-controls .btn:disabled {
-            opacity: 0.5; /* Más evidente que está deshabilitado */
+        #locateMeBtn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-
-        /* -------------------------- */
-        /* DETALLES DE LA IGLESIA */
-        /* -------------------------- */
-
-        .church-details {
-            display: none;
-            background-color: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px; /* Padding ajustado */
-            margin-top: 25px; /* Margen ajustado */
-            animation: fadeInScale 0.4s ease-out; /* Animación más rápida */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.06); /* Sombra más suave */
-            overflow: hidden;
-        }
-
-        .church-details.active {
-            display: block;
-        }
-        
-        .church-details h3 {
-            color: var(--primary-color);
-            margin-bottom: 18px; /* Margen ajustado */
-            font-weight: 700;
-            font-size: 1.6rem; /* Tamaño ajustado */
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Espaciado ajustado */
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 12px;
-            margin-top: 0;
-        }
-        .church-details h3 i {
-            font-size: 1.4em; /* Tamaño ajustado */
-            color: var(--accent-color);
-        }
-
-        .church-details .info-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Una columna por defecto en móviles */
-            gap: 15px; /* Espaciado ajustado */
-            margin-bottom: 20px; /* Margen ajustado */
-        }
-        
-        .church-details .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px; /* Espaciado ajustado */
-            color: var(--text-color-light);
-            font-size: 1rem; /* Tamaño ajustado */
-        }
-        .church-details .info-item i {
-            color: var(--secondary-color);
-            font-size: 1.2rem; /* Tamaño ajustado */
-            flex-shrink: 0;
-            margin-top: 3px;
-        }
-        .church-details .info-item p {
-            margin-bottom: 0;
-        }
-        .church-details .info-item strong {
-            color: var(--text-color-dark);
-        }
-
-        .church-details ul {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 8px; /* Margen ajustado */
-        }
-        .church-details ul li {
-            position: relative;
-            padding-left: 22px; /* Padding ajustado */
-            margin-bottom: 6px; /* Margen ajustado */
-            color: var(--text-color-dark);
-            font-size: 0.95rem; /* Tamaño ajustado */
-        }
-        .church-details ul li::before {
-            content: "\f017";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-size: 0.9em;
-            top: 2px; /* Ajuste vertical */
-        }
-
-        .church-details .map-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px; /* Espaciado ajustado */
-            margin-top: 20px; /* Margen ajustado */
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem; /* Tamaño ajustado */
-            transition: color 0.2s ease, transform 0.1s ease;
-        }
-
-        .church-details .map-link:hover {
-            text-decoration: underline;
-            color: #0056b3;
-            transform: translateX(3px); /* Menor desplazamiento */
-        }
-        .church-details .map-link i {
-            font-size: 1em;
-        }
-
-        /* Estilo para el contenedor del mapa */
-        .map-container {
-            width: 100%;
-            height: 300px; /* Altura más flexible */
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 25px; /* Margen ajustado */
-            border: 2px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra más sutil */
-            background-color: #e9ecef;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.9rem;
-            color: var(--text-color-light);
-        }
-        .map-container.loading::after {
-            content: "Cargando mapa...";
-        }
-
-        /* -------------------------- */
-        /* MENSAJES DE GEOLOCALIZACIÓN */
-        /* -------------------------- */
-
-        .geolocation-message {
-            margin-top: 15px; /* Margen ajustado */
-            padding: 12px; /* Padding ajustado */
+        /* Estilos para el mensaje de geolocalización */
+        #geolocationMessage {
+            margin-top: 15px;
+            padding: 12px;
             border-radius: 8px;
             display: none;
-            font-size: 0.9rem; /* Tamaño ajustado */
+            font-size: 0.9rem;
             line-height: 1.4;
-            animation: fadeIn 0.3s ease-out; /* Animación más rápida */
-            display: flex; /* Para el icono y texto */
+            animation: fadeIn 0.3s ease-out;
+            display: flex;
             align-items: center;
             gap: 10px;
         }
-        .geolocation-message.show {
+        #geolocationMessage.show {
             display: flex;
         }
-        .geolocation-message.error {
+        #geolocationMessage.error {
             background-color: #f8d7da;
             color: #721c24;
             border-color: #f5c6cb;
         }
-        .geolocation-message.info {
-            background-color: #d1ecf1; /* Azul suave para info */
+        #geolocationMessage.info {
+            background-color: #d1ecf1;
             color: #0c5460;
             border-color: #bee5eb;
         }
-        .geolocation-message.success {
+        #geolocationMessage.success {
             background-color: #d4edda;
             color: #155724;
             border-color: #c3e6cb;
         }
-        .geolocation-message i {
-            font-size: 1.2em; /* Icono un poco más grande */
+        #geolocationMessage i {
+            font-size: 1.2em;
         }
-
-        /* -------------------------- */
-        /* ANIMACIONES */
-        /* -------------------------- */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* -------------------------- */
-        /* RESPONSIVIDAD */
-        /* -------------------------- */
-
-        /* Para pantallas pequeñas (móviles) - hasta 576px (extra small en Bootstrap) */
-        @media (max-width: 575.98px) {
-            .modal-content {
-                padding: 20px; /* Menos padding en pantallas muy pequeñas */
-                border-radius: 10px;
-                max-height: 95vh; /* Ocupa más espacio vertical */
-            }
-
-            .close-button {
-                font-size: 1.8rem;
-                top: 10px;
-                right: 10px;
-            }
-
-            .modal-content h2 {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
-            }
-
-            .modal-controls {
-                flex-direction: column;
-                gap: 10px;
-                margin-bottom: 20px;
-                padding-bottom: 15px;
-            }
-
-            .modal-controls .form-select,
-            .modal-controls .btn {
-                padding: 10px 15px;
-                font-size: 0.95rem;
-                border-radius: 6px;
-            }
-            .modal-controls .btn {
-                width: 100%; /* Asegura que el botón ocupe todo el ancho */
-            }
-
-            .church-details {
-                padding: 18px;
-                margin-top: 18px;
-                border-radius: 10px;
-            }
-
-            .church-details h3 {
-                font-size: 1.4rem;
-                margin-bottom: 15px;
-                gap: 8px;
-            }
-            .church-details h3 i {
-                font-size: 1.3em;
-            }
-
-            .church-details .info-grid {
-                gap: 10px;
-                margin-bottom: 15px;
-            }
-
-            .church-details .info-item {
-                font-size: 0.9rem;
-                gap: 8px;
-            }
-            .church-details .info-item i {
-                font-size: 1.1rem;
-            }
-
-            .church-details ul li {
-                font-size: 0.85rem;
-                padding-left: 20px;
-            }
-            .church-details ul li::before {
-                font-size: 0.8em;
-            }
-
-            .church-details .map-link {
-                font-size: 0.9rem;
-                margin-top: 15px;
-                gap: 5px;
-            }
-
-            .map-container {
-                height: 250px; /* Menos altura en pantallas muy pequeñas */
-                margin-top: 20px;
-            }
-
-            .geolocation-message {
-                font-size: 0.85rem;
-                padding: 10px;
-                gap: 8px;
-            }
-            .geolocation-message i {
-                font-size: 1.1em;
-            }
-        }
-
-        /* Para pantallas medianas (tablets y móviles grandes) - de 576px a 767.98px */
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            .modal-content {
-                padding: 25px;
-                max-width: 650px;
-            }
-            .modal-content h2 {
-                font-size: 2rem;
-            }
-            .modal-controls {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .modal-controls .btn {
-                 width: 100%;
-            }
-            .church-details h3 {
-                font-size: 1.5rem;
-            }
-            .info-grid {
-                grid-template-columns: 1fr; /* Una columna para asegurar el stack */
-            }
-            .map-container {
-                height: 300px;
-            }
-        }
-
-        /* Para pantallas grandes (desktops y laptops) - a partir de 768px */
+        /* Media queries para responsividad */
         @media (min-width: 768px) {
             .modal-controls {
-                flex-direction: row; /* Vuelven a ser fila */
+                flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-                padding-left: 10px; /* Pequeño ajuste para alinear */
+                padding-left: 10px;
                 padding-right: 10px;
             }
-             .modal-controls .btn {
-                width: auto; /* Ancho automático */
-                flex-shrink: 0; /* Evita que el botón se encoja */
-            }
-            .info-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Dos columnas o más */
+            #locateMeBtn {
+                width: auto;
+                flex-shrink: 0;
             }
         }
-
     </style>
 </head>
-<body>
+<body class="bg-gray-100 p-4">
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Ubicación de Nuestras Sedes</h1>
 
-    <div id="churchModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-button" id="closeModalButton" title="Cerrar Modal">×</button>
-            <h2><i class="fas fa-cross me-3"></i> Nuestras Sedes <i class="fas fa-cross ms-3"></i></h2>
+        <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
+            <div class="w-full md:w-auto flex-grow">
+                <label for="sede-select" class="block text-gray-700 text-sm font-bold mb-2">Selecciona una Sede:</label>
+                <select id="sede-select" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Las opciones se llenarán dinámicamente con JavaScript -->
+                </select>
+            </div>
+            <button id="locateMeBtn" class="btn mt-4 md:mt-0">
+                <i class="fas fa-location-crosshairs"></i> Ubicarme
+            </button>
+        </div>
 
-            <div class="modal-controls">
-                <div class="d-flex align-items-center gap-3 w-100">
-                    <label for="sede-selector" class="form-label mb-0 flex-shrink-0">Selecciona una Sede:</label>
-                    <select id="sede-selector" class="form-select flex-grow-1"></select>
-                </div>
-                <button id="locateMeBtn" class="btn">
-                    <i class="fas fa-location-crosshairs"></i> Ubicarme
-                </button>
+        <!-- Mensaje de geolocalización -->
+        <div id="geolocationMessage" class="geolocation-message"></div>
+
+        <!-- Contenedor para mostrar los detalles de la sede seleccionada -->
+        <div id="sede-details" class="bg-white p-6 rounded-xl shadow-md mb-6 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4" id="sede-name"></h2>
+            <p class="text-gray-700 mb-2"><strong class="text-gray-900">Dirección:</strong> <span id="sede-address"></span></p>
+            <p class="text-gray-700 mb-2"><strong class="text-gray-900">Horarios:</strong> <span id="sede-horarios"></span></p>
+            <p class="text-gray-700 mb-4"><strong class="text-gray-900">Teléfono:</strong> <span id="sede-phone"></span></p>
+            
+            <!-- Nuevos campos para distancia y tiempo de viaje -->
+            <div id="travel-info" class="mb-4 hidden">
+                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Distancia desde tu ubicación:</strong> <span id="travel-distance"></span></p>
+                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Caminando):</strong> <span id="travel-time-walking"></span></p>
+                <p class="text-gray-700 mb-2"><strong class="text-gray-900">Tiempo estimado (Vehículo):</strong> <span id="travel-time-driving"></span></p>
             </div>
 
-            <div id="geolocationMessage" class="geolocation-message"></div>
+            <a id="sede-gmaps-link" href="#" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">Ver en Google Maps</a>
+        </div>
 
-            <div id="churches-container">
-                <div class="church-details" data-id="victoria">
-                    <h3><i class="fas fa-church"></i> La Vcitoria Cruzada Cristiana - Principal</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fa-sharp-duotone fa-solid fa-user"></i><p><strong>Pastores:</strong> Rodrigo Castrillón y Rosalba Perez</p></div>
-                        <div class="info-item"><i class="fa-solid fa-route"></i><p><strong>Dirección:</strong> Av7 #3 - 80 (La Victoria).</p></div>
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Ciudad:</strong> Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7890</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/KLdE18eimYx5ykQZ6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-victoria" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="fortaleza">
-                    <h3><i class="fas fa-church"></i> La Fortaleza Cruzada Cristiana</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fa-sharp-duotone fa-solid fa-user"></i><p><strong>Pastores:</strong> Miguel Bautista y Leidy Contreras</p></div>
-                        <div class="info-item"><i class="fa-solid fa-route"></i><p><strong>Dirección:</strong> Mz AN lote 20 - B (La Fortaleza).</p></div>
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Ciudad:</strong> Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7891</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 8:00 A.M.</li>
-                                <li>Martes: 6:00 P.M.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/rRagrEuArHkDXYJT6" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-fortaleza" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="belen">
-                    <h3><i class="fas fa-church"></i>  Cristiano Belén</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7892</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> belen@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/U2D3E4F5G6H7I8J90" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-belen" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="colinas">
-                    <h3><i class="fas fa-church"></i>  Cristiano Colinas</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7893</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> colinas@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/V1W2X3Y4Z5A6B7C8D" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-colinas" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="donanidia">
-                    <h3><i class="fas fa-church"></i>  Cristiano Doña Nidia</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7894</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> donanidia@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/P9Q8R7S6T5U4V3W2X" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-donanidia" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="libertad">
-                    <h3><i class="fas fa-church"></i>  Cristiano Libertad</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7895</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> libertad@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/M1N2O3P4Q5R6S7T8U" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-libertad" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="lospinos">
-                    <h3><i class="fas fa-church"></i>  Cristiano Los Pinos</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7896</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> lospinos@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/Z9A8B7C6D5E4F3G2H" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-lospinos" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="prados">
-                    <h3><i class="fas fa-church"></i>  Cristiano Prados del Este</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7897</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> prados@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8O" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-prados" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="sanmartin">
-                    <h3><i class="fas fa-church"></i>  Cristiano San Martín</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7898</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> sanmartin@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/A9S8D7F6G5H4J3K2L" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-sanmartin" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="tucunare">
-                    <h3><i class="fas fa-church"></i>  Cristiano Tucunaré</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7899</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> tucunare@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM y 11:00 AM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8K" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-tucunare" class="map-container"></div>
-                </div>
-
-                <div class="church-details" data-id="vallesther">
-                    <h3><i class="fas fa-church"></i>  Cristiano Vallesther</h3>
-                    <div class="info-grid">
-                        <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Dirección:</strong> Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.</p></div>
-                        <div class="info-item"><i class="fas fa-phone-alt"></i><p><strong>Teléfono:</strong> (123) 456-7900</p></div>
-                        <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> vallesther@iglesia.com</p></div>
-                        <div class="info-item"><i class="fas fa-clock"></i><p><strong>Horarios:</strong></p>
-                            <ul>
-                                <li>Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM</li>
-                                <li>Miércoles: 6:00 PM</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/P1O2I3U4Y5T6R7E8W" target="_blank" class="map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
-                    <div id="map-vallesther" class="map-container"></div>
-                </div>
-
-            </div>
+        <!-- Contenedor donde se renderizará el mapa -->
+        <div id="map">
+            Cargando mapa...
         </div>
     </div>
 
     <script>
         // --- FUNCIONES GLOBALES Y DATOS ---
 
-        // Datos de las sedes con COORDENADAS REALES y URLs de Google Maps  
+        // Datos de las sedes con COORDENADAS REALES y URLs de Google Maps
         // ¡IMPORTANTE! Reemplaza estas latitudes y longitudes con las REALES de tus sedes.
         const sedes = [
-            { id: 'victoria', name: 'La Vcitoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Av7 #3 - 80. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/KLdE18eimYx5ykQZ6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567'},
+            { id: 'victoria', name: 'La Victoria Cruzada Cristiana', lat: 7.9050520309805306, lng: -72.51411305759578, address: 'Av7 #3 - 80. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/KLdE18eimYx5ykQZ6', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234567'},
             { id: 'fortaleza', name: 'La Fortaleza Cruzada Cristiana', lat: 7.902643058045286, lng: -72.55504307641618, address: 'Mz AN lote 20 - B (La Fortaleza). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/rRagrEuArHkDXYJT6', horarios: ['Domingos: 8:00 A.M.', 'Miércoles: 6:00 P.M.'], phone: '(+57) 3202106461' },
-            { id: 'belen', name: ' Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569' },
-            { id: 'colinas', name: ' Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570' },
-            { id: 'donanidia', name: ' Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571' },
-            { id: 'libertad', name: ' Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A1S2D3F4G5H6J7K8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234572' },
-            { id: 'lospinos', name: ' Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9O8I7U6Y5T4R3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234573' },
-            { id: 'prados', name: ' Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234574' },
-            { id: 'sanmartin', name: ' Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/F1G2H3J4K5L6M7N8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234575'},
-            { id: 'tucunare', name: ' Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2V3B4N5M6L7K8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234576'},
-            { id: 'vallesther', name: ' Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/E1R2T3Y4U5I6O7P8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234577'}
-        ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente
+            { id: 'belen', name: 'Cristiano Belén', lat: 7.859660, lng: -72.519500, address: 'Anillo Vial Oriental Av 12 No. 8-105 km 1 sector Belén. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2D3E4F5G6H7I8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234569' },
+            { id: 'colinas', name: 'Cristiano Colinas', lat: 7.905660, lng: -72.494790, address: 'Av 10 # 18-05 Barrio El Contento (Colinas). Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/X9Y8Z7A6B5C4D3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234570' },
+            { id: 'donanidia', name: 'Cristiano Doña Nidia', lat: 7.896740, lng: -72.498170, address: 'Cll 5 # 4E-22 Barrio Doña Nidia. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Q1W2E3R4T5Y6U7I8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234571' },
+            { id: 'libertad', name: 'Cristiano Libertad', lat: 7.909060, lng: -72.505080, address: 'Av 1 # 1-13 Barrio La Libertad. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/A1S2D3F4G5H6J7K8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234572' },
+            { id: 'lospinos', name: 'Cristiano Los Pinos', lat: 7.893540, lng: -72.508540, address: 'Av 0 # 13-45 Barrio Los Pinos. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/P9O8I7U6Y5T4R3E2', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234573' },
+            { id: 'prados', name: 'Cristiano Prados del Este', lat: 7.886470, lng: -72.492160, address: 'Cll 15 # 2-89 Barrio Prados del Este. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/Z1X2C3V4B5N6M7L8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234574' },
+            { id: 'sanmartin', name: 'Cristiano San Martín', lat: 7.900890, lng: -72.501170, address: 'Cll 3 # 7-12 Barrio San Martín. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/F1G2H3J4K5L6M7N8', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234575'},
+            { id: 'tucunare', name: 'Cristiano Tucunaré', lat: 7.910550, lng: -72.506110, address: 'Mz 15 Lt 14 Urbanización Tucunaré. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/C2V3B4N5M6L7K8J9', horarios: ['Domingos: 7:00 AM, 9:00 AM y 11:00 AM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234576'},
+            { id: 'vallesther', name: 'Cristiano Vallesther', lat: 7.907720, lng: -72.499640, address: 'Cll 12 # 15-23 Barrio Vallesther. Cúcuta, Norte de Santander.', gmaps: 'https://maps.app.goo.gl/E1R2T3Y4U5I6O7P8', horarios: ['Domingos: 7:00 AM, 9:00 AM, 11:00 AM y 5:00 PM', 'Miércoles: 6:00 PM'], phone: '(+57) 300 1234577'}
+        ].sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente las sedes por nombre
 
         let currentMaps = {}; // Objeto para almacenar instancias de mapas de Google
+        // ¡IMPORTANTE! Reemplaza 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44' con tu clave API REAL de Google Maps.
+        // Asegúrate de que tu clave API esté habilitada para la API de JavaScript de Google Maps
+        // y que no haya caducado. Si tu clave no es válida, el mapa no se cargará.
         const googleMapsApiKey = 'AIzaSyCq5chD1KycI038MImTGWVEN5uM5WRsg44'; // <-- TU CLAVE API
 
         // Función para cargar dinámicamente el script de Google Maps API
+        // Se carga de forma asíncrona y con la versión 'beta' para habilitar Advanced Markers y las librerías 'routes'.
         function loadGoogleMapsScript() {
             const scriptId = 'googleMapsScript';
+            // Verifica si el script ya ha sido añadido al documento para evitar duplicados
             if (document.getElementById(scriptId)) {
-                console.log("MODAL_POPUP.HTML: Google Maps API script ya existe.");
+                console.log("MODAL_POPUP.HTML: El script de Google Maps API ya existe.");
                 return;
             }
 
             const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&callback=initMap`;
-            script.async = true;
-            script.defer = true;
+            // La URL incluye 'v=beta' para usar las características más recientes como Advanced Markers.
+            // 'async' y 'defer' aseguran que el script no bloquee la renderización de la página.
+            // 'libraries=routes' es necesario para usar la API de Directions y Distance Matrix.
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&callback=initMap&v=beta&libraries=routes`;
+            script.async = true; // Carga asíncrona
+            script.defer = true; // Diferir ejecución hasta que el DOM esté completamente cargado
             script.id = scriptId;
+            // Manejo de errores en caso de que el script no se cargue correctamente
             script.onerror = () => {
                 console.error("MODAL_POPUP.HTML ERROR: Fallo al cargar el script de Google Maps API. Revisa tu clave API y la configuración.");
-                showGeolocationMessage("Error: No se pudo cargar el mapa. Revisa tu conexión o clave API.", 'error');
+                showMessage("Error: No se pudo cargar el mapa. Revisa tu conexión o clave API.", 'error');
             };
             document.head.appendChild(script);
             console.log("MODAL_POPUP.HTML: Intentando cargar el script de Google Maps API...");
         }
 
-        // Función de inicialización del mapa (llamada por Google Maps API cuando se carga)
-        window.initMap = function() {
+        // Función de inicialización del mapa, llamada automáticamente por el callback de la API de Google Maps
+        function initMap() {
             console.log("MODAL_POPUP.HTML: Google Maps API cargada exitosamente.");
-            // Si el modal ya está abierto y una sede seleccionada, inicializa su mapa
-            const sedeSelector = document.getElementById('sede-selector');
-            if (sedeSelector && sedeSelector.value) {
-                window.showSelectedSede();
+            // Obtener el elemento select para las sedes
+            const sedeSelect = document.getElementById('sede-select');
+            // Llenar el selector de sedes con las opciones disponibles
+            sedes.forEach(sede => {
+                const option = document.createElement('option');
+                option.value = sede.id;
+                option.textContent = sede.name;
+                sedeSelect.appendChild(option);
+            });
+
+            // Mostrar los detalles y el mapa de la primera sede por defecto al cargar
+            if (sedes.length > 0) {
+                showSelectedSede(sedes[0].id);
             }
-        };
 
-        // Calcula la distancia entre dos coordenadas (Haversine formula)
-        function haversineDistance(coords1, coords2) {
-            const R = 6371e3; // Radio de la Tierra en metros
-            const φ1 = coords1.lat * Math.PI / 180;
-            const φ2 = coords2.lat * Math.PI / 180;
-            const Δφ = (coords2.lat - coords1.lat) * Math.PI / 180;
-            const Δλ = (coords2.lng - coords1.lng) * Math.PI / 180;
+            // Añadir un listener para detectar cambios en la selección de la sede
+            sedeSelect.addEventListener('change', (event) => {
+                showSelectedSede(event.target.value);
+            });
 
-            const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                      Math.cos(φ1) * Math.cos(φ2) *
-                      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            return R * c; // Distancia en metros
+            // Añadir listener para el botón "Ubicarme"
+            document.getElementById('locateMeBtn').addEventListener('click', findNearestSede);
         }
 
-        // Función para rellenar el selector de sedes.
-        window.initializeSedeSelector = function() {
-            console.log("MODAL_POPUP.HTML: Inicializando selector de sedes.");
-            const sedeSelector = document.getElementById('sede-selector');
-            if (sedeSelector) {
-                sedeSelector.innerHTML = '';
-
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Selecciona una Sede...';
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                sedeSelector.appendChild(defaultOption);
-
-                sedes.forEach(sede => {
-                    const option = document.createElement('option');
-                    option.value = sede.id;
-                    option.textContent = sede.name;
-                    sedeSelector.appendChild(option);
-                });
-                console.log("MODAL_POPUP.HTML: Selector de sedes rellenado.");
-            } else {
-                console.error("MODAL_POPUP.HTML ERROR: #sede-selector no encontrado para inicializar.");
-            }
-        };
-
-        // Función para mostrar la sede seleccionada e inicializar su mapa
-        window.showSelectedSede = function() {
+        // Función para mostrar los detalles de la sede seleccionada y su mapa
+        async function showSelectedSede(sedeId) {
             console.log("MODAL_POPUP.HTML: showSelectedSede llamada.");
-            const sedeSelector = document.getElementById('sede-selector');
-            const churchesContainer = document.getElementById('churches-container');
+            // Encontrar la sede seleccionada en el array de datos
+            const selectedSede = sedes.find(sede => sede.id === sedeId);
 
-            if (!sedeSelector || !churchesContainer) {
-                console.error("MODAL_POPUP.HTML ERROR: Elementos de selector o contenedor no encontrados para showSelectedSede.");
+            if (selectedSede) {
+                console.log(`MODAL_POPUP.HTML: Sede seleccionada en el dropdown: ${selectedSede.id}`);
+                // Mostrar el contenedor de detalles de la sede
+                document.getElementById('sede-details').classList.remove('hidden');
+                // Actualizar la información de la sede en la interfaz
+                document.getElementById('sede-name').textContent = selectedSede.name;
+                document.getElementById('sede-address').textContent = selectedSede.address;
+                document.getElementById('sede-horarios').textContent = selectedSede.horarios.join(', ');
+                document.getElementById('sede-phone').textContent = selectedSede.phone;
+                document.getElementById('sede-gmaps-link').href = selectedSede.gmaps;
+
+                // Ocultar la información de viaje por defecto
+                document.getElementById('travel-info').classList.add('hidden');
+                document.getElementById('travel-distance').textContent = '';
+                document.getElementById('travel-time-walking').textContent = '';
+                document.getElementById('travel-time-driving').textContent = '';
+
+                console.log(`MODAL_POPUP.HTML: Mostrando detalles de la sede: ${selectedSede.id}`);
+
+                // Inicializar o actualizar el mapa para la sede seleccionada
+                await initializeMapForSede(selectedSede);
+            } else {
+                // Ocultar los detalles si no se encuentra la sede
+                document.getElementById('sede-details').classList.add('hidden');
+                console.log("MODAL_POPUP.HTML: No se encontró la sede seleccionada.");
+            }
+        }
+
+        // Función para inicializar el mapa de Google para una sede específica
+        async function initializeMapForSede(sede) {
+            const mapContainer = document.getElementById('map');
+            const mapId = `map-${sede.id}`; // ID único para el contenedor del mapa de cada sede
+
+            // Si ya existe una instancia de mapa para esta sede, simplemente la re-centramos
+            if (currentMaps[mapId]) {
+                currentMaps[mapId].setCenter({ lat: sede.lat, lng: sede.lng });
+                currentMaps[mapId].setZoom(15); // Ajustar el zoom si es necesario
+                console.log(`MODAL_POPUP.HTML: Mapa para ${sede.id} ya existe, re-centrando.`);
                 return;
             }
 
-            const selectedId = sedeSelector.value;
-            console.log(`MODAL_POPUP.HTML: Sede seleccionada en el dropdown: ${selectedId}`);
-            
-            const churchDetailsElements = churchesContainer.querySelectorAll('.church-details');
-            churchDetailsElements.forEach(churchElement => {
-                const mapContainerId = `map-${churchElement.getAttribute('data-id')}`;
-                const mapDiv = document.getElementById(mapContainerId);
+            // Limpiar el contenedor del mapa antes de crear uno nuevo, para evitar superposiciones
+            mapContainer.innerHTML = '';
 
-                if (churchElement.getAttribute('data-id') === selectedId) {
-                    churchElement.classList.add('active');
-                    console.log(`MODAL_POPUP.HTML: Mostrando detalles de la sede: ${selectedId}`);
-                    
-                    const selectedSede = sedes.find(s => s.id === selectedId);
-                    if (selectedSede) {
-                        if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-                            if (mapDiv) {
-                                if (!currentMaps[selectedId]) {
-                                    const mapOptions = {
-                                        center: { lat: selectedSede.lat, lng: selectedSede.lng },
-                                        zoom: 15,
-                                        clickableIcons: false,
-                                        mapTypeId: 'roadmap',
-                                        disableDefaultUI: true, // Oculta algunos controles por defecto para un look más limpio
-                                        zoomControl: true // Pero mantiene el control de zoom
-                                    };
-                                    const map = new google.maps.Map(mapDiv, mapOptions);
-                                    new google.maps.Marker({
-                                        position: { lat: selectedSede.lat, lng: selectedSede.lng },
-                                        map: map,
-                                        title: selectedSede.name,
-                                        animation: google.maps.Animation.DROP
-                                    });
-                                    currentMaps[selectedId] = map;
-                                    console.log(`MODAL_POPUP.HTML: Mapa para ${selectedId} inicializado.`);
-                                } else {
-                                    currentMaps[selectedId].setCenter({ lat: selectedSede.lat, lng: selectedSede.lng });
-                                    currentMaps[selectedId].setZoom(15);
-                                    // Disparar el evento resize para asegurar que el mapa se renderice correctamente si estaba oculto
-                                    google.maps.event.trigger(currentMaps[selectedId], 'resize');
-                                    console.log(`MODAL_POPUP.HTML: Mapa para ${selectedId} re-centrado y redimensionado.`);
-                                }
-                                mapDiv.classList.remove('loading');
-                            }
-                        } else {
-                            console.warn("MODAL_POPUP.HTML ADVERTENCIA: Google Maps API aún no está disponible para inicializar el mapa.");
-                            if (mapDiv) mapDiv.classList.add('loading');
-                            // Intentar re-inicializar el mapa después de un breve retraso si la API se carga.
-                            setTimeout(() => {
-                                if (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && churchElement.classList.contains('active')) {
-                                    window.showSelectedSede();
-                                }
-                            }, 300); // Intenta más rápido
-                        }
-                    }
+            // Crear un nuevo div que contendrá el mapa específico de esta sede
+            const mapDiv = document.createElement('div');
+            mapDiv.id = mapId;
+            mapDiv.style.width = '100%';
+            mapDiv.style.height = '100%';
+            mapContainer.appendChild(mapDiv);
 
-                } else {
-                    churchElement.classList.remove('active');
-                }
+            // Crear una nueva instancia del mapa de Google
+            const map = new google.maps.Map(mapDiv, {
+                center: { lat: sede.lat, lng: sede.lng }, // Centrar el mapa en las coordenadas de la sede
+                zoom: 15, // Nivel de zoom inicial
+                // mapId: 'YOUR_MAP_ID_HERE' // Opcional: Reemplaza con tu ID de mapa si usas estilos personalizados de Cloud-based Map Styling
             });
-            if (!selectedId) {
-                 churchDetailsElements.forEach(el => el.classList.remove('active'));
-                 document.getElementById('geolocationMessage').classList.remove('show', 'error', 'info', 'success');
-            }
-        };
-        
-        // Función para mostrar mensajes de geolocalización
+
+            // Crear un Advanced Marker (marcador avanzado) para la sede
+            // Este es el reemplazo recomendado para google.maps.Marker
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map, // Asociar el marcador a la instancia del mapa
+                position: { lat: sede.lat, lng: sede.lng }, // Posición del marcador
+                title: sede.name, // Título que aparece al pasar el ratón
+            });
+
+            // Opcional: Añadir un InfoWindow (ventana de información) al marcador
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<h3>${sede.name}</h3><p>${sede.address}</p>`, // Contenido HTML para la ventana
+            });
+
+            // Añadir un listener para abrir el InfoWindow cuando se haga clic en el marcador
+            marker.addListener('click', () => {
+                infoWindow.open({
+                    anchor: marker, // Anclar la ventana al marcador
+                    map, // Asociar a la instancia del mapa
+                });
+            });
+
+            currentMaps[mapId] = map; // Almacenar la instancia del mapa para futuras referencias
+            console.log(`MODAL_POPUP.HTML: Mapa para ${sede.id} inicializado.`);
+        }
+
+        // Función para mostrar mensajes al usuario (reemplazo de alert/confirm)
+        function showMessage(message, type = 'info') {
+            const messageBox = document.createElement('div');
+            messageBox.className = `message-box ${type}`;
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+
+            // Hacer que el mensaje desaparezca después de 5 segundos
+            setTimeout(() => {
+                messageBox.style.opacity = '0'; // Iniciar la transición de desvanecimiento
+                setTimeout(() => messageBox.remove(), 500); // Eliminar el elemento después de la transición
+            }, 5000);
+        }
+
+        // Función para mostrar mensajes de geolocalización en el div específico
         function showGeolocationMessage(message, type = 'info') {
             const msgDiv = document.getElementById('geolocationMessage');
             if (msgDiv) {
@@ -894,52 +391,144 @@
             }
         }
 
-        // Función para encontrar la sede más cercana
-        window.findNearestSede = function() {
+        // Función para encontrar la sede más cercana y calcular distancias/tiempos de viaje
+        async function findNearestSede() {
             console.log("MODAL_POPUP.HTML: Iniciando búsqueda de sede más cercana...");
-            // Mensaje más directo al usuario para pedir permiso
-            showGeolocationMessage("<i class='fas fa-info-circle me-2'></i> Por favor, permite el acceso a tu ubicación.", 'info');
+            showGeolocationMessage("<i class='fas fa-info-circle mr-2'></i> Por favor, permite el acceso a tu ubicación.", 'info');
             const locateMeBtn = document.getElementById('locateMeBtn');
             if (locateMeBtn) locateMeBtn.disabled = true;
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
+                    async (position) => {
                         const userCoords = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         };
                         console.log("MODAL_POPUP.HTML: Ubicación del usuario:", userCoords);
-                        showGeolocationMessage("<i class='fas fa-check-circle me-2'></i> ¡Ubicación encontrada! Buscando la sede más cercana...", 'success');
+                        showGeolocationMessage("<i class='fas fa-check-circle mr-2'></i> ¡Ubicación encontrada! Calculando distancias...", 'success');
 
+                        // Preparar destinos para la Distance Matrix API
+                        const destinations = sedes.map(sede => ({ lat: sede.lat, lng: sede.lng }));
+
+                        if (typeof google === 'undefined' || typeof google.maps === 'undefined' || typeof google.maps.DistanceMatrixService === 'undefined') {
+                            showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> Google Maps API o Distance Matrix Service no están cargados. Intenta de nuevo en un momento.", 'error');
+                            if (locateMeBtn) locateMeBtn.disabled = false;
+                            return;
+                        }
+
+                        const service = new google.maps.DistanceMatrixService();
                         let nearestSede = null;
-                        let minDistance = Infinity;
+                        let minTravelTimeDriving = Infinity;
+                        let minTravelTimeWalking = Infinity;
+                        let nearestDistance = '';
+                        let nearestTimeWalking = '';
+                        let nearestTimeDriving = '';
 
-                        sedes.forEach(sede => {
-                            const sedeCoords = { lat: sede.lat, lng: sede.lng };
-                            const distance = haversineDistance(userCoords, sedeCoords);
+                        // Realizar la solicitud para Driving
+                        try {
+                            const responseDriving = await service.getDistanceMatrix({
+                                origins: [userCoords],
+                                destinations: destinations,
+                                travelMode: google.maps.TravelMode.DRIVING,
+                                unitSystem: google.maps.UnitSystem.METRIC,
+                            });
 
-                            if (distance < minDistance) {
-                                minDistance = distance;
-                                nearestSede = sede;
+                            if (responseDriving.rows[0].elements) {
+                                responseDriving.rows[0].elements.forEach((element, index) => {
+                                    if (element.status === 'OK') {
+                                        const sede = sedes[index];
+                                        const duration = element.duration.value; // Duración en segundos
+
+                                        if (duration < minTravelTimeDriving) {
+                                            minTravelTimeDriving = duration;
+                                            nearestSede = sede;
+                                            nearestDistance = element.distance.text;
+                                            nearestTimeDriving = element.duration.text;
+                                        }
+                                    }
+                                });
                             }
-                        });
+                        } catch (error) {
+                            console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Driving):", error);
+                            showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> Error al calcular rutas en vehículo.", 'error');
+                        }
+
+                        // Realizar la solicitud para Walking (solo si se encontró una sede para driving, o si no se encontró ninguna para driving)
+                        // Esto asegura que siempre intentamos encontrar la más cercana, incluso si no hay rutas de coche.
+                        if (nearestSede) { // If a nearest sede was found by driving, let's get its walking time
+                            try {
+                                const responseWalking = await service.getDistanceMatrix({
+                                    origins: [userCoords],
+                                    destinations: [{ lat: nearestSede.lat, lng: nearestSede.lng }], // Solo la sede más cercana
+                                    travelMode: google.maps.TravelMode.WALKING,
+                                    unitSystem: google.maps.UnitSystem.METRIC,
+                                });
+
+                                if (responseWalking.rows[0].elements && responseWalking.rows[0].elements[0].status === 'OK') {
+                                    nearestTimeWalking = responseWalking.rows[0].elements[0].duration.text;
+                                } else {
+                                    nearestTimeWalking = 'No disponible';
+                                }
+                            } catch (error) {
+                                console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Walking):", error);
+                                nearestTimeWalking = 'Error al calcular';
+                            }
+                        } else { // If no sede was found by driving, try finding the nearest by walking
+                             try {
+                                const responseWalkingAll = await service.getDistanceMatrix({
+                                    origins: [userCoords],
+                                    destinations: destinations,
+                                    travelMode: google.maps.TravelMode.WALKING,
+                                    unitSystem: google.maps.UnitSystem.METRIC,
+                                });
+
+                                if (responseWalkingAll.rows[0].elements) {
+                                    responseWalkingAll.rows[0].elements.forEach((element, index) => {
+                                        if (element.status === 'OK') {
+                                            const sede = sedes[index];
+                                            const duration = element.duration.value;
+
+                                            if (duration < minTravelTimeWalking) {
+                                                minTravelTimeWalking = duration;
+                                                nearestSede = sede;
+                                                nearestDistance = element.distance.text;
+                                                nearestTimeWalking = element.duration.text;
+                                                // If we find the nearest by walking, and driving wasn't successful, set driving time to N/A
+                                                if (nearestTimeDriving === '') nearestTimeDriving = 'No disponible';
+                                            }
+                                        }
+                                    });
+                                }
+                            } catch (error) {
+                                console.error("MODAL_POPUP.HTML ERROR al obtener matriz de distancias (Walking All):", error);
+                                showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> Error al calcular rutas a pie.", 'error');
+                            }
+                        }
+
 
                         if (nearestSede) {
-                            const sedeSelector = document.getElementById('sede-selector');
+                            const sedeSelector = document.getElementById('sede-select');
                             if (sedeSelector) {
                                 sedeSelector.value = nearestSede.id;
-                                window.showSelectedSede();
-                                showGeolocationMessage(`<i class='fas fa-map-pin me-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong> (${(minDistance / 1000).toFixed(2)} km).`, 'success');
+                                await showSelectedSede(nearestSede.id); // Usar await para asegurar que el mapa se cargue antes de actualizar info
+                                
+                                // Mostrar la información de viaje
+                                document.getElementById('travel-info').classList.remove('hidden');
+                                document.getElementById('travel-distance').textContent = nearestDistance;
+                                document.getElementById('travel-time-walking').textContent = nearestTimeWalking;
+                                document.getElementById('travel-time-driving').textContent = nearestTimeDriving;
+
+                                showGeolocationMessage(`<i class='fas fa-map-pin mr-2'></i> La sede más cercana es: <strong>${nearestSede.name}</strong>.`, 'success');
                             }
                         } else {
-                            showGeolocationMessage("<i class='fas fa-exclamation-triangle me-2'></i> No se encontraron sedes cercanas a tu ubicación.", 'error');
+                            showGeolocationMessage("<i class='fas fa-exclamation-triangle mr-2'></i> No se pudieron encontrar sedes cercanas o calcular rutas.", 'error');
                         }
                         if (locateMeBtn) locateMeBtn.disabled = false;
                     },
                     (error) => {
                         console.error("MODAL_POPUP.HTML ERROR de geolocalización:", error);
-                        let errorMessage = "<i class='fas fa-exclamation-circle me-2'></i> Error de ubicación: ";
+                        let errorMessage = "<i class='fas fa-exclamation-circle mr-2'></i> Error de ubicación: ";
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
                                 errorMessage += "Necesitas permitir el acceso a la ubicación para usar esta función.";
@@ -964,87 +553,13 @@
                     }
                 );
             } else {
-                showGeolocationMessage("<i class='fas fa-ban me-2'></i> Tu navegador no soporta la función de geolocalización.", 'error');
+                showGeolocationMessage("<i class='fas fa-ban mr-2'></i> Tu navegador no soporta la función de geolocalización.", 'error');
                 if (locateMeBtn) locateMeBtn.disabled = false;
             }
-        };
+        }
 
-        // Función global para cerrar el modal y redirigir
-        window.closeChurchModal = function() {
-            const churchModal = document.getElementById('churchModal');
-            if (churchModal) {
-                churchModal.classList.remove('show');
-                console.log("MODAL_POPUP.HTML: Iniciando cierre del modal y redirección...");
-                // Usamos requestAnimationFrame para la máxima fluidez antes de la redirección
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        churchModal.style.display = 'none';
-                        // Redirige a la página de inicio
-                        window.location.href = 'index.html'; 
-                    }, 300); // Coincide con la duración de la transición CSS
-                });
-            }
-        };
-
-        // Función global para abrir el modal (llamada desde index.html).
-        window.openChurchModal = function() {
-            console.log("MODAL_POPUP.HTML: Función 'openChurchModal' llamada.");
-            const churchModal = document.getElementById('churchModal');
-            if (churchModal) {
-                churchModal.style.display = 'flex'; // Hace visible el modal para la transición
-                requestAnimationFrame(() => { // Usar requestAnimationFrame para asegurar que el display se aplique antes de la clase 'show'
-                    churchModal.classList.add('show');
-                });
-                
-                window.initializeSedeSelector(); 
-                const sedeSelector = document.getElementById('sede-selector');
-                if (sedeSelector) {
-                    sedeSelector.value = '';
-                    window.showSelectedSede();
-                }
-
-                // Eliminamos y re-adjuntamos los listeners para evitar duplicados
-                const localCloseButton = document.getElementById('closeModalButton');
-                const localSedeSelector = document.getElementById('sede-selector');
-                const localLocateMeBtn = document.getElementById('locateMeBtn');
-
-                // Limpiar listeners existentes
-                if (localCloseButton) localCloseButton.onclick = null;
-                if (churchModal) churchModal.onclick = null; // Clic en overlay
-                if (localSedeSelector) localSedeSelector.onchange = null;
-                if (localLocateMeBtn) localLocateMeBtn.onclick = null;
-
-                // Adjuntar nuevos listeners
-                if (localCloseButton) {
-                    localCloseButton.onclick = window.closeChurchModal;
-                }
-                if (churchModal) { 
-                    churchModal.onclick = function(event) {
-                        if (event.target === churchModal) {
-                            window.closeChurchModal();
-                        }
-                    };
-                }
-                if (localSedeSelector) {
-                    localSedeSelector.onchange = window.showSelectedSede;
-                }
-                if (localLocateMeBtn) {
-                    localLocateMeBtn.onclick = window.findNearestSede;
-                }
-                
-                // Carga la API de Google Maps
-                loadGoogleMapsScript();
-
-            } else {
-                console.error("MODAL_POPUP.HTML ERROR: #churchModal no se encontró.");
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("MODAL_POPUP.HTML: DOMContentLoaded - Script del popup cargado.");
-        });
+        // Cargar el script de Google Maps cuando el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', loadGoogleMapsScript);
     </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
